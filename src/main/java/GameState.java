@@ -36,8 +36,7 @@ public class GameState
     return wasSet;
   }
 
-  public enum getCurrentState()
-  {
+  public enum getCurrentState(){
     return currentState;
   }
 
@@ -46,7 +45,7 @@ public class GameState
 
   // line 87 "model.ump"
    public void advanceGameState(){
-    
+
   }
 
 

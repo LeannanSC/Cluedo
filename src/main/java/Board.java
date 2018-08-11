@@ -1,9 +1,6 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.28.0.4160.f573280ad modeling language!*/
 
-
-import sun.plugin2.main.client.PluginCookieSelector;
-
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -23,7 +20,7 @@ public class Board {
     //Board Associations
     private GameState gameState;
     private List<WeaponTokens> weaponTokens;
-    private List<Tile> tiles;
+    private Tile[][] tiles = new Tile[width][height];
     private List<Player> currentPlayers;
     private Map<String, Player> poolOfAvailablePlayers;
     private List<Card> solutionCards;
@@ -54,7 +51,6 @@ public class Board {
                 new WeaponTokens("Rope", "grey"),
                 new WeaponTokens("Spanner", "grey")
         );
-
         if (!didAddWeaponTokens) {
             throw new RuntimeException("Unable to create Board, must have 6 weaponTokens");
         }
@@ -152,25 +148,8 @@ public class Board {
         return weaponTokens.indexOf(aWeaponToken);
     }
 
-    /* Code from template association_GetMany */
-    public Tile getTile(int index) {
-        return tiles.get(index);
-    }
-
-    public List<Tile> getTiles() {
-        return Collections.unmodifiableList(tiles);
-    }
-
-    public int numberOfTiles() {
-        return tiles.size();
-    }
-
-    public boolean hasTiles() {
-        return tiles.size() > 0;
-    }
-
-    public int indexOfTile(Tile aTile) {
-        return tiles.indexOf(aTile);
+    public Tile[][] getTiles() {
+        return tiles;
     }
 
     /* Code from template association_GetMany */
@@ -262,61 +241,6 @@ public class Board {
         return 0;
     }
 
-    /* Code from template association_AddUnidirectionalMany */
-    public boolean addTile(Tile aTile) {
-        boolean wasAdded = false;
-        if (tiles.contains(aTile)) {
-            return false;
-        }
-        tiles.add(aTile);
-        wasAdded = true;
-        return wasAdded;
-    }
-
-    public boolean removeTile(Tile aTile) {
-        boolean wasRemoved = false;
-        if (tiles.contains(aTile)) {
-            tiles.remove(aTile);
-            wasRemoved = true;
-        }
-        return wasRemoved;
-    }
-
-    /* Code from template association_AddIndexControlFunctions */
-    public boolean addTileAt(Tile aTile, int index) {
-        boolean wasAdded = false;
-        if (addTile(aTile)) {
-            if (index < 0) {
-                index = 0;
-            }
-            if (index > numberOfTiles()) {
-                index = numberOfTiles() - 1;
-            }
-            tiles.remove(aTile);
-            tiles.add(index, aTile);
-            wasAdded = true;
-        }
-        return wasAdded;
-    }
-
-    public boolean addOrMoveTileAt(Tile aTile, int index) {
-        boolean wasAdded = false;
-        if (tiles.contains(aTile)) {
-            if (index < 0) {
-                index = 0;
-            }
-            if (index > numberOfTiles()) {
-                index = numberOfTiles() - 1;
-            }
-            tiles.remove(aTile);
-            tiles.add(index, aTile);
-            wasAdded = true;
-        } else {
-            wasAdded = addTileAt(aTile, index);
-        }
-        return wasAdded;
-    }
-
     /* Code from template association_MinimumNumberOfMethod */
     public static int minimumNumberOfPlayers() {
         return 3;
@@ -391,14 +315,29 @@ public class Board {
     public void delete() {
         gameState = null;
         weaponTokens.clear();
-        tiles.clear();
         poolOfAvailablePlayers.clear();
+        tiles = new Tile[width][height];
         allCards.clear();
     }
 
-    // line 20 "model.ump"
+    /**
+     * Draws the whole board
+     */
     public void draw() {
-
+        StringBuilder printMe = new StringBuilder();
+        for (int y = 0; y < height; y++) {
+            for (int x1 = 0; x1 < width; x1++) {
+                printMe.append(tiles[x1][y].getDrawMethod()[0]);
+            }
+            for (int x2 = 0; x2 < width; x2++) {
+                printMe.append(tiles[x2][y].getDrawMethod()[1]);
+            }
+            for (int x3 = 0; x3 < width; x3++) {
+                printMe.append(tiles[x3][y].getDrawMethod()[2]);
+            }
+            printMe.append("\n");
+        }
+        System.out.print(printMe);
     }
 
     public String toString() {
