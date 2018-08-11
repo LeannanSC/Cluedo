@@ -25,6 +25,11 @@ public class Room extends Tile
   // INTERFACE
   //------------------------
 
+
+  public void draw() {
+
+  }
+
   public void delete()
   {
     super.delete();
