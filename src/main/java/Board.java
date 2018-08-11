@@ -23,13 +23,12 @@ public class Board
   private List<Tile> tiles;
   private List<Player> players;
   private List<Card> allCards;
-  private Dice die;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Board(int aWidth, int aHeight, GameState aGameState, Dice aDie, WeaponTokens[] allWeaponTokens, Player[] allPlayers, Card[] allAllCards)
+  public Board(int aWidth, int aHeight, GameState aGameState, WeaponTokens[] allWeaponTokens, Player[] allPlayers, Card[] allAllCards)
   {
     width = aWidth;
     height = aHeight;
@@ -55,10 +54,6 @@ public class Board
     if (!didAddAllCards)
     {
       throw new RuntimeException("Unable to create Board, must have 21 allCards");
-    }
-    if (!setDie(aDie))
-    {
-      throw new RuntimeException("Unable to create Board due to aDie");
     }
   }
 
@@ -215,11 +210,6 @@ public class Board
   {
     int index = allCards.indexOf(aAllCard);
     return index;
-  }
-  /* Code from template association_GetOne */
-  public Dice getDie()
-  {
-    return die;
   }
   /* Code from template association_SetUnidirectionalOne */
   public boolean setGameState(GameState aNewGameState)
@@ -406,17 +396,6 @@ public class Board
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setDie(Dice aNewDie)
-  {
-    boolean wasSet = false;
-    if (aNewDie != null)
-    {
-      die = aNewDie;
-      wasSet = true;
-    }
-    return wasSet;
-  }
 
   public void delete()
   {
@@ -425,7 +404,6 @@ public class Board
     tiles.clear();
     players.clear();
     allCards.clear();
-    die = null;
   }
 
   // line 19 "model.ump"
@@ -439,7 +417,6 @@ public class Board
     return super.toString() + "["+
             "width" + ":" + getWidth()+ "," +
             "height" + ":" + getHeight()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "gameState = "+(getGameState()!=null?Integer.toHexString(System.identityHashCode(getGameState())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "die = "+(getDie()!=null?Integer.toHexString(System.identityHashCode(getDie())):"null");
+            "  " + "gameState = "+(getGameState()!=null?Integer.toHexString(System.identityHashCode(getGameState())):"null") + System.getProperties().getProperty("line.separator");
   }
 }
