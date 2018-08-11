@@ -1,57 +1,28 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.28.0.4160.f573280ad modeling language!*/
+public class GameState {
 
+    //GameState Attributes
+    private State currentState;
 
+    public GameState() {
+        this.currentState = State.START_TURN;
+    }
 
-// line 82 "model.ump"
-// line 203 "model.ump"
-public class GameState
-{
+    //todo ask sophie
+    private enum State {
+        START_TURN,
+        ROLL_DICE,
+        MAKE_GUESS,
+        NEXT_PLAYER
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
+    }
 
-  //GameState Attributes
-  private enum currentState;
+    public void advanceGameState() {
+        int nextStateIndex = currentState.ordinal() + 1;
+        currentState = State.values()[nextStateIndex];
+    }
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
+    public void endTurn(){
+        currentState = State.NEXT_PLAYER;
+    }
 
-  public GameState(enum aCurrentState)
-  {
-    currentState = aCurrentState;
-  }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
-
-  public boolean setCurrentState(enum aCurrentState)
-  {
-    boolean wasSet = false;
-    currentState = aCurrentState;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public enum getCurrentState(){
-    return currentState;
-  }
-
-  public void delete()
-  {}
-
-  // line 87 "model.ump"
-   public void advanceGameState(){
-
-  }
-
-
-  public String toString()
-  {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "currentState" + "=" + (getCurrentState() != null ? !getCurrentState().equals(this)  ? getCurrentState().toString().replaceAll("  ","    ") : "this" : "null");
-  }
 }
