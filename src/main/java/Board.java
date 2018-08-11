@@ -32,14 +32,13 @@ public class Board
   {
     width = 24;
     height = 25;
-    if (!setGameState(new GameState()))
-    {
+    if (!setGameState(new GameState())){
       throw new RuntimeException("Unable to create Board due to aGameState");
     }
 
     // create weapon tokens
     List<WeaponTokens> temp = new ArrayList<>();
-    temp.add()
+    temp.add();
 
     weaponTokens = new ArrayList<WeaponTokens>();
     boolean didAddWeaponTokens = setWeaponTokens(allWeaponTokens);
