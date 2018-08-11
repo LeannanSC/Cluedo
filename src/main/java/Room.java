@@ -4,7 +4,7 @@
 
 
 // line 58 "model.ump"
-// line 131 "model.ump"
+// line 134 "model.ump"
 public class Room extends Tile
 {
 

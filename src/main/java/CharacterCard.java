@@ -3,8 +3,8 @@
 
 
 
-// line 2 "model.ump"
-// line 176 "model.ump"
+// line 3 "model.ump"
+// line 179 "model.ump"
 public class CharacterCard extends Card
 {
 

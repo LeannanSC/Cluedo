@@ -3,9 +3,9 @@
 
 
 
-// line 82 "model.ump"
-// line 200 "model.ump"
-public class Dice
+// line 129 "model.ump"
+// line 226 "model.ump"
+public class TextView extends View
 {
 
   //------------------------
@@ -16,19 +16,18 @@ public class Dice
   // CONSTRUCTOR
   //------------------------
 
-  public Dice()
-  {}
+  public TextView()
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
 
   public void delete()
-  {}
-
-  // line 86 "model.ump"
-   public Integer roll(){
-    
+  {
+    super.delete();
   }
 
 }

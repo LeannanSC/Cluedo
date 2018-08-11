@@ -4,7 +4,7 @@
 
 
 // line 38 "model.ump"
-// line 156 "model.ump"
+// line 159 "model.ump"
 public class WeaponTokens
 {
 

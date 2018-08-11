@@ -4,7 +4,7 @@
 
 
 // line 28 "model.ump"
-// line 181 "model.ump"
+// line 184 "model.ump"
 public class WeaponCard extends Card
 {
 

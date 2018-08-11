@@ -6,7 +6,7 @@
  */
 
 // line 61 "model.ump"
-// line 186 "model.ump"
+// line 189 "model.ump"
 public class Inaccessible extends Tile
 {
 

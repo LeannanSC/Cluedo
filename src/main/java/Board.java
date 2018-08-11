@@ -4,8 +4,8 @@
 
 import java.util.*;
 
-// line 12 "model.ump"
-// line 136 "model.ump"
+// line 13 "model.ump"
+// line 139 "model.ump"
 public class Board
 {
 
@@ -47,7 +47,7 @@ public class Board
     boolean didAddPlayers = setPlayers(allPlayers);
     if (!didAddPlayers)
     {
-      throw new RuntimeException("Unable to create Board, must have 6 players");
+      throw new RuntimeException("Unable to create Board, must have 3 to 6 players");
     }
     allCards = new ArrayList<Card>();
     boolean didAddAllCards = setAllCards(allAllCards);
@@ -318,22 +318,47 @@ public class Board
     }
     return wasAdded;
   }
-  /* Code from template association_RequiredNumberOfMethod */
-  public static int requiredNumberOfPlayers()
-  {
-    return 6;
-  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfPlayers()
   {
-    return 6;
+    return 3;
   }
   /* Code from template association_MaximumNumberOfMethod */
   public static int maximumNumberOfPlayers()
   {
     return 6;
   }
-  /* Code from template association_SetUnidirectionalN */
+  /* Code from template association_AddUnidirectionalMN */
+  public boolean addPlayer(Player aPlayer)
+  {
+    boolean wasAdded = false;
+    if (players.contains(aPlayer)) { return false; }
+    if (numberOfPlayers() < maximumNumberOfPlayers())
+    {
+      players.add(aPlayer);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean removePlayer(Player aPlayer)
+  {
+    boolean wasRemoved = false;
+    if (!players.contains(aPlayer))
+    {
+      return wasRemoved;
+    }
+
+    if (numberOfPlayers() <= minimumNumberOfPlayers())
+    {
+      return wasRemoved;
+    }
+
+    players.remove(aPlayer);
+    wasRemoved = true;
+    return wasRemoved;
+  }
+  /* Code from template association_SetUnidirectionalMN */
   public boolean setPlayers(Player... newPlayers)
   {
     boolean wasSet = false;
@@ -347,7 +372,7 @@ public class Board
       verifiedPlayers.add(aPlayer);
     }
 
-    if (verifiedPlayers.size() != newPlayers.length || verifiedPlayers.size() != requiredNumberOfPlayers())
+    if (verifiedPlayers.size() != newPlayers.length || verifiedPlayers.size() < minimumNumberOfPlayers() || verifiedPlayers.size() > maximumNumberOfPlayers())
     {
       return wasSet;
     }
@@ -356,6 +381,38 @@ public class Board
     players.addAll(verifiedPlayers);
     wasSet = true;
     return wasSet;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addPlayerAt(Player aPlayer, int index)
+  {  
+    boolean wasAdded = false;
+    if(addPlayer(aPlayer))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
+      players.remove(aPlayer);
+      players.add(index, aPlayer);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMovePlayerAt(Player aPlayer, int index)
+  {
+    boolean wasAdded = false;
+    if(players.contains(aPlayer))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
+      players.remove(aPlayer);
+      players.add(index, aPlayer);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addPlayerAt(aPlayer, index);
+    }
+    return wasAdded;
   }
   /* Code from template association_RequiredNumberOfMethod */
   public static int requiredNumberOfAllCards()
@@ -406,7 +463,7 @@ public class Board
     allCards.clear();
   }
 
-  // line 19 "model.ump"
+  // line 20 "model.ump"
    public void draw(){
     
   }
@@ -417,6 +474,6 @@ public class Board
     return super.toString() + "["+
             "width" + ":" + getWidth()+ "," +
             "height" + ":" + getHeight()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "gameState = "+(getGameState()!=null?Integer.toHexString(System.identityHashCode(getGameState())):"null") + System.getProperties().getProperty("line.separator");
+            "  " + "gameState = "+(getGameState()!=null?Integer.toHexString(System.identityHashCode(getGameState())):"null");
   }
 }
