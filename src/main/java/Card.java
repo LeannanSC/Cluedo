@@ -3,7 +3,7 @@ abstract class Card {
     private String cardName;
 
     public Card(String cardName) {
-        cardName = cardName;
+        this.cardName = cardName;
     }
 
     public boolean setCardName(String cardName) {

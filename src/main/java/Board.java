@@ -9,11 +9,11 @@ public class Board {
     private static final int height = 25;
 
     //Board Associations
-    private GameLoader gameLoader;
-    private GameState gameState;
+    private final GameLoader gameLoader;
+    private final GameState gameState;
 
-    private List<Card> solutionCards;
-    private List<Player> currentPlayers;
+    private final List<Card> solutionCards;
+    private final List<Player> currentPlayers;
     // todo fill
     private Tile[][] boardTiles;
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class GameLoader {
     //our random number
-    Random rng;
+    final Random rng;
 
     private List<RoomCard> roomCards;
     private List<CharacterCard> chrCards;

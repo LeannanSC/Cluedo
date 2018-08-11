@@ -1,8 +1,8 @@
 abstract class Tile {
 
     //Tile Attributes
-    private String name;
-    private boolean canAccess;
+    private final String name;
+    private final boolean canAccess;
     private String[] drawMethod = new String[3];
 
     public Tile(String name, boolean canAccess, String[] drawMethod) {
