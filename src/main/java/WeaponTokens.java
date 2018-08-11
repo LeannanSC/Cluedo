@@ -3,7 +3,7 @@
 
 
 
-// line 38 "model.ump"
+// line 37 "model.ump"
 // line 159 "model.ump"
 public class WeaponTokens
 {
@@ -14,15 +14,19 @@ public class WeaponTokens
 
   //WeaponTokens Attributes
   private String name;
+  private String colour;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public WeaponTokens(String aName)
+  public WeaponTokens(String aName, String aColour)
   {
     name = aName;
+    colour = aColour;
   }
+
+  // WORK DAMN YOU
 
   //------------------------
   // INTERFACE
@@ -36,9 +40,22 @@ public class WeaponTokens
     return wasSet;
   }
 
+  public boolean setColour(String aColour)
+  {
+    boolean wasSet = false;
+    colour = aColour;
+    wasSet = true;
+    return wasSet;
+  }
+
   public String getName()
   {
     return name;
+  }
+
+  public String getColour()
+  {
+    return colour;
   }
 
   public void delete()
@@ -48,6 +65,9 @@ public class WeaponTokens
   public String toString()
   {
     return super.toString() + "["+
-            "name" + ":" + getName()+ "]";
+            "name" + ":" + getName()+ "," +
+            "colour" + ":" + getColour()+ "]";
   }
 }
+
+
