@@ -3,8 +3,8 @@
 
 
 
-// line 89 "model.ump"
-// line 207 "model.ump"
+// line 82 "model.ump"
+// line 203 "model.ump"
 public class GameState
 {
 
@@ -44,7 +44,7 @@ public class GameState
   public void delete()
   {}
 
-  // line 94 "model.ump"
+  // line 87 "model.ump"
    public void advanceGameState(){
     
   }

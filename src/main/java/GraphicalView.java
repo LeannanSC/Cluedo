@@ -3,9 +3,9 @@
 
 
 
-// line 53 "model.ump"
-// line 169 "model.ump"
-public class Hallway extends Tile
+// line 124 "model.ump"
+// line 221 "model.ump"
+public class GraphicalView extends View
 {
 
   //------------------------
@@ -16,9 +16,9 @@ public class Hallway extends Tile
   // CONSTRUCTOR
   //------------------------
 
-  public Hallway(String aName, boolean aCanAccess)
+  public GraphicalView()
   {
-    super(aName, aCanAccess);
+    super();
   }
 
   //------------------------

@@ -4,8 +4,8 @@
 
 import java.util.*;
 
-// line 12 "model.ump"
-// line 136 "model.ump"
+// line 13 "model.ump"
+// line 139 "model.ump"
 public class Board
 {
 
@@ -23,13 +23,12 @@ public class Board
   private List<Tile> tiles;
   private List<Player> players;
   private List<Card> allCards;
-  private Dice die;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Board(int aWidth, int aHeight, GameState aGameState, Dice aDie, WeaponTokens[] allWeaponTokens, Player[] allPlayers, Card[] allAllCards)
+  public Board(int aWidth, int aHeight, GameState aGameState, WeaponTokens[] allWeaponTokens, Player[] allPlayers, Card[] allAllCards)
   {
     width = aWidth;
     height = aHeight;
@@ -48,17 +47,13 @@ public class Board
     boolean didAddPlayers = setPlayers(allPlayers);
     if (!didAddPlayers)
     {
-      throw new RuntimeException("Unable to create Board, must have 6 players");
+      throw new RuntimeException("Unable to create Board, must have 3 to 6 players");
     }
     allCards = new ArrayList<Card>();
     boolean didAddAllCards = setAllCards(allAllCards);
     if (!didAddAllCards)
     {
       throw new RuntimeException("Unable to create Board, must have 21 allCards");
-    }
-    if (!setDie(aDie))
-    {
-      throw new RuntimeException("Unable to create Board due to aDie");
     }
   }
 
@@ -216,11 +211,6 @@ public class Board
     int index = allCards.indexOf(aAllCard);
     return index;
   }
-  /* Code from template association_GetOne */
-  public Dice getDie()
-  {
-    return die;
-  }
   /* Code from template association_SetUnidirectionalOne */
   public boolean setGameState(GameState aNewGameState)
   {
@@ -328,22 +318,47 @@ public class Board
     }
     return wasAdded;
   }
-  /* Code from template association_RequiredNumberOfMethod */
-  public static int requiredNumberOfPlayers()
-  {
-    return 6;
-  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfPlayers()
   {
-    return 6;
+    return 3;
   }
   /* Code from template association_MaximumNumberOfMethod */
   public static int maximumNumberOfPlayers()
   {
     return 6;
   }
-  /* Code from template association_SetUnidirectionalN */
+  /* Code from template association_AddUnidirectionalMN */
+  public boolean addPlayer(Player aPlayer)
+  {
+    boolean wasAdded = false;
+    if (players.contains(aPlayer)) { return false; }
+    if (numberOfPlayers() < maximumNumberOfPlayers())
+    {
+      players.add(aPlayer);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean removePlayer(Player aPlayer)
+  {
+    boolean wasRemoved = false;
+    if (!players.contains(aPlayer))
+    {
+      return wasRemoved;
+    }
+
+    if (numberOfPlayers() <= minimumNumberOfPlayers())
+    {
+      return wasRemoved;
+    }
+
+    players.remove(aPlayer);
+    wasRemoved = true;
+    return wasRemoved;
+  }
+  /* Code from template association_SetUnidirectionalMN */
   public boolean setPlayers(Player... newPlayers)
   {
     boolean wasSet = false;
@@ -357,7 +372,7 @@ public class Board
       verifiedPlayers.add(aPlayer);
     }
 
-    if (verifiedPlayers.size() != newPlayers.length || verifiedPlayers.size() != requiredNumberOfPlayers())
+    if (verifiedPlayers.size() != newPlayers.length || verifiedPlayers.size() < minimumNumberOfPlayers() || verifiedPlayers.size() > maximumNumberOfPlayers())
     {
       return wasSet;
     }
@@ -366,6 +381,38 @@ public class Board
     players.addAll(verifiedPlayers);
     wasSet = true;
     return wasSet;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addPlayerAt(Player aPlayer, int index)
+  {  
+    boolean wasAdded = false;
+    if(addPlayer(aPlayer))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
+      players.remove(aPlayer);
+      players.add(index, aPlayer);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMovePlayerAt(Player aPlayer, int index)
+  {
+    boolean wasAdded = false;
+    if(players.contains(aPlayer))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
+      players.remove(aPlayer);
+      players.add(index, aPlayer);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addPlayerAt(aPlayer, index);
+    }
+    return wasAdded;
   }
   /* Code from template association_RequiredNumberOfMethod */
   public static int requiredNumberOfAllCards()
@@ -406,17 +453,6 @@ public class Board
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setDie(Dice aNewDie)
-  {
-    boolean wasSet = false;
-    if (aNewDie != null)
-    {
-      die = aNewDie;
-      wasSet = true;
-    }
-    return wasSet;
-  }
 
   public void delete()
   {
@@ -425,10 +461,9 @@ public class Board
     tiles.clear();
     players.clear();
     allCards.clear();
-    die = null;
   }
 
-  // line 19 "model.ump"
+  // line 20 "model.ump"
    public void draw(){
     
   }
@@ -439,7 +474,6 @@ public class Board
     return super.toString() + "["+
             "width" + ":" + getWidth()+ "," +
             "height" + ":" + getHeight()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "gameState = "+(getGameState()!=null?Integer.toHexString(System.identityHashCode(getGameState())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "die = "+(getDie()!=null?Integer.toHexString(System.identityHashCode(getDie())):"null");
+            "  " + "gameState = "+(getGameState()!=null?Integer.toHexString(System.identityHashCode(getGameState())):"null");
   }
 }

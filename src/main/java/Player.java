@@ -5,7 +5,7 @@
 import java.util.*;
 
 // line 66 "model.ump"
-// line 191 "model.ump"
+// line 194 "model.ump"
 public class Player
 {
 
@@ -34,7 +34,7 @@ public class Player
     boolean didAddCardsInHand = setCardsInHand(allCardsInHand);
     if (!didAddCardsInHand)
     {
-      throw new RuntimeException("Unable to create Player, must have 6 cardsInHand");
+      throw new RuntimeException("Unable to create Player, must have 3 to 6 cardsInHand");
     }
   }
 
@@ -110,22 +110,47 @@ public class Player
     int index = cardsInHand.indexOf(aCardsInHand);
     return index;
   }
-  /* Code from template association_RequiredNumberOfMethod */
-  public static int requiredNumberOfCardsInHand()
-  {
-    return 6;
-  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfCardsInHand()
   {
-    return 6;
+    return 3;
   }
   /* Code from template association_MaximumNumberOfMethod */
   public static int maximumNumberOfCardsInHand()
   {
     return 6;
   }
-  /* Code from template association_SetUnidirectionalN */
+  /* Code from template association_AddUnidirectionalMN */
+  public boolean addCardsInHand(Card aCardsInHand)
+  {
+    boolean wasAdded = false;
+    if (cardsInHand.contains(aCardsInHand)) { return false; }
+    if (numberOfCardsInHand() < maximumNumberOfCardsInHand())
+    {
+      cardsInHand.add(aCardsInHand);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean removeCardsInHand(Card aCardsInHand)
+  {
+    boolean wasRemoved = false;
+    if (!cardsInHand.contains(aCardsInHand))
+    {
+      return wasRemoved;
+    }
+
+    if (numberOfCardsInHand() <= minimumNumberOfCardsInHand())
+    {
+      return wasRemoved;
+    }
+
+    cardsInHand.remove(aCardsInHand);
+    wasRemoved = true;
+    return wasRemoved;
+  }
+  /* Code from template association_SetUnidirectionalMN */
   public boolean setCardsInHand(Card... newCardsInHand)
   {
     boolean wasSet = false;
@@ -139,7 +164,7 @@ public class Player
       verifiedCardsInHand.add(aCardsInHand);
     }
 
-    if (verifiedCardsInHand.size() != newCardsInHand.length || verifiedCardsInHand.size() != requiredNumberOfCardsInHand())
+    if (verifiedCardsInHand.size() != newCardsInHand.length || verifiedCardsInHand.size() < minimumNumberOfCardsInHand() || verifiedCardsInHand.size() > maximumNumberOfCardsInHand())
     {
       return wasSet;
     }
@@ -148,6 +173,38 @@ public class Player
     cardsInHand.addAll(verifiedCardsInHand);
     wasSet = true;
     return wasSet;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addCardsInHandAt(Card aCardsInHand, int index)
+  {  
+    boolean wasAdded = false;
+    if(addCardsInHand(aCardsInHand))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfCardsInHand()) { index = numberOfCardsInHand() - 1; }
+      cardsInHand.remove(aCardsInHand);
+      cardsInHand.add(index, aCardsInHand);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveCardsInHandAt(Card aCardsInHand, int index)
+  {
+    boolean wasAdded = false;
+    if(cardsInHand.contains(aCardsInHand))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfCardsInHand()) { index = numberOfCardsInHand() - 1; }
+      cardsInHand.remove(aCardsInHand);
+      cardsInHand.add(index, aCardsInHand);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addCardsInHandAt(aCardsInHand, index);
+    }
+    return wasAdded;
   }
 
   public void delete()

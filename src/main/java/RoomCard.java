@@ -3,8 +3,8 @@
 
 
 
-// line 7 "model.ump"
-// line 171 "model.ump"
+// line 8 "model.ump"
+// line 174 "model.ump"
 public class RoomCard extends Card
 {
 

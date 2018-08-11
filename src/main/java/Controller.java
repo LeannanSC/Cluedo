@@ -3,8 +3,8 @@
 
 
 
-// line 105 "model.ump"
-// line 219 "model.ump"
+// line 98 "model.ump"
+// line 215 "model.ump"
 public class Controller
 {
 
@@ -13,22 +13,22 @@ public class Controller
   //------------------------
 
   //Controller Associations
-  private View view;
   private Board board;
+  private View view;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Controller(View aView, Board aBoard)
+  public Controller(Board aBoard, View aView)
   {
-    if (!setView(aView))
-    {
-      throw new RuntimeException("Unable to create Controller due to aView");
-    }
     if (!setBoard(aBoard))
     {
       throw new RuntimeException("Unable to create Controller due to aBoard");
+    }
+    if (!setView(aView))
+    {
+      throw new RuntimeException("Unable to create Controller due to aView");
     }
   }
 
@@ -36,25 +36,14 @@ public class Controller
   // INTERFACE
   //------------------------
   /* Code from template association_GetOne */
-  public View getView()
-  {
-    return view;
-  }
-  /* Code from template association_GetOne */
   public Board getBoard()
   {
     return board;
   }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setView(View aNewView)
+  /* Code from template association_GetOne */
+  public View getView()
   {
-    boolean wasSet = false;
-    if (aNewView != null)
-    {
-      view = aNewView;
-      wasSet = true;
-    }
-    return wasSet;
+    return view;
   }
   /* Code from template association_SetUnidirectionalOne */
   public boolean setBoard(Board aNewBoard)
@@ -67,39 +56,50 @@ public class Controller
     }
     return wasSet;
   }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setView(View aNewView)
+  {
+    boolean wasSet = false;
+    if (aNewView != null)
+    {
+      view = aNewView;
+      wasSet = true;
+    }
+    return wasSet;
+  }
 
   public void delete()
   {
-    view = null;
     board = null;
+    view = null;
   }
 
-  // line 109 "model.ump"
+  // line 102 "model.ump"
    public void update(){
     
   }
 
-  // line 112 "model.ump"
+  // line 105 "model.ump"
    public void nextPhase(){
     
   }
 
-  // line 115 "model.ump"
+  // line 108 "model.ump"
    public void nextTurn(){
     
   }
 
-  // line 118 "model.ump"
+  // line 111 "model.ump"
    public void makeGuess(){
     
   }
 
-  // line 121 "model.ump"
+  // line 114 "model.ump"
    public void makeAccusation(){
     
   }
 
-  // line 124 "model.ump"
+  // line 117 "model.ump"
    public void rollDice(){
     
   }

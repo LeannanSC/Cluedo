@@ -3,8 +3,8 @@
 
 
 
-// line 97 "model.ump"
-// line 213 "model.ump"
+// line 90 "model.ump"
+// line 209 "model.ump"
 public class View
 {
 
@@ -26,7 +26,7 @@ public class View
   public void delete()
   {}
 
-  // line 102 "model.ump"
+  // line 95 "model.ump"
    public void redraw(){
     
   }

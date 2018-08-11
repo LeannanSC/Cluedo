@@ -4,7 +4,7 @@
 
 
 // line 33 "model.ump"
-// line 150 "model.ump"
+// line 153 "model.ump"
 public class Card
 {
 
