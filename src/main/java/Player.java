@@ -2,7 +2,9 @@
 /*This code was generated using the UMPLE 1.28.0.4160.f573280ad modeling language!*/
 
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 // line 66 "model.ump"
 // line 194 "model.ump"
