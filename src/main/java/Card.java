@@ -1,53 +1,24 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.28.0.4160.f573280ad modeling language!*/
+abstract class Card {
+    //Card Attributes
+    private String cardName;
 
+    public Card(String cardName) {
+        cardName = cardName;
+    }
 
+    public boolean setCardName(String cardName) {
+        boolean wasSet = false;
+        this.cardName = cardName;
+        wasSet = true;
+        return wasSet;
+    }
 
-// line 33 "model.ump"
-// line 153 "model.ump"
-abstract class Card
-{
+    public String getCardName() {
+        return cardName;
+    }
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //Card Attributes
-  private String cardName;
-
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public Card(String aCardName)
-  {
-    cardName = aCardName;
-  }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
-
-  public boolean setCardName(String aCardName)
-  {
-    boolean wasSet = false;
-    cardName = aCardName;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public String getCardName()
-  {
-    return cardName;
-  }
-
-  public void delete()
-  {}
-
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "cardName" + ":" + getCardName()+ "]";
-  }
+    public String toString() {
+        return super.toString() + "[" +
+                "cardName" + ":" + getCardName() + "]";
+    }
 }
