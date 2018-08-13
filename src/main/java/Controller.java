@@ -78,6 +78,7 @@ public class Controller {
             case 8: // End Turn
                 break;
 
+
             default: // Default
                 throw new Error("invalid input in doCommand");
         }
