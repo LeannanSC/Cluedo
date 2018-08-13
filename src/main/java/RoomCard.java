@@ -1,33 +1,6 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.28.0.4160.f573280ad modeling language!*/
+public class RoomCard extends Card {
 
-
-
-// line 8 "model.ump"
-// line 174 "model.ump"
-public class RoomCard extends Card
-{
-
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public RoomCard(String aCardName)
-  {
-    super(aCardName);
-  }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
-
-  public void delete()
-  {
-    super.delete();
-  }
-
+    public RoomCard(String cardName) {
+        super(cardName);
+    }
 }
