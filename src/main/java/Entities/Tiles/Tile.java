@@ -2,7 +2,7 @@ package Entities.Tiles;
 
 public abstract class Tile {
 
-    //Entities.Tiles.Tile Attributes
+    //Tile Attributes
     private final String name;
     private final boolean canAccess;
     private String[] drawMethod = new String[3];

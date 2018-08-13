@@ -1,7 +1,7 @@
 package Entities.Cards;
 
 public abstract class Card {
-    //Entities.Cards.Card Attributes
+    //Card Attributes
     private String cardName;
 
     public Card(String cardName) {

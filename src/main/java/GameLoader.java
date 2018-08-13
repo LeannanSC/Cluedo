@@ -3,6 +3,9 @@ import Entities.Cards.CharacterCard;
 import Entities.Cards.RoomCard;
 import Entities.Cards.WeaponCard;
 import Entities.Player;
+import Entities.Tiles.HallwayTile;
+import Entities.Tiles.InaccessibleTile;
+import Entities.Tiles.RoomTile;
 import Entities.Tiles.Tile;
 import Entities.WeaponTokens;
 
@@ -134,12 +137,12 @@ public class GameLoader {
     private void loadAvailableCharacters() {
         //load all playable characters
         allCharacterPool = new ArrayList<>();
-        allCharacterPool.add(new Player(new Point(-1, -1), "Miss Scarlett", "Red"));
-        allCharacterPool.add(new Player(new Point(-1, -1), "Colonel Mustard", "Yellow"));
-        allCharacterPool.add(new Player(new Point(-1, -1), "Mrs. White", "White"));
-        allCharacterPool.add(new Player(new Point(-1, -1), "Mr. Green", "Green"));
-        allCharacterPool.add(new Player(new Point(-1, -1), "Mrs. Peacock", "Blue"));
-        allCharacterPool.add(new Player(new Point(-1, -1), "Professor Plum", "Purple"));
+        allCharacterPool.add(new Player(new Point(7,24), "Miss Scarlett", "Red"));
+        allCharacterPool.add(new Player(new Point(0, 17), "Colonel Mustard", "Yellow"));
+        allCharacterPool.add(new Player(new Point(9, 0), "Mrs. White", "White"));
+        allCharacterPool.add(new Player(new Point(14, 0), "Mr. Green", "Green"));
+        allCharacterPool.add(new Player(new Point(23, 6), "Mrs. Peacock", "Blue"));
+        allCharacterPool.add(new Player(new Point(23, 19), "Professor Plum", "Purple"));
     }
 
     private void loadWeaponTokens() {
@@ -155,10 +158,135 @@ public class GameLoader {
     }
 
     private void loadTiles() {
-        Tile[][] tempBoard;
-        // kitchen room init
-        Tile[][] kitchen = new Tile[6][6];
-        // todo load tiles hre sophie
+        String[] inaccessibleDraw = new String[3];
+        inaccessibleDraw[0] = "XXX";
+        inaccessibleDraw[1] = "XXX";
+        inaccessibleDraw[2] = "XXX";
+
+        String[] hallwayDraw = new String[3];
+        hallwayDraw[0] = "+-+";
+        hallwayDraw[1] = "| |";
+        hallwayDraw[2] = "+-+";
+
+        String[] roomDraw = new String[3];
+        roomDraw[0] = "***";
+        roomDraw[1] = "* *";
+        roomDraw[2] = "***";
+
+        Tile[][] tempBoard = new Tile[Game.getWidth()][Game.getHeight()];
+        // TODO: Test if this draws properly
+        // ROOMS
+        // Ballroom
+        for (int x = 10; x < 14; x++) {
+            tempBoard[x][1] = new RoomTile("Ballroom", roomDraw);
+        }
+        for (int x = 8; x < 16; x++) {
+            for (int y = 2; y < 8; y++) {
+                tempBoard[x][y] = new RoomTile("Ballroom", roomDraw);
+            }
+        }
+        // Kitchen
+        for (int x = 0; x < 6; x++) {
+            for (int y = 1; y < 7; y++) {
+                tempBoard[x][y] = new RoomTile("Kitchen", roomDraw);
+
+            }
+        }
+        // Dining Room
+        for (int x = 0; x < 5; x++) {
+            tempBoard[x][9] = new RoomTile("Dining Room", roomDraw);
+        }
+        for (int x = 0; x < 8; x++) {
+            for (int y = 10; y < 16; y++) {
+                tempBoard[x][y] = new RoomTile("Dining Room", roomDraw);
+            }
+        }
+        // Lounge
+        for (int x = 0; x < 7; x++) {
+            for (int y = 19; y < 25; y++) {
+                tempBoard[x][y] = new RoomTile("Lounge", roomDraw);
+            }
+        }
+        // Hall
+        for (int x = 9; x < 15; x++) {
+            for (int y = 18; y < 25; y++) {
+                tempBoard[x][y] = new RoomTile("Hall", roomDraw);
+            }
+        }
+        // Study
+        for (int x = 17; x < 24; x++) {
+            for (int y = 20; y < 25; y++) {
+                tempBoard[x][y] = new RoomTile("Study", roomDraw);
+            }
+        }
+        // Library
+        for (int x = 18; x < 23; x++) {
+            for (int y = 13; y < 18; y++) {
+                tempBoard[x][y] = new RoomTile("Library", roomDraw);
+            }
+        }
+        for (int x = 17; x < 24; x++) {
+            for (int y = 14; y < 17; y++) {
+                if (tempBoard[x][y] == null) {
+                    tempBoard[x][y] = new RoomTile("Library", roomDraw);
+                }
+            }
+        }
+        // Billiard Room
+        for (int x = 18; x < 24; x++) {
+            for (int y = 8; y < 13; y++) {
+                tempBoard[x][y] = new RoomTile("Billiard Room", roomDraw);
+            }
+        }
+        // Conservatory
+        for (int x = 18; x < 24; x++) {
+            for (int y = 1; y < 5; y++) {
+                tempBoard[x][y] = new RoomTile("Conservatory", roomDraw);
+            }
+        }
+        for (int x = 19; x < 23; x++) {
+            tempBoard[x][5] = new RoomTile("Conservatory", roomDraw);
+        }
+        // INACCESSIBLE (It does replace rooms as it goes)
+        // Top side of board
+        for (int x = 0; x < Game.getWidth(); x++) {
+            if (x != 9 && x != 14) {
+                tempBoard[x][0] = new InaccessibleTile(inaccessibleDraw);
+            }
+        }
+        tempBoard[6][1] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[17][1] = new InaccessibleTile(inaccessibleDraw);
+        // Left side of board
+        tempBoard[0][6] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[0][8] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[0][16] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[0][18] = new InaccessibleTile(inaccessibleDraw);
+        // Right side of board
+        tempBoard[23][5] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[23][7] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[23][13] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[23][14] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[23][18] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[23][20] = new InaccessibleTile(inaccessibleDraw);
+        // Bottom side of board
+        tempBoard[6][24] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[8][24] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[15][24] = new InaccessibleTile(inaccessibleDraw);
+        tempBoard[17][24] = new InaccessibleTile(inaccessibleDraw);
+        // Cellar (inaccessible)
+        for (int x = 10; x < 15; x++) {
+            for (int y = 10; y < 17; y++) {
+                tempBoard[x][y] = new InaccessibleTile(inaccessibleDraw);
+            }
+        }
+        // HALLWAY (All remaining tiles)
+        for (int x = 0; x < Game.getWidth(); x++) {
+            for (int y = 0; y < Game.getHeight(); y++) {
+                if (tempBoard[x][y] == null) {
+                    tempBoard[x][y] = new HallwayTile(hallwayDraw);
+                }
+            }
+        }
     }
 
     //Getters and Setters
