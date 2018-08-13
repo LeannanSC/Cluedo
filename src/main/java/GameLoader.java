@@ -1,3 +1,11 @@
+import Entities.Cards.Card;
+import Entities.Cards.CharacterCard;
+import Entities.Cards.RoomCard;
+import Entities.Cards.WeaponCard;
+import Entities.Player;
+import Entities.Tiles.Tile;
+import Entities.WeaponTokens;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -32,9 +40,7 @@ public class GameLoader {
         loadTiles();
 
 
-
     }
-
 
     private List<Card> initPlayerHand(List<Player> currentPlayers) {
         int sizeSnapshot = remainingCards.size();
@@ -89,12 +95,12 @@ public class GameLoader {
         roomCards = new ArrayList<>();
         roomCards.add(new RoomCard("Ballroom"));
         roomCards.add(new RoomCard("Kitchen"));
-        roomCards.add(new RoomCard("Dining RoomTile"));
+        roomCards.add(new RoomCard("Dining Entities.Tiles.RoomTile"));
         roomCards.add(new RoomCard("Lounge"));
         roomCards.add(new RoomCard("Hall"));
         roomCards.add(new RoomCard("Study"));
         roomCards.add(new RoomCard("Library"));
-        roomCards.add(new RoomCard("Billiard RoomTile"));
+        roomCards.add(new RoomCard("Billiard Entities.Tiles.RoomTile"));
         roomCards.add(new RoomCard("Conservatory"));
 
         chrCards = new ArrayList<>();
@@ -144,7 +150,10 @@ public class GameLoader {
     }
 
     private void loadTiles(){
-        Tile[][] boardTiles;
+        Tile[][] tempBoard;
+        // kitchen room init
+        Tile[][] kitchen = new Tile[6][6];
+        kitchen[0][1] // todo load tiles hre sophie
 
     }
 
