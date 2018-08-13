@@ -4,12 +4,7 @@ public class HallwayTile extends Tile {
         super("Hallway Tile", true, drawMethod);
     }
 
-    // todo ask sophie about design
-    protected static String[] getDesign(){
-        String[] design = new String[3];
-        design[0] = "*-*";
-        design[1] = "| |";
-        design[2] = "*-*";
-        return design;
-    }
+    // TODO: ask sophie about design
+    // Each tile is passed in their draw methods based on the type of tile they are
+	// This is done in GameLoader
 }
