@@ -84,7 +84,6 @@ public class Controller {
     }
 
     public void update() {
-
     }
 
     public void nextTurn() {
