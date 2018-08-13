@@ -13,7 +13,6 @@ public abstract class Tile {
         this.drawMethod = drawMethod;
     }
 
-
     public String getName() {
         return name;
     }
