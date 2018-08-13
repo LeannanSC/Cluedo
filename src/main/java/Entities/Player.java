@@ -53,8 +53,8 @@ public class Player {
         return Collections.unmodifiableList(cardsInHand);
     }
 
-    public void setCardsInHand(List<Card> cardsInHand) {
-        this.cardsInHand = cardsInHand;
+    public void addCardToHand(Card card) {
+        this.cardsInHand.add(card);
     }
 
     public void move(String direction) {

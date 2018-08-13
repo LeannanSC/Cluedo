@@ -14,9 +14,8 @@ public class Controller {
     Player currentPlayer;
 
     private Controller() {
-        rng = new Random();
         System.out.println("Loading Assets...");
-        gameLoader = new GameLoader(rng);
+        gameLoader = new GameLoader();
 
         System.out.println("Please Enter number of players(3-6): ");
         game = new Game(getInput(), gameLoader);
@@ -25,23 +24,31 @@ public class Controller {
 
         boolean gameFinished = false;
         while (!gameFinished) {
+            game.draw();
+            System.out.println("\n\n");
             System.out.println(getAvailMoves()); // fixme?
             System.out.println("Select Command");
             doCommand(currentPlayer, getInput());
         }
     }
 
-    private static int getInput() {
-        Scanner sc = new Scanner(System.in);
-        int input = Integer.parseInt(sc.nextLine());
-        sc.close();
-        return input;
+    private int getInput() {
+
+        try{
+            Scanner sc = new Scanner(System.in);
+            String line = sc.nextLine();
+            int input = Integer.parseInt(line);
+            return input;
+        } catch (Exception e){
+            throw new Error("Input Parsing error");
+        }
+
     }
 
     public List<String> getAvailMoves() {
         List<String> currentOptions = new ArrayList<>();
         // add conditions limiting options todo
-        if (diceRolledThisTurn) {
+        if (!diceRolledThisTurn) {
             currentOptions.add("1: Roll Dice");
         } else {
             currentOptions.add("1:");

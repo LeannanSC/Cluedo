@@ -30,7 +30,7 @@ public class GameLoader {
     private List<Player> availableCharacterPool; // fixme may not need?
     private List<Card> remainingCards;
 
-    public GameLoader(Random rng) {
+    public GameLoader() {
 
         loadWeaponTokens();
 
@@ -43,16 +43,25 @@ public class GameLoader {
         System.out.println("Assets loaded ...");
     }
 
-    private List<Card> initPlayerHand(int handSize,Random rng) {
-        List<Card> hand = new ArrayList<>();
+    public void initPlayerHands(int handSize,List<Player> currentPlayers) {
+        Random rng = new Random();
+        Card randomCard;
+
         for (int i = 0; i < handSize; i++) {
-            hand.add(remainingCards.remove(rng.nextInt(remainingCards.size())));
+            for (Player p: currentPlayers) {
+                randomCard = remainingCards.remove(rng.nextInt(remainingCards.size()));
+                p.addCardToHand(randomCard);
+            }
         }
-        return hand;
+
+        if (currentPlayers.get(0).getCardsInHand().size() == 0){
+            throw new Error("No cards added to hand");
+        }
     }
 
 
-    public List<Player> initPlayers(int numPlayers,Random rng) {
+    public List<Player> initPlayers(int numPlayers) {
+        Random rng = new Random();
 
         if (numPlayers < 3 || numPlayers > 6) {
             throw new Error("Invalid Player Amount");
@@ -60,21 +69,23 @@ public class GameLoader {
 
         List<Player> allPlayerCopy = new ArrayList<>(allCharacterPool);
         List<Player> currentPlayers = new ArrayList<>();
-        int handSize = numPlayers / remainingCards.size();
 
         for (int i = 0; i < numPlayers; i++) {
-            Player newPlayer = allPlayerCopy.remove(rng.nextInt());
-            newPlayer.setCardsInHand(initPlayerHand(handSize,rng));
+            Player newPlayer = allPlayerCopy.remove(rng.nextInt(allPlayerCopy.size()));
+            System.out.println("cards set: " + newPlayer.getCardsInHand().size());
             currentPlayers.add(newPlayer);
         }
 
+        initPlayerHands(remainingCards.size()/currentPlayers.size(), currentPlayers);
+
         if (remainingCards.size() != 0){
-            throw new Error("should have 0 remaining cards after all hands initialised");
+            throw new Error("should have 0 remaining cards after all hands initialised size is: " + remainingCards.size());
         }
         return currentPlayers;
     }
 
-    public List<Card> initSolution(Random rng) {
+    public List<Card> initSolution() {
+        Random rng = new Random();
         //Randomly select availableCardPool from their respective type pool
         List<Card> solutionCards = new ArrayList<>();
         solutionCards.add(getRoomCardAtIndex(rng.nextInt(roomCards.size())));
