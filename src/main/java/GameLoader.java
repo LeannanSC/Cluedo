@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Random;
 
 public class GameLoader {
-    //our random number
+    public static final int width = 24;
+    public static final int height = 25;
+
     private List<RoomCard> roomCards;
     private List<CharacterCard> chrCards;
     private List<WeaponCard> weapCards;
@@ -32,29 +34,36 @@ public class GameLoader {
 
     public GameLoader() {
 
-        loadWeaponTokens();
-
-        loadAvailableCharacters();
+        loadTiles();
 
         loadCards();
 
-        loadTiles();
+        loadAvailableCharacters();
+
+        loadWeaponTokens();
+
 
         System.out.println("Assets loaded ...");
     }
 
-    public void initPlayerHands(int handSize,List<Player> currentPlayers) {
+    public void initPlayerHands(int handSize, List<Player> currentPlayers) {
         Random rng = new Random();
-        Card randomCard;
 
-        for (int i = 0; i < handSize; i++) {
-            for (Player p: currentPlayers) {
-                randomCard = remainingCards.remove(rng.nextInt(remainingCards.size()));
+        // can now deal with uneven hand size
+        while (!remainingCards.isEmpty()) {
+            for (Player p : currentPlayers) {
+                int size = remainingCards.size();
+                if (size == 0){
+                    break;
+                }
+                Card randomCard = remainingCards.remove(rng.nextInt(size));
                 p.addCardToHand(randomCard);
+                remainingCards.remove(randomCard);
+                System.out.println("cards set: " + p.getCardsInHand().size());
             }
         }
 
-        if (currentPlayers.get(0).getCardsInHand().size() == 0){
+        if (currentPlayers.get(0).getCardsInHand().size() == 0) {
             throw new Error("No cards added to hand");
         }
     }
@@ -72,13 +81,12 @@ public class GameLoader {
 
         for (int i = 0; i < numPlayers; i++) {
             Player newPlayer = allPlayerCopy.remove(rng.nextInt(allPlayerCopy.size()));
-            System.out.println("cards set: " + newPlayer.getCardsInHand().size());
             currentPlayers.add(newPlayer);
         }
 
-        initPlayerHands(remainingCards.size()/currentPlayers.size(), currentPlayers);
+        initPlayerHands(remainingCards.size() / currentPlayers.size(), currentPlayers);
 
-        if (remainingCards.size() != 0){
+        if (remainingCards.size() != 0) {
             throw new Error("should have 0 remaining cards after all hands initialised size is: " + remainingCards.size());
         }
         return currentPlayers;
@@ -98,12 +106,11 @@ public class GameLoader {
             remainingCards.remove(c);
         }
 
-        if (remainingCards.size() != 18){
+        if (remainingCards.size() != 18) {
             throw new Error("should have 18 remaining cards after solution initialised");
         }
         return solutionCards;
     }
-
 
     private void loadCards() {
         // load allCardPool into arrays grouped by type
@@ -144,7 +151,7 @@ public class GameLoader {
     private void loadAvailableCharacters() {
         //load all playable characters
         allCharacterPool = new ArrayList<>();
-        allCharacterPool.add(new Player(new Point(7,24), "Miss Scarlett", "Red"));
+        allCharacterPool.add(new Player(new Point(7, 24), "Miss Scarlett", "Red"));
         allCharacterPool.add(new Player(new Point(0, 17), "Colonel Mustard", "Yellow"));
         allCharacterPool.add(new Player(new Point(9, 0), "Mrs. White", "White"));
         allCharacterPool.add(new Player(new Point(14, 0), "Mr. Green", "Green"));
@@ -171,21 +178,28 @@ public class GameLoader {
         inaccessibleDraw[2] = "XXX";
 
         String[] hallwayDraw = new String[3];
-        hallwayDraw[0] = "+-+";
-        hallwayDraw[1] = "| |";
-        hallwayDraw[2] = "+-+";
+        hallwayDraw[0] = "   ";
+        hallwayDraw[1] = "   ";
+        hallwayDraw[2] = "   ";
+//        hallwayDraw[0] = "+-+";
+//        hallwayDraw[1] = "| |";
+//        hallwayDraw[2] = "+-+";
 
         String[] roomDraw = new String[3];
-        roomDraw[0] = "***";
-        roomDraw[1] = "* *";
-        roomDraw[2] = "***";
+        roomDraw[0] = "+++";
+        roomDraw[1] = "+++";
+        roomDraw[2] = "+++";
 
-        board = new Tile[Game.getWidth()][Game.getHeight()];
-        // TODO: Test if this draws properly
-        // ROOMS
+//        roomDraw[0] = "***";
+//        roomDraw[1] = "* *";
+//        roomDraw[2] = "***";
+
+        board = new Tile[width][height];
+
         // Ballroom
         for (int x = 10; x < 14; x++) {
             board[x][1] = new RoomTile("Ballroom", roomDraw);
+
         }
         for (int x = 8; x < 16; x++) {
             for (int y = 2; y < 8; y++) {
@@ -228,12 +242,12 @@ public class GameLoader {
         }
         // Library
         for (int x = 18; x < 23; x++) {
-            for (int y = 13; y < 18; y++) {
+            for (int y = 14; y < 19; y++) {
                 board[x][y] = new RoomTile("Library", roomDraw);
             }
         }
         for (int x = 17; x < 24; x++) {
-            for (int y = 14; y < 17; y++) {
+            for (int y = 15; y < 18; y++) {
                 if (board[x][y] == null) {
                     board[x][y] = new RoomTile("Library", roomDraw);
                 }
@@ -254,20 +268,25 @@ public class GameLoader {
         for (int x = 19; x < 23; x++) {
             board[x][5] = new RoomTile("Conservatory", roomDraw);
         }
+
         // INACCESSIBLE (It does replace rooms as it goes)
         // Top side of board
-        for (int x = 0; x < Game.getWidth(); x++) {
+        for (int x = 0; x < width; x++) {
             if (x != 9 && x != 14) {
                 board[x][0] = new InaccessibleTile(inaccessibleDraw);
             }
         }
+
         board[6][1] = new InaccessibleTile(inaccessibleDraw);
         board[17][1] = new InaccessibleTile(inaccessibleDraw);
+
         // Left side of board
         board[0][6] = new InaccessibleTile(inaccessibleDraw);
         board[0][8] = new InaccessibleTile(inaccessibleDraw);
         board[0][16] = new InaccessibleTile(inaccessibleDraw);
         board[0][18] = new InaccessibleTile(inaccessibleDraw);
+        board[0][19] = new InaccessibleTile(inaccessibleDraw);
+
         // Right side of board
         board[23][5] = new InaccessibleTile(inaccessibleDraw);
         board[23][7] = new InaccessibleTile(inaccessibleDraw);
@@ -275,25 +294,30 @@ public class GameLoader {
         board[23][14] = new InaccessibleTile(inaccessibleDraw);
         board[23][18] = new InaccessibleTile(inaccessibleDraw);
         board[23][20] = new InaccessibleTile(inaccessibleDraw);
+        board[23][21] = new InaccessibleTile(inaccessibleDraw);
+
         // Bottom side of board
         board[6][24] = new InaccessibleTile(inaccessibleDraw);
         board[8][24] = new InaccessibleTile(inaccessibleDraw);
         board[15][24] = new InaccessibleTile(inaccessibleDraw);
         board[17][24] = new InaccessibleTile(inaccessibleDraw);
+
         // Cellar (inaccessible)
         for (int x = 10; x < 15; x++) {
             for (int y = 10; y < 17; y++) {
                 board[x][y] = new InaccessibleTile(inaccessibleDraw);
             }
         }
+
         // HALLWAY (All remaining tiles)
-        for (int x = 0; x < Game.getWidth(); x++) {
-            for (int y = 0; y < Game.getHeight(); y++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if (board[x][y] == null) {
                     board[x][y] = new HallwayTile(hallwayDraw);
                 }
             }
         }
+
     }
 
     //Getters and Setters
