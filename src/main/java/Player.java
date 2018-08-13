@@ -7,8 +7,8 @@ public class Player {
 
     //Player Attributes
     private Point location;
-    private String characterName;
-    private String colour;
+    private final String characterName;
+    private final String colour;
 
     //Player Associations
     private List<Card> cardsInHand;
@@ -47,7 +47,6 @@ public class Player {
         return Collections.unmodifiableList(cardsInHand);
     }
 
-
     public void setCardsInHand(List<Card> cardsInHand) {
         this.cardsInHand = cardsInHand;
     }
@@ -57,13 +56,5 @@ public class Player {
     }
 
     public void draw() {
-    }
-
-
-    public String toString() {
-        return super.toString() + "[" +
-                "characterName" + ":" + getCharacterName() + "," +
-                "colour" + ":" + getColour() + "]" + System.getProperties().getProperty("line.separator") +
-                "  " + "location" + "=" + (getLocation() != null ? !getLocation().equals(this) ? getLocation().toString().replaceAll("  ", "    ") : "this" : "null");
     }
 }
