@@ -9,19 +9,19 @@ public class Game {
     //Game Attributes
     private static final int width = 24;
     private static final int height = 25;
+//fixme delete
+
 
     //Game Associations
     private final GameLoader gameLoader;
     private final List<Card> solutionCards;
     private final List<Player> currentPlayers;
 
-
     public Game(int numPlayers, GameLoader gameLoader) {
         Random rng = new Random();
         this.gameLoader = gameLoader;
         solutionCards = gameLoader.initSolution(rng);
         currentPlayers = gameLoader.initPlayers(numPlayers,rng);
-
 
         System.out.println("Starting game!");
     }
