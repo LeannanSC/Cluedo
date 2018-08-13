@@ -1,11 +1,11 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
+package Views;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.28.0.4160.f573280ad modeling language!*/
 
 
 
-// line 53 "model.ump"
-// line 166 "model.ump"
-public class Hallway extends Tile
+// line 124 "model.ump"
+// line 221 "model.ump"
+public class GraphicalView extends View
 {
 
   //------------------------
@@ -16,18 +16,14 @@ public class Hallway extends Tile
   // CONSTRUCTOR
   //------------------------
 
-  public Hallway(String aName, boolean aCanAccess)
+  public GraphicalView()
   {
-    super(aName, aCanAccess);
+    super();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public void delete()
-  {
-    super.delete();
-  }
 
 }
