@@ -1,6 +1,8 @@
-abstract class Tile {
+package Entities.Tiles;
 
-    //Tile Attributes
+public abstract class Tile {
+
+    //Entities.Tiles.Tile Attributes
     private final String name;
     private final boolean canAccess;
     private String[] drawMethod = new String[3];

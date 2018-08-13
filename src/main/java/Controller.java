@@ -1,107 +1,106 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.28.0.4160.f573280ad modeling language!*/
+import Entities.Player;
+import Views.View;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
+public class Controller {
 
-// line 98 "model.ump"
-// line 215 "model.ump"
-public class Controller
-{
+    //Controller Associations
+    private Game game;
+    private View view;
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
+    public static void main(String[] args) {
 
-  //Controller Associations
-  private Board board;
-  private View view;
+        System.out.println("enter number of players(3-6): ");
+        int numPlayer = getInput();
+        Game game = new Game(numPlayer);
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
+        boolean gameFinished = false;
+        List<String> currentMovesAvailable = new ArrayList<>();
 
-  public Controller(Board aBoard, View aView)
-  {
-    if (!setBoard(aBoard))
-    {
-      throw new RuntimeException("Unable to create Controller due to aBoard");
+        while (!gameFinished) {
+            for (Player p : game.getCurrentPlayers()) {
+                System.out.println(getAvailMoves()); // fixme?
+                doCommand(p, getInput());
+            }
+
+        }
     }
-    if (!setView(aView))
-    {
-      throw new RuntimeException("Unable to create Controller due to aView");
+
+    private static int getInput() {
+        Scanner sc = new Scanner(System.in);
+        int input = Integer.parseInt(sc.nextLine());
+        sc.close();
+        return input;
     }
-  }
 
-  //------------------------
-  // INTERFACE
-  //------------------------
-  /* Code from template association_GetOne */
-  public Board getBoard()
-  {
-    return board;
-  }
-  /* Code from template association_GetOne */
-  public View getView()
-  {
-    return view;
-  }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setBoard(Board aNewBoard)
-  {
-    boolean wasSet = false;
-    if (aNewBoard != null)
-    {
-      board = aNewBoard;
-      wasSet = true;
+    public static List<String> getAvailMoves() {
+        List<String> currentOptions = new ArrayList<>();
+        // add conditions limiting options todo
+        currentOptions.add("1: Roll Dice");
+        currentOptions.add("2: Move North");
+        currentOptions.add("3: Move South");
+        currentOptions.add("4: Move East");
+        currentOptions.add("5: Move West");
+        currentOptions.add("6: Make Suggestion");
+        currentOptions.add("7: Make Accusation");
+        currentOptions.add("8: End Turn");
+        return currentOptions;
     }
-    return wasSet;
-  }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setView(View aNewView)
-  {
-    boolean wasSet = false;
-    if (aNewView != null)
-    {
-      view = aNewView;
-      wasSet = true;
+
+
+    private static void doCommand(Player p, int input) {
+        switch (input){
+            case 1: // Roll Dice
+                break;
+
+            case 2: // Move North
+
+                break;
+
+            case 3: // Move South
+                break;
+
+            case 4: // Move East
+                break;
+
+            case 5: // Move West
+                break;
+
+            case 6: // Make Suggestion
+                break;
+
+            case 7: // Make Accusation
+                break;
+
+            case 8: // End Turn
+                break;
+
+            default: // Default
+                throw new Error("invalid input in doCommand");
+        }
     }
-    return wasSet;
-  }
 
-  public void delete()
-  {
-    board = null;
-    view = null;
-  }
+    public void update() {
 
-  // line 102 "model.ump"
-   public void update(){
-    
-  }
+    }
 
-  // line 105 "model.ump"
-   public void nextPhase(){
-    
-  }
+    public void nextTurn() {
 
-  // line 108 "model.ump"
-   public void nextTurn(){
-    
-  }
+    }
 
-  // line 111 "model.ump"
-   public void makeGuess(){
-    
-  }
+    public void makeGuess() {
 
-  // line 114 "model.ump"
-   public void makeAccusation(){
-    
-  }
+    }
 
-  // line 117 "model.ump"
-   public void rollDice(){
-    
-  }
+    public void makeAccusation() {
+
+    }
+
+    public void rollDice() {
+
+    }
 
 }

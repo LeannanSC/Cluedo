@@ -1,24 +1,26 @@
+package Entities;
+
 public class WeaponTokens {
 
-    //WeaponTokens Attributes
+    //Entities.WeaponTokens Attributes
     private String name;
     private String colour;
 
-    public WeaponTokens(String aName, String aColour) {
-        name = aName;
-        colour = aColour;
+    public WeaponTokens(String name, String colour) {
+        this.name = name;
+        this.colour = colour;
     }
 
-    public boolean setName(String aName) {
+    public boolean setName(String name) {
         boolean wasSet = false;
-        name = aName;
+        this.name = name;
         wasSet = true;
         return wasSet;
     }
 
-    public boolean setColour(String aColour) {
+    public boolean setColour(String colour) {
         boolean wasSet = false;
-        colour = aColour;
+        this.colour = colour;
         wasSet = true;
         return wasSet;
     }

@@ -1,3 +1,7 @@
+package Entities;
+
+import Entities.Cards.Card;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -5,12 +9,12 @@ import java.util.List;
 
 public class Player {
 
-    //Player Attributes
+    //Entities.Player Attributes
     private Point location;
     private final String characterName;
     private final String colour;
 
-    //Player Associations
+    //Entities.Player Associations
     private List<Card> cardsInHand;
 
     public Player(Point aLocation, String aCharacterName, String aColour) {
