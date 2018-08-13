@@ -184,6 +184,7 @@ public class Controller {
         currentPlayer = game.getCurrentPlayers().get(nextPlayer);
         diceRolledThisTurn = false;
         System.out.println(p.getCharacterName() + "'s Turn");
+
     }
 
     public void makeSuggestion(Player p) {
