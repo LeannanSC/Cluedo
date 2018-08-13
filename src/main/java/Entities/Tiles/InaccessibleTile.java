@@ -2,8 +2,8 @@ package Entities.Tiles;
 
 public class InaccessibleTile extends Tile {
 
-    public InaccessibleTile(String[] drawMethod) {
-        super("Inaccessible Entities.Tiles.Tile", false, drawMethod);
+    public InaccessibleTile() {
+        super("Inaccessible Tile", false, new String[]{"XXX", "XXX", "XXX"});
     }
 
 }
