@@ -9,12 +9,14 @@ import java.util.List;
 
 public class Player {
 
-    //Entities.Player Attributes
+    //Player Attributes
     private Point location;
     private final String characterName;
     private final String colour;
 
-    //Entities.Player Associations
+    private int movesRemaining = 0;
+
+    //Player Associations
     private List<Card> cardsInHand;
 
     public Player(Point aLocation, String aCharacterName, String aColour) {
@@ -55,10 +57,36 @@ public class Player {
         this.cardsInHand = cardsInHand;
     }
 
-    public void move() {
+    public void move(String direction) {
+        switch (direction) {
+            case "North":
+                location = new Point(location.x, location.y);
+                break;
 
+            case "South":
+                location = new Point(location.x, location.y);
+                break;
+
+            case "East":
+                location = new Point(location.x, location.y);
+                break;
+
+            case "West":
+                location = new Point(location.x, location.y);
+                break;
+
+                default: throw new Error();
+        }
     }
 
     public void draw() {
+    }
+
+    public int getMovesRemaining() {
+        return movesRemaining;
+    }
+
+    public void setMovesRemaining(int moves) {
+        movesRemaining = moves;
     }
 }

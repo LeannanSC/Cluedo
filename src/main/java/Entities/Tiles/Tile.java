@@ -7,6 +7,7 @@ public abstract class Tile {
     private final boolean canAccess;
     private String[] drawMethod = new String[3];
 
+
     public Tile(String name, boolean canAccess, String[] drawMethod) {
         this.name = name;
         this.canAccess = canAccess;
@@ -23,6 +24,10 @@ public abstract class Tile {
 
     public String[] getDrawMethod() {
         return drawMethod;
+    }
+
+    public void setDrawMethod(String[] drawMethod) {
+        this.drawMethod = drawMethod;
     }
 
     public String toString() {

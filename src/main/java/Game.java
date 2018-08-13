@@ -1,8 +1,8 @@
 import Entities.Cards.Card;
 import Entities.Player;
-import Entities.Tiles.Tile;
 
 import java.util.List;
+import java.util.Random;
 
 public class Game {
 
@@ -12,16 +12,18 @@ public class Game {
 
     //Game Associations
     private final GameLoader gameLoader;
-
     private final List<Card> solutionCards;
     private final List<Player> currentPlayers;
-    // todo fill
-    private Tile[][] board;
 
-    public Game(int numPlayers) {
-        this.gameLoader = new GameLoader();
-        solutionCards = gameLoader.initSolution();
-        currentPlayers = gameLoader.initPlayers(numPlayers);
+
+    public Game(int numPlayers, GameLoader gameLoader) {
+        Random rng = new Random();
+        this.gameLoader = gameLoader;
+        solutionCards = gameLoader.initSolution(rng);
+        currentPlayers = gameLoader.initPlayers(numPlayers,rng);
+
+
+        System.out.println("Starting game!");
     }
 
     /**
@@ -31,13 +33,13 @@ public class Game {
         StringBuilder printMe = new StringBuilder();
         for (int y = 0; y < height; y++) {
             for (int x1 = 0; x1 < width; x1++) {
-                printMe.append(board[x1][y].getDrawMethod()[0]);
+                printMe.append(gameLoader.getBoard()[x1][y].getDrawMethod()[0]);
             }
             for (int x2 = 0; x2 < width; x2++) {
-                printMe.append(board[x2][y].getDrawMethod()[1]);
+                printMe.append(gameLoader.getBoard()[x2][y].getDrawMethod()[1]);
             }
             for (int x3 = 0; x3 < width; x3++) {
-                printMe.append(board[x3][y].getDrawMethod()[2]);
+                printMe.append(gameLoader.getBoard()[x3][y].getDrawMethod()[2]);
             }
             printMe.append("\n");
         }
@@ -46,10 +48,6 @@ public class Game {
 
     public List<Player> getCurrentPlayers() {
         return currentPlayers;
-    }
-
-    public Tile[][] getBoard() {
-        return board;
     }
 
     public static int getWidth() {
