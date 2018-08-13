@@ -8,12 +8,6 @@ import java.util.Random;
 
 public class Game {
 
-    //Game Attributes
-    private static final int width = 24;
-    private static final int height = 25;
-//fixme delete
-
-
     //Game Associations
     private final GameLoader gameLoader;
     private final List<Card> solutionCards = new ArrayList<>();
@@ -28,35 +22,34 @@ public class Game {
         System.out.println("Starting game!");
     }
 
+
     /**
      * Draws the whole board
      */
     public void draw() {
         StringBuilder printMe = new StringBuilder();
-        for (int y = 0; y < height; y++) {
-            for (int x1 = 0; x1 < width; x1++) {
-                printMe.append(board[x1][y].getDrawMethod()[0]);
+
+        StringBuilder output = new StringBuilder();
+        for (int y = 0; y < GameLoader.height; y++) {
+            StringBuilder line1 = new StringBuilder();
+            StringBuilder line2 = new StringBuilder();
+            StringBuilder line3 = new StringBuilder();
+            for (int x = 0; x < GameLoader.width; x++) {
+                line1.append(board[x][y].getDrawMethod()[0]);
+                line2.append(board[x][y].getDrawMethod()[1]);
+                line3.append(board[x][y].getDrawMethod()[2]);
             }
-            for (int x2 = 0; x2 < width; x2++) {
-                printMe.append(board[x2][y].getDrawMethod()[1]);
-            }
-            for (int x3 = 0; x3 < width; x3++) {
-                printMe.append(board[x3][y].getDrawMethod()[2]);
-            }
-            printMe.append("\n");
+            output.append(line1).append('\n')
+                    .append(line2).append('\n')
+                    .append(line3).append('\n');
         }
-        System.out.print(printMe);
+
+        System.out.println(output);
     }
+
 
     public List<Player> getCurrentPlayers() {
         return currentPlayers;
     }
 
-    public static int getWidth() {
-        return width;
-    }
-
-    public static int getHeight() {
-        return height;
-    }
 }
