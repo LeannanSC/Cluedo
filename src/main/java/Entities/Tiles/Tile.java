@@ -1,9 +1,15 @@
-abstract class Tile {
+package Entities.Tiles;
+
+import Entities.Player;
+
+public abstract class Tile {
 
     //Tile Attributes
     private final String name;
     private final boolean canAccess;
     private String[] drawMethod = new String[3];
+    Player player = null;
+
 
     public Tile(String name, boolean canAccess, String[] drawMethod) {
         this.name = name;
@@ -23,9 +29,17 @@ abstract class Tile {
         return drawMethod;
     }
 
+    public void setDrawMethod(String[] drawMethod) {
+        this.drawMethod = drawMethod;
+    }
+
     public String toString() {
         return super.toString() + "[" +
                 "name" + ":" + getName() + "," +
                 "canAccess" + ":" + getCanAccess() + "]";
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

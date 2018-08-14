@@ -1,4 +1,6 @@
-abstract class Card {
+package Entities.Cards;
+
+public abstract class Card {
     //Card Attributes
     private String cardName;
 

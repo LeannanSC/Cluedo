@@ -1,3 +1,7 @@
+package Entities;
+
+import Entities.Cards.Card;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +13,8 @@ public class Player {
     private Point location;
     private final String characterName;
     private final String colour;
+
+    private int movesRemaining = 0;
 
     //Player Associations
     private List<Card> cardsInHand;
@@ -47,14 +53,40 @@ public class Player {
         return Collections.unmodifiableList(cardsInHand);
     }
 
-    public void setCardsInHand(List<Card> cardsInHand) {
-        this.cardsInHand = cardsInHand;
+    public void addCardToHand(Card card) {
+        this.cardsInHand.add(card);
     }
 
-    public void move() {
+    public void move(String direction) {
+        switch (direction) {
+            case "North":
+                location = new Point(location.x, location.y);
+                break;
 
+            case "South":
+                location = new Point(location.x, location.y);
+                break;
+
+            case "East":
+                location = new Point(location.x, location.y);
+                break;
+
+            case "West":
+                location = new Point(location.x, location.y);
+                break;
+
+                default: throw new Error();
+        }
     }
 
     public void draw() {
+    }
+
+    public int getMovesRemaining() {
+        return movesRemaining;
+    }
+
+    public void setMovesRemaining(int moves) {
+        movesRemaining = moves;
     }
 }

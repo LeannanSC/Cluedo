@@ -1,4 +1,4 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
+package Views;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.28.0.4160.f573280ad modeling language!*/
 
 
@@ -25,9 +25,5 @@ public class GraphicalView extends View
   // INTERFACE
   //------------------------
 
-  public void delete()
-  {
-    super.delete();
-  }
 
 }
