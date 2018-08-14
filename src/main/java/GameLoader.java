@@ -263,6 +263,7 @@ public class GameLoader {
             board[x][5] = new RoomTile("Conservatory");
         }
 
+
         // INACCESSIBLE (It does replace rooms as it goes)
         // Top side of board
         for (int x = 0; x < width; x++) {
@@ -270,7 +271,6 @@ public class GameLoader {
                 board[x][0] = new InaccessibleTile();
             }
         }
-
         board[6][1] = new InaccessibleTile();
         board[17][1] = new InaccessibleTile();
 
