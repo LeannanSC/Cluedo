@@ -5,14 +5,15 @@ import Entities.Player;
 public class HallwayTile extends Tile {
 
     public HallwayTile() {
-        super("Hallway Tile", true,new String[]{ "   ", "   ","   "});
+        super("Hallway Tile", true);
     }
 
-    public String[] playerHere(){
+    @Override
+    public String[] draw() {
         if (player != null) {
             String[] hallwayDraw = new String[3];
             hallwayDraw[0] = "   ";
-            hallwayDraw[1] = " " + player.getCharacterName().charAt(0) + " ";
+            hallwayDraw[1] = " " + player.getColour().charAt(0) + " ";
             hallwayDraw[2] = "   ";
 
             return hallwayDraw;
@@ -21,6 +22,5 @@ public class HallwayTile extends Tile {
 
     public void setPlayer(Player player) {
         super.player = player;
-        super.setDrawMethod(playerHere());
     }
 }

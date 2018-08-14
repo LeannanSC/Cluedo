@@ -1,4 +1,6 @@
 import Entities.Player;
+import Entities.Tiles.HallwayTile;
+import Entities.Tiles.RoomTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +11,8 @@ public class Controller {
 
     Game game;
     GameLoader gameLoader;
-    Random rng;
-    boolean diceRolledThisTurn = false;
     Player currentPlayer;
+    boolean rolledThisTurn = false;
 
     private Controller() {
         System.out.println("Loading Assets...");
@@ -23,23 +24,45 @@ public class Controller {
 
 
         boolean gameFinished = false;
+        update();
+
         while (!gameFinished) {
-            game.draw();
-            System.out.println("\n\n");
-            System.out.println(getAvailMoves()); // fixme?
-            System.out.println("Select Command");
+            System.out.println("\n");
+            System.out.println("Character name - " + currentPlayer.getCharacterName() + ", Board Representation - " + currentPlayer.getColour().charAt(0));
+            if (!rolledThisTurn) {
+                System.out.println("Rolling dice...");
+                currentPlayer.setMovesRemaining(game.rollDice());
+                rolledThisTurn = true;
+            }
+
+            if (currentPlayer.getMovesRemaining() == 0) {
+                if (gameLoader.getBoard()[currentPlayer.getLocation().x][currentPlayer.getLocation().y]
+                        instanceof HallwayTile) {
+                    System.out.println("you have run out of steps " +
+                            "and are unable to continue this turn");
+                    nextTurn(currentPlayer);
+                    continue;
+                }
+            }
+
+            System.out.println("You have " + currentPlayer.getMovesRemaining() +
+                    " steps remaining");
+            System.out.println("Your hand -\n" + currentPlayer.getCardsInHand());
+
+            System.out.println("Current Valid Moves -\n" + getAvailMoves());
+            System.out.println("Select Command:");
             doCommand(currentPlayer, getInput());
         }
     }
 
     private int getInput() {
 
-        try{
+        try {
             Scanner sc = new Scanner(System.in);
             String line = sc.nextLine();
             int input = Integer.parseInt(line);
             return input;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new Error("Input Parsing error");
         }
 
@@ -48,178 +71,176 @@ public class Controller {
     public List<String> getAvailMoves() {
         List<String> currentOptions = new ArrayList<>();
         // add conditions limiting options todo
-        if (!diceRolledThisTurn) {
-            currentOptions.add("1: Roll Dice");
-        } else {
-            currentOptions.add("1:");
+
+            if (game.getCanMove(currentPlayer, "North")) {
+                currentOptions.add("1: Move North");
+            } else {
+                currentOptions.add("1:");
+            }
+
+            if (game.getCanMove(currentPlayer, "South")) {
+                currentOptions.add("2: Move South");
+            } else {
+                currentOptions.add("2:");
+            }
+
+            if (game.getCanMove(currentPlayer, "East")) {
+                currentOptions.add("3: Move East");
+            } else {
+                currentOptions.add("3:");
+            }
+
+            if (game.getCanMove(currentPlayer, "West")) {
+                currentOptions.add("4: Move West");
+            } else {
+                currentOptions.add("4:");
+            }
+
+            if (gameLoader.getBoard()[currentPlayer.getLocation().x][currentPlayer.getLocation().y]
+                    instanceof RoomTile) {
+                currentOptions.add("5: Make Suggestion");
+            } else {
+                currentOptions.add("5:");
+            }
+
+            if (gameLoader.getBoard()[currentPlayer.getLocation().x][currentPlayer.getLocation().y]
+                    instanceof RoomTile) {
+                currentOptions.add("6: Make Accusation");
+            } else {
+                currentOptions.add("6:");
+            }
+
+            currentOptions.add("7: End Turn");
+
+            currentOptions.add("8: Show Board Info");
+
+            if (currentOptions.size() != 8) {
+                throw new Error("Options incorrect size");
+            }
+            return currentOptions;
         }
 
 
-        currentOptions.add("2: Move North");
-//    } else {
-//        currentOptions.add("2:");
-//    }
-
-        currentOptions.add("3: Move South");
-//    } else {
-//        currentOptions.add("3:");
-//    }
-
-        currentOptions.add("4: Move East");
-        //    } else {
-//        currentOptions.add("4:");
-//    }
-
-        currentOptions.add("5: Move West");
-        //    } else {
-//        currentOptions.add("5:");
-//    }
-
-        currentOptions.add("6: Make Suggestion");
-        //    } else {
-//        currentOptions.add("6:");
-//    }
-
-        currentOptions.add("7: Make Accusation");
-        //    } else {
-//        currentOptions.add("7:");
-//    }
-
-        currentOptions.add("8: End Turn");
-        //    } else {
-//        currentOptions.add("8:");
-//    }
-        if (currentOptions.size() != 8) { throw new Error("Options incorrect size");}
-        return currentOptions;
-    }
+        private void doCommand (Player p,int input){
 
 
-    private void doCommand(Player p, int input) {
-        switch (input) {
-            case 1: // Roll Dice
-                if (getAvailMoves().get(0).equals("1: Roll Dice")) {
-                    p.setMovesRemaining(rollDice());
+            switch (input) {
 
-                } else if (getAvailMoves().contains("1:")){
-                    System.out.println("That move is unavailable please select another");
-                } else throw new Error("Error unexpected move found during roll dice");
+                case 1: // Move North
+                    if (getAvailMoves().get(0).equals("1: Move North")) {
+                        game.movePlayer(currentPlayer, "North");
+                        update();
+                    } else if (getAvailMoves().contains("1:")) {
+                        System.out.println("That move is unavailable please select another");
+                    } else throw new Error("Error unexpected move found during move north");
 
-                break;
+                    break;
 
-            case 2: // Move North
-                if (getAvailMoves().get(1).equals("2: Move North")) {
-                p.move("North");
+                case 2: // Move South
+                    if (getAvailMoves().get(1).equals("2: Move South")) {
+                        game.movePlayer(currentPlayer, "South");
+                        update();
+                    } else if (getAvailMoves().contains("2:")) {
+                        System.out.println("That move is unavailable please select another");
+                    } else throw new Error("Error unexpected move found during mov south");
 
-                } else if (getAvailMoves().contains("2:")){
-                    System.out.println("That move is unavailable please select another");
-                } else throw new Error("Error unexpected move found during roll dice");
+                    break;
 
-                break;
+                case 3: // Move East
+                    if (getAvailMoves().get(2).equals("3: Move East")) {
+                        game.movePlayer(currentPlayer, "East");
+                        update();
+                    } else if (getAvailMoves().contains("3:")) {
+                        System.out.println("That move is unavailable please select another");
+                    } else throw new Error("Error unexpected move found during move east");
 
-            case 3: // Move South
-                if (getAvailMoves().get(2).equals("3: Move South")) {
-                    p.move("South");
+                    break;
 
-                } else if (getAvailMoves().contains("3:")){
-                    System.out.println("That move is unavailable please select another");
-                } else throw new Error("Error unexpected move found during roll dice");
+                case 4: // Move West
+                    if (getAvailMoves().get(3).equals("4: Move West")) {
+                        game.movePlayer(currentPlayer, "West");
+                        update();
+                    } else if (getAvailMoves().contains("4:")) {
+                        System.out.println("That move is unavailable please select another");
+                    } else throw new Error("Error unexpected move found during move west");
 
-                break;
+                    break;
 
-            case 4: // Move East
-                if (getAvailMoves().get(3).equals("4: Move East")) {
-                    p.move("East");
+                case 5: // Make Suggestion
+                    if (getAvailMoves().get(4).equals("5:  Make Suggestion")) {
+                        makeSuggestion(p);//todo
 
-                } else if (getAvailMoves().contains("4:")){
-                    System.out.println("That move is unavailable please select another");
-                } else throw new Error("Error unexpected move found during roll dice");
+                    } else if (getAvailMoves().contains("5:")) {
+                        System.out.println("That move is unavailable please select another");
+                    } else throw new Error("Error unexpected move found during make suggestion");
 
-                break;
+                    break;
 
-            case 5: // Move West
-                if (getAvailMoves().get(4).equals("5: Move West")) {
-                    p.move("West");
+                case 6: // Make Accusation
+                    if (getAvailMoves().get(5).equals("6: Make Accusation")) {
+                        makeAccusation(p);//todo
 
-                } else if (getAvailMoves().contains("5:")){
-                    System.out.println("That move is unavailable please select another");
-                } else throw new Error("Error unexpected move found during roll dice");
+                    } else if (getAvailMoves().contains("6:")) {
+                        System.out.println("That move is unavailable please select another");
+                    } else throw new Error("Error unexpected move found during make accusation");
 
-                break;
+                    break;
 
-            case 6: // Make Suggestion
-                if (getAvailMoves().get(5).equals("6:  Make Suggestion")) {
-                    makeSuggestion(p);//todo
+                case 7: // End Turn
+                    if (getAvailMoves().get(6).equals("7: End Turn")) {
+                        nextTurn(p);//todo
+                        System.out.println("Turn Ended");
 
-                } else if (getAvailMoves().contains("6:")){
-                    System.out.println("That move is unavailable please select another");
-                } else throw new Error("Error unexpected move found during roll dice");
+                    } else if (getAvailMoves().contains("7:")) {
+                        System.out.println("That move is unavailable please select another");
+                    } else throw new Error("Error unexpected move found during end turn");
 
-                break;
+                    break;
 
-            case 7: // Make Accusation
-                if (getAvailMoves().get(6).equals("7: Make Accusation")){
-                    makeAccusation(p);//todo
+                case 8: // End Turn
+                    if (getAvailMoves().get(7).equals("8: Show Board Info")) {
+                        //todo print board info
+                        System.out.println("Board Inrormation");
 
-                } else if (getAvailMoves().contains("7:")){
-                    System.out.println("That move is unavailable please select another");
-                } else throw new Error("Error unexpected move found during roll dice");
+                    } else if (getAvailMoves().contains("8:")) {
+                        System.out.println("That move is unavailable please select another");
+                    } else throw new Error("Error unexpected move found during show board info");
 
-                break;
-
-            case 8: // End Turn
-                if (getAvailMoves().get(7).equals("8: End Turn")){
-                    nextTurn(p);//todo
-                    System.out.println("Turn Ended");
-
-                } else if (getAvailMoves().contains("8:")){
-                    System.out.println("That move is unavailable please select another");
-                } else throw new Error("Error unexpected move found during roll dice");
-
-                break;
-
-            default: // Default
-                throw new Error("invalid input in doCommand");
+                    break;
+                default: // Default
+                    throw new Error("invalid input in doCommand");
+            }
         }
-    }
 
-    public void update() {
-    }
-
-    public void nextTurn(Player p) {
-        int nextPlayer = game.getCurrentPlayers().indexOf(currentPlayer) + 1;
-        if (nextPlayer > 3) { nextPlayer = 0;}
-        currentPlayer = game.getCurrentPlayers().get(nextPlayer);
-        diceRolledThisTurn = false;
-        System.out.println(p.getCharacterName() + "'s Turn");
-
-    }
-
-    public void makeSuggestion(Player p) {
-        System.out.println("not implemented");//fixme
-
-    }
-
-    public void makeAccusation(Player p) {
-        System.out.println("not implemented");//fixme
-
-    }
-
-    public int rollDice() {
-        int d1 = rng.nextInt(6) + 1; // 0 -> 5 so + 1
-        int d2 = rng.nextInt(6) + 1;
-
-        int moves = d1 + d2;
-        if (d1 > 6 || d2 > 6 || moves > 12) {
-            throw new Error("Dice rolled too high");
+        public void update () {
+            game.draw();
         }
-        diceRolledThisTurn = true;
-        return moves;
-    }
 
-    public static void main(String[] args) {
-        System.out.println("Welcome to Cluedo");
-        System.out.println("Starting Game...");
-        new Controller();
-    }
+        public void nextTurn (Player p){
+            int nextPlayer = game.getCurrentPlayers().indexOf(currentPlayer) + 1;
 
-}
+            if (nextPlayer > game.getCurrentPlayers().size() - 1) {
+                nextPlayer = 0;
+            }
+            currentPlayer.setMovesRemaining(0);
+            currentPlayer = game.getCurrentPlayers().get(nextPlayer);
+            rolledThisTurn = false;
+        }
+
+        public void makeSuggestion (Player p){
+            System.out.println("not implemented");//fixme
+
+        }
+
+        public void makeAccusation (Player p){
+            System.out.println("not implemented");//fixme
+
+        }
+
+        public static void main (String[]args){
+            System.out.println("Welcome to Cluedo");
+            System.out.println("Starting Game...");
+            new Controller();
+        }
+
+    }

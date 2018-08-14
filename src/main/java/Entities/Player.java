@@ -14,16 +14,17 @@ public class Player {
     private final String characterName;
     private final String colour;
 
-    private int movesRemaining = 0;
+    private int movesRemaining;
 
     //Player Associations
     private List<Card> cardsInHand;
 
-    public Player(Point aLocation, String aCharacterName, String aColour) {
-        location = aLocation;
-        characterName = aCharacterName;
-        colour = aColour;
-        cardsInHand = new ArrayList<>();
+    public Player(Point location, String characterName, String colour) {
+        this.location = location;
+        this.characterName = characterName;
+        this.colour = colour;
+        this.cardsInHand = new ArrayList<>();
+        this.movesRemaining = 0;
     }
 
     public boolean setLocation(Point aLocation) {
@@ -58,21 +59,28 @@ public class Player {
     }
 
     public void move(String direction) {
+        movesRemaining--;
         switch (direction) {
+
             case "North":
-                location = new Point(location.x, location.y);
+                location = new Point(location.x,location.y - 1);
+
+                System.out.println("moved" + direction);
                 break;
 
             case "South":
-                location = new Point(location.x, location.y);
+                location = new Point(location.x, location.y + 1);
+                System.out.println("moved" + direction);
                 break;
 
             case "East":
-                location = new Point(location.x, location.y);
+                location = new Point(location.x -1 , location.y);
+                System.out.println("moved" + direction);
                 break;
 
             case "West":
-                location = new Point(location.x, location.y);
+                location = new Point(location.x + 1, location.y);
+                System.out.println("moved" + direction);
                 break;
 
                 default: throw new Error();
