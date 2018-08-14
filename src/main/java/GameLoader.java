@@ -7,23 +7,27 @@ import Entities.Tiles.HallwayTile;
 import Entities.Tiles.InaccessibleTile;
 import Entities.Tiles.RoomTile;
 import Entities.Tiles.Tile;
-import Entities.WeaponTokens;
+import Entities.WeaponToken;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Loads the game to the specification
+ */
 public class GameLoader {
-    public static final int width = 24;
-    public static final int height = 25;
+    public static final int WIDTH = 24;
+    public static final int HEIGHT = 25;
 
     private List<RoomCard> roomCards;
     private List<CharacterCard> chrCards;
     private List<WeaponCard> weapCards;
 
     // todo ask sophie about
-    private List<WeaponTokens> weaponTokens;
+    private List<WeaponToken> weaponTokens;
 
     private List<Player> allCharacterPool;
     private List<Card> allCardPool;
@@ -42,10 +46,58 @@ public class GameLoader {
 
         loadWeaponTokens();
 
+        initWeaponTokens();
 
         System.out.println("Assets loaded ...");
     }
 
+    /**
+     * Puts the weapon tokens randomly on the board
+     *
+     * @author Sophie
+     */
+    // TODO: This needs to be implemented
+    public void initWeaponTokens() {
+        Random rng = new Random();
+        List<String> availableRooms = new ArrayList<>();
+        availableRooms.add("Ballroom");
+        availableRooms.add("Kitchen");
+        availableRooms.add("Dining Room");
+        availableRooms.add("Lounge");
+        availableRooms.add("Hall");
+        availableRooms.add("Study");
+        availableRooms.add("Library");
+        availableRooms.add("Billiard Room");
+        availableRooms.add("Conservatory");
+
+        List<WeaponToken> clone = new ArrayList<>(weaponTokens);
+        // Go through all weapon tokens
+        while (!clone.isEmpty()) {
+            int room = rng.nextInt(availableRooms.size());
+
+            for (int y = 0; y < HEIGHT; y++) {
+                for (int x = 0; x < WIDTH; x++) {
+                    if (clone.size() == 0) {
+                        break;
+                    }
+
+                    if (board[x][y].getName().equals(availableRooms.get(room))){
+                        if (!((RoomTile) board[x][y]).isDoorway()) {
+                            ((RoomTile) board[x][y]).setWeaponToken(clone.remove(rng.nextInt(clone.size())));
+                            availableRooms.remove(room);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Distributes all remaining cards to the players
+     *
+     * @param handSize
+     * @param currentPlayers the Players
+     */
     public void initPlayerHands(int handSize, List<Player> currentPlayers) {
         Random rng = new Random();
 
@@ -53,13 +105,12 @@ public class GameLoader {
         while (!remainingCards.isEmpty()) {
             for (Player p : currentPlayers) {
                 int size = remainingCards.size();
-                if (size == 0){
+                if (size == 0) {
                     break;
                 }
                 Card randomCard = remainingCards.remove(rng.nextInt(size));
                 p.addCardToHand(randomCard);
                 remainingCards.remove(randomCard);
-                System.out.println("cards set: " + p.getCardsInHand().size());
             }
         }
 
@@ -69,6 +120,12 @@ public class GameLoader {
     }
 
 
+    /**
+     * Initialise players, including their hands
+     *
+     * @param numPlayers number of players, must be between 3 and 6
+     * @return
+     */
     public List<Player> initPlayers(int numPlayers) {
         Random rng = new Random();
 
@@ -93,6 +150,12 @@ public class GameLoader {
         return currentPlayers;
     }
 
+    /**
+     * Randomly choose the murder solution from all available cards
+     * Must comprise of one weapon, one room, and one character
+     *
+     * @return the three cards
+     */
     public List<Card> initSolution() {
         Random rng = new Random();
         //Randomly select availableCardPool from their respective type pool
@@ -113,6 +176,9 @@ public class GameLoader {
         return solutionCards;
     }
 
+    /**
+     * Load in all the cards into the game
+     */
     private void loadCards() {
         // load allCardPool into arrays grouped by type
 
@@ -149,6 +215,9 @@ public class GameLoader {
         allCardPool.addAll(weapCards);
     }
 
+    /**
+     * Load all characters that are available to play at launch
+     */
     private void loadAvailableCharacters() {
         //load all playable characters
         allCharacterPool = new ArrayList<>();
@@ -160,19 +229,27 @@ public class GameLoader {
         allCharacterPool.add(new Player(new Point(23, 19), "Professor Plum", "Purple"));
     }
 
+    /**
+     * Load all weapon tokens
+     */
     private void loadWeaponTokens() {
         //load all weapons
         weaponTokens = new ArrayList<>();
-        weaponTokens.add(new WeaponTokens("Candlestick", "grey"));
-        weaponTokens.add(new WeaponTokens("Dagger", "grey"));
-        weaponTokens.add(new WeaponTokens("Lead Pipe", "grey"));
-        weaponTokens.add(new WeaponTokens("Dagger", "grey"));
-        weaponTokens.add(new WeaponTokens("Revolver", "grey"));
-        weaponTokens.add(new WeaponTokens("Rope", "grey"));
-        weaponTokens.add(new WeaponTokens("Spanner", "grey"));
+        weaponTokens.add(new WeaponToken("Candlestick", "*"));
+        weaponTokens.add(new WeaponToken("Dagger", "%"));
+        weaponTokens.add(new WeaponToken("Lead Pipe", "1"));
+        weaponTokens.add(new WeaponToken("Revolver", "q"));
+        weaponTokens.add(new WeaponToken("Rope", "&"));
+        weaponTokens.add(new WeaponToken("Spanner", "!"));
     }
 
+    /**
+     * Loads the tiles of the board, each are a room, hallway, or inaccessible
+     *
+     * @author Sophie
+     */
     private void loadTiles() {
+        // Old draw method, keep for reference
 //        String[] inaccessibleDraw = new String[3];
 //        inaccessibleDraw[0] = "XXX";
 //        inaccessibleDraw[1] = "XXX";
@@ -188,7 +265,7 @@ public class GameLoader {
 //        roomDraw[1] = "* *";
 //        roomDraw[2] = "***";
 
-        board = new Tile[width][height];
+        board = new Tile[WIDTH][HEIGHT];
 
         // Ballroom
         for (int x = 10; x < 14; x++) {
@@ -200,13 +277,19 @@ public class GameLoader {
                 board[x][y] = new RoomTile("Ballroom");
             }
         }
+        ((RoomTile) board[8][5]).setDoorway(true);
+        ((RoomTile) board[9][7]).setDoorway(true);
+        ((RoomTile) board[15][5]).setDoorway(true);
+        ((RoomTile) board[14][7]).setDoorway(true);
+
         // Kitchen
         for (int x = 0; x < 6; x++) {
             for (int y = 1; y < 7; y++) {
                 board[x][y] = new RoomTile("Kitchen");
-
             }
         }
+        ((RoomTile) board[4][6]).setDoorway(true);
+
         // Dining Room
         for (int x = 0; x < 5; x++) {
             board[x][9] = new RoomTile("Dining Room");
@@ -216,24 +299,35 @@ public class GameLoader {
                 board[x][y] = new RoomTile("Dining Room");
             }
         }
+        ((RoomTile) board[7][12]).setDoorway(true);
+        ((RoomTile) board[6][15]).setDoorway(true);
+
         // Lounge
         for (int x = 0; x < 7; x++) {
             for (int y = 19; y < 25; y++) {
                 board[x][y] = new RoomTile("Lounge");
             }
         }
+        ((RoomTile) board[6][19]).setDoorway(true);
+
         // Hall
         for (int x = 9; x < 15; x++) {
             for (int y = 18; y < 25; y++) {
                 board[x][y] = new RoomTile("Hall");
             }
         }
+        ((RoomTile) board[11][18]).setDoorway(true);
+        ((RoomTile) board[12][18]).setDoorway(true);
+        ((RoomTile) board[14][20]).setDoorway(true);
+
         // Study
         for (int x = 17; x < 24; x++) {
-            for (int y = 20; y < 25; y++) {
+            for (int y = 21; y < 25; y++) {
                 board[x][y] = new RoomTile("Study");
             }
         }
+        ((RoomTile) board[17][21]).setDoorway(true);
+
         // Library
         for (int x = 18; x < 23; x++) {
             for (int y = 14; y < 19; y++) {
@@ -247,12 +341,18 @@ public class GameLoader {
                 }
             }
         }
+        ((RoomTile) board[20][14]).setDoorway(true);
+        ((RoomTile) board[17][16]).setDoorway(true);
+
         // Billiard Room
         for (int x = 18; x < 24; x++) {
             for (int y = 8; y < 13; y++) {
                 board[x][y] = new RoomTile("Billiard Room");
             }
         }
+        ((RoomTile) board[18][9]).setDoorway(true);
+        ((RoomTile) board[22][12]).setDoorway(true);
+
         // Conservatory
         for (int x = 18; x < 24; x++) {
             for (int y = 1; y < 5; y++) {
@@ -262,11 +362,12 @@ public class GameLoader {
         for (int x = 19; x < 23; x++) {
             board[x][5] = new RoomTile("Conservatory");
         }
+        ((RoomTile) board[18][4]).setDoorway(true);
 
 
         // INACCESSIBLE (It does replace rooms as it goes)
         // Top side of board
-        for (int x = 0; x < width; x++) {
+        for (int x = 0; x < WIDTH; x++) {
             if (x != 9 && x != 14) {
                 board[x][0] = new InaccessibleTile();
             }
@@ -304,8 +405,8 @@ public class GameLoader {
         }
 
         // HALLWAY (All remaining tiles)
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
                 if (board[x][y] == null) {
                     board[x][y] = new HallwayTile();
                 }
@@ -314,8 +415,12 @@ public class GameLoader {
 
     }
 
-    //Getters and Setters
-    public List<WeaponTokens> getWeaponTokens() {
+    /**
+     * Getters for most of our variables
+     *
+     * @return
+     */
+    public List<WeaponToken> getWeaponTokens() {
         return weaponTokens;
     }
 

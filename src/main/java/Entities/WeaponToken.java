@@ -1,14 +1,14 @@
 package Entities;
 
-public class WeaponTokens {
+public class WeaponToken {
 
-    //Entities.WeaponTokens Attributes
+    //WeaponToken Attributes
     private String name;
-    private String colour;
+    private String icon;
 
-    public WeaponTokens(String name, String colour) {
+    public WeaponToken(String name, String colour) {
         this.name = name;
-        this.colour = colour;
+        this.icon = colour;
     }
 
     public boolean setName(String name) {
@@ -18,9 +18,9 @@ public class WeaponTokens {
         return wasSet;
     }
 
-    public boolean setColour(String colour) {
+    public boolean setIcon(String icon) {
         boolean wasSet = false;
-        this.colour = colour;
+        this.icon = icon;
         wasSet = true;
         return wasSet;
     }
@@ -29,8 +29,8 @@ public class WeaponTokens {
         return name;
     }
 
-    public String getColour() {
-        return colour;
+    public String getIcon() {
+        return icon;
     }
 
     public void delete() {
@@ -40,7 +40,7 @@ public class WeaponTokens {
     public String toString() {
         return super.toString() + "[" +
                 "name" + ":" + getName() + "," +
-                "colour" + ":" + getColour() + "]";
+                "icon" + ":" + getIcon() + "]";
     }
 }
 

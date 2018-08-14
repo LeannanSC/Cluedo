@@ -20,7 +20,6 @@ public abstract class Card {
     }
 
     public String toString() {
-        return super.toString() + "[" +
-                "cardName" + ":" + getCardName() + "]";
+        return getCardName();
     }
 }
