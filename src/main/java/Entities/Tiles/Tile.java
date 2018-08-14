@@ -2,6 +2,9 @@ package Entities.Tiles;
 
 import Entities.Player;
 
+/**
+ * General class for
+ */
 public abstract class Tile {
 
     //Tile Attributes
