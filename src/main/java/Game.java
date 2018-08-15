@@ -1,4 +1,7 @@
 import Entities.Cards.Card;
+import Entities.Cards.CharacterCard;
+import Entities.Cards.RoomCard;
+import Entities.Cards.WeaponCard;
 import Entities.Player;
 import Entities.Tiles.HallwayTile;
 import Entities.Tiles.InaccessibleTile;
@@ -237,4 +240,11 @@ public class Game {
 	public List<Player> getCurrentPlayers() {
 		return currentPlayers;
 	}
+
+    public boolean getCanRefute(Player player, CharacterCard characterCard, WeaponCard weaponCard, RoomCard roomCard) {
+	   if( player.getCardsInHand().contains(characterCard) || player.getCardsInHand().contains(weaponCard) || player.getCardsInHand().contains(weaponCard)){
+	       return true;
+        }
+        return false;
+    }
 }

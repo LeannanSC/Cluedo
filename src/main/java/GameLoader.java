@@ -243,22 +243,6 @@ public class GameLoader {
 	 * Each are a room, hallway, or inaccessible.
 	 */
 	private void loadTiles() {
-        /* Old draw method, keep for reference
-        String[] inaccessibleDraw = new String[3];
-        inaccessibleDraw[0] = "XXX";
-        inaccessibleDraw[1] = "XXX";
-        inaccessibleDraw[2] = "XXX";
-
-        String[] hallwayDraw = new String[3];
-        hallwayDraw[0] = "+-+";
-        hallwayDraw[1] = "| |";
-        hallwayDraw[2] = "+-+";
-
-
-        roomDraw[0] = "***";
-        roomDraw[1] = "* *";
-        roomDraw[2] = "***";
-        */
 
 		board = new Tile[WIDTH][HEIGHT];
 
@@ -425,7 +409,19 @@ public class GameLoader {
 		return roomCards.get(idx);
 	}
 
-	public CharacterCard getChrCardAtIndex(int idx) {
+    public List<RoomCard> getRoomCards() {
+        return roomCards;
+    }
+
+    public List<CharacterCard> getChrCards() {
+        return chrCards;
+    }
+
+    public List<WeaponCard> getWeapCards() {
+        return weapCards;
+    }
+
+    public CharacterCard getChrCardAtIndex(int idx) {
 		return chrCards.get(idx);
 	}
 
