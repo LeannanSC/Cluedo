@@ -15,12 +15,18 @@ public class RoomTile extends Tile {
 
 	/**
 	 * Constructor
+	 *
 	 * @param name Name of the room type (e.g Study, Ballroom)
 	 */
 	public RoomTile(String name) {
 		super(name, true);
 	}
 
+	/**
+	 * Gives the draw method of the tile, including the player icon if a player is present
+	 *
+	 * @return An array of 3 strings each 3 chars long, to represent the tile
+	 */
 	@Override
 	public String[] draw() {
 		// Draw player if on tile
@@ -45,6 +51,9 @@ public class RoomTile extends Tile {
 		} else return new String[]{"+++", "+++", "+++"};
 	}
 
+	// -------------------
+	// GETTERS AND SETTERS
+	// -------------------
 	public void setPlayer(Player player) {
 		super.player = player;
 	}

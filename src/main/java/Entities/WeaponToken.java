@@ -20,7 +20,11 @@ public class WeaponToken {
 		this.icon = colour;
 	}
 
+	// -------------------
+	// GETTERS AND SETTERS
+	// -------------------
 	public boolean setName(String name) {
+		// FIXME: Unused method
 		boolean wasSet = false;
 		this.name = name;
 		wasSet = true;
@@ -28,6 +32,7 @@ public class WeaponToken {
 	}
 
 	public boolean setIcon(String icon) {
+		// FIXME: Unused method
 		boolean wasSet = false;
 		this.icon = icon;
 		wasSet = true;
@@ -43,6 +48,7 @@ public class WeaponToken {
 	}
 
 	public void delete() {
+		// FIXME: Unused empty method
 	}
 
 	public String toString() {
