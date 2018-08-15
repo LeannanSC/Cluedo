@@ -69,7 +69,7 @@ public class GameLoader {
         List<WeaponToken> clone = new ArrayList<>(weaponTokens);
         // Go through all weapon tokens
         while (!clone.isEmpty()) {
-            int room = rng.nextInt(availableRooms.size());
+            int room = rng.nextInt(availableRooms.size()-1);
 
             for (int y = 0; y < HEIGHT; y++) {
                 for (int x = 0; x < WIDTH; x++) {
