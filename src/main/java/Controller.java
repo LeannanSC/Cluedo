@@ -14,6 +14,7 @@ public class Controller {
     GameLoader gameLoader;
     Player currentPlayer;
     boolean rolledThisTurn = false;
+    boolean movedThisTurn = true;
 
     private Controller() {
         System.out.println("Loading Assets...");
@@ -111,7 +112,11 @@ public class Controller {
                 currentOptions.add("6:");
             }
 
-            currentOptions.add("7: End Turn");
+            if (movedThisTurn) {
+                currentOptions.add("7: End Turn");
+            }else {
+                currentOptions.add("7:");
+            }
 
             currentOptions.add("8: Show Board Info");
 
@@ -124,12 +129,12 @@ public class Controller {
 
         private void doCommand (Player p,int input){
 
-
             switch (input) {
 
                 case 1: // Move North
                     if (getAvailMoves().get(0).equals("1: Move North")) {
                         game.movePlayer(currentPlayer, "North");
+                        movedThisTurn = true;
                         update();
                     } else if (getAvailMoves().contains("1:")) {
                         System.out.println("That move is unavailable please select another");
@@ -140,6 +145,7 @@ public class Controller {
                 case 2: // Move South
                     if (getAvailMoves().get(1).equals("2: Move South")) {
                         game.movePlayer(currentPlayer, "South");
+                        movedThisTurn = true;
                         update();
                     } else if (getAvailMoves().contains("2:")) {
                         System.out.println("That move is unavailable please select another");
@@ -150,6 +156,7 @@ public class Controller {
                 case 3: // Move East
                     if (getAvailMoves().get(2).equals("3: Move East")) {
                         game.movePlayer(currentPlayer, "East");
+                        movedThisTurn = true;
                         update();
                     } else if (getAvailMoves().contains("3:")) {
                         System.out.println("That move is unavailable please select another");
@@ -160,6 +167,7 @@ public class Controller {
                 case 4: // Move West
                     if (getAvailMoves().get(3).equals("4: Move West")) {
                         game.movePlayer(currentPlayer, "West");
+                        movedThisTurn = true;
                         update();
                     } else if (getAvailMoves().contains("4:")) {
                         System.out.println("That move is unavailable please select another");
@@ -189,7 +197,7 @@ public class Controller {
 
                 case 7: // End Turn
                     if (getAvailMoves().get(6).equals("7: End Turn")) {
-                        nextTurn(p);//todo
+                        nextTurn(p);
                         System.out.println("Turn Ended");
 
                     } else if (getAvailMoves().contains("7:")) {
@@ -198,7 +206,7 @@ public class Controller {
 
                     break;
 
-                case 8: // End Turn
+                case 8: // board info
                     if (getAvailMoves().get(7).equals("8: Show Board Info")) {
                         //todo print board info
                         System.out.println("Board Inrormation");
@@ -225,17 +233,17 @@ public class Controller {
             }
             currentPlayer.setMovesRemaining(0);
             currentPlayer = game.getCurrentPlayers().get(nextPlayer);
+            game.placesMoved = new ArrayList<>();
             rolledThisTurn = false;
+            movedThisTurn = false;
         }
 
         public void makeSuggestion (Player p){
             System.out.println("not implemented");//fixme
-
         }
 
-        public void makeAccusation (Player p){
+        public void makeAccusation (Player p) {
             System.out.println("not implemented");//fixme
-
         }
 
         public static void main (String[]args){

@@ -67,7 +67,7 @@ public class Game {
         player.move(direction);
         Tile nextTile = board[player.getLocation().x][player.getLocation().y];
         nextTile.setPlayer(player);
-        placesMoved.add(new Point(player.getLocation().x,player.getLocation().y));
+        placesMoved.add(new Point(player.getLocation().x, player.getLocation().y));
     }
 
 
@@ -80,7 +80,7 @@ public class Game {
             case "North":
                 // if next tile is out of bounds
                 try {
-                    nextTileLocation = new Point(p.getLocation().x,p.getLocation().y - 1);
+                    nextTileLocation = new Point(p.getLocation().x, p.getLocation().y - 1);
                     nextTile = board[nextTileLocation.x][nextTileLocation.y];
                 } catch (ArrayIndexOutOfBoundsException ae) {
                     return false;
@@ -91,12 +91,13 @@ public class Game {
                     return false;
                 }
 
+                // check if player is at next tile
+                if (nextTile.getPlayer() != null) {
+                    return false;
+                }
+
                 // check if moved to the next tile before
-                System.out.println(placesMoved.size());
-                System.out.println(nextTileLocation);
-                if(placesMoved.contains(nextTileLocation)){
-                    System.out.println(placesMoved.get(0));
-                    System.out.println("already moved" + direction);
+                if (placesMoved.contains(nextTileLocation)) {
                     return false;
                 }
 
@@ -108,12 +109,11 @@ public class Game {
                 if (currentTile instanceof RoomTile && nextTile instanceof HallwayTile) {
                     return ((RoomTile) currentTile).isDoorway();
                 }
-
                 return true;
 
             case "South":
                 try {
-                    nextTileLocation = new Point(p.getLocation().x,p.getLocation().y + 1);
+                    nextTileLocation = new Point(p.getLocation().x, p.getLocation().y + 1);
                     nextTile = board[nextTileLocation.x][nextTileLocation.y];
                 } catch (ArrayIndexOutOfBoundsException ae) {
                     return false;
@@ -123,12 +123,12 @@ public class Game {
                     return false;
                 }
 
+                if (nextTile.getPlayer() != null) {
+                    return false;
+                }
+
                 // check if moved to the next tile before
-                System.out.println(placesMoved.size());
-                System.out.println(nextTileLocation);
-                if(placesMoved.contains(nextTileLocation)){
-                    System.out.println(placesMoved.get(0));
-                    System.out.println("already moved" + direction);
+                if (placesMoved.contains(nextTileLocation)) {
                     return false;
                 }
 
@@ -144,7 +144,7 @@ public class Game {
 
             case "East":
                 try {
-                    nextTileLocation = new Point(p.getLocation().x + 1,p.getLocation().y);
+                    nextTileLocation = new Point(p.getLocation().x + 1, p.getLocation().y);
                     nextTile = board[nextTileLocation.x][nextTileLocation.y];
                 } catch (ArrayIndexOutOfBoundsException ae) {
                     return false;
@@ -155,11 +155,11 @@ public class Game {
                     return false;
                 }
 
-                System.out.println(placesMoved.size());
-                System.out.println(nextTileLocation);
-                if(placesMoved.contains(nextTileLocation)){
-                    System.out.println(placesMoved.get(0));
-                    System.out.println("already moved" + direction);
+                if (nextTile.getPlayer() != null) {
+                    return false;
+                }
+
+                if (placesMoved.contains(nextTileLocation)) {
                     return false;
                 }
 
@@ -174,7 +174,7 @@ public class Game {
 
             case "West":
                 try {
-                    nextTileLocation = new Point(p.getLocation().x - 1,p.getLocation().y);
+                    nextTileLocation = new Point(p.getLocation().x - 1, p.getLocation().y);
                     nextTile = board[nextTileLocation.x][nextTileLocation.y];
                 } catch (ArrayIndexOutOfBoundsException ae) {
                     return false;
@@ -182,11 +182,11 @@ public class Game {
                 if (nextTile instanceof InaccessibleTile) {
                     return false;
                 }
-                System.out.println(placesMoved.size());
-                System.out.println(nextTileLocation);
-                if(placesMoved.contains(nextTileLocation)){
-                    System.out.println(placesMoved.get(0));
-                    System.out.println("already moved" + direction);
+
+                if (nextTile.getPlayer() != null) {
+                    return false;
+                }
+                if (placesMoved.contains(nextTileLocation)) {
                     return false;
                 }
 
