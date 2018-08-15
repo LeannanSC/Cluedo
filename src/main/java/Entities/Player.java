@@ -65,22 +65,18 @@ public class Player {
             case "North":
                 location = new Point(location.x,location.y - 1);
 
-                System.out.println("moved" + direction);
                 break;
 
             case "South":
                 location = new Point(location.x, location.y + 1);
-                System.out.println("moved" + direction);
                 break;
 
             case "East":
-                location = new Point(location.x -1 , location.y);
-                System.out.println("moved" + direction);
+                location = new Point(location.x + 1 , location.y);
                 break;
 
             case "West":
-                location = new Point(location.x + 1, location.y);
-                System.out.println("moved" + direction);
+                location = new Point(location.x - 1, location.y);
                 break;
 
                 default: throw new Error();

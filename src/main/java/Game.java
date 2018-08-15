@@ -144,7 +144,7 @@ public class Game {
 
             case "East":
                 try {
-                    nextTileLocation = new Point(p.getLocation().x - 1,p.getLocation().y);
+                    nextTileLocation = new Point(p.getLocation().x + 1,p.getLocation().y);
                     nextTile = board[nextTileLocation.x][nextTileLocation.y];
                 } catch (ArrayIndexOutOfBoundsException ae) {
                     return false;
@@ -174,7 +174,7 @@ public class Game {
 
             case "West":
                 try {
-                    nextTileLocation = new Point(p.getLocation().x + 1,p.getLocation().y);
+                    nextTileLocation = new Point(p.getLocation().x - 1,p.getLocation().y);
                     nextTile = board[nextTileLocation.x][nextTileLocation.y];
                 } catch (ArrayIndexOutOfBoundsException ae) {
                     return false;
