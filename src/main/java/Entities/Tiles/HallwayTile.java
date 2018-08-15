@@ -15,6 +15,11 @@ public class HallwayTile extends Tile {
 		super("Hallway Tile", true);
 	}
 
+	/**
+	 * Gives the draw method of the tile, including the player icon if a player is present
+	 *
+	 * @return An array of 3 strings each 3 chars long, to represent the tile
+	 */
 	@Override
 	public String[] draw() {
 		if (player != null) {

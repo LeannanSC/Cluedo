@@ -18,12 +18,13 @@ public abstract class Card {
 	}
 
 	/**
-	 * Set the card name, this class is likely redundant
+	 * Set the card name
 	 *
 	 * @param cardName the new name of the card
 	 * @return if the card was properly set
 	 */
 	public boolean setCardName(String cardName) {
+		// FIXME: Unused method
 		boolean wasSet = false;
 		this.cardName = cardName;
 		wasSet = true;
