@@ -1,10 +1,11 @@
 package Entities.Cards;
 
+/**
+ * Represents weapon cards
+ */
 public class WeaponCard extends Card {
 
-    public WeaponCard(String cardName) {
-        super(cardName);
-    }
-
-
+	public WeaponCard(String cardName) {
+		super(cardName);
+	}
 }
