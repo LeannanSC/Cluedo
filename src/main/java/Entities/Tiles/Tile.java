@@ -7,38 +7,41 @@ import Entities.Player;
  */
 public abstract class Tile {
 
-    //Tile Attributes
-    private final String name;
-    private final boolean canAccess;
-    Player player = null;
+	//Tile Attributes
+	private final String name;
+	private final boolean canAccess;
+	Player player = null;
 
 
-    public Tile(String name, boolean canAccess) {
-        this.name = name;
-        this.canAccess = canAccess;
-    }
+	public Tile(String name, boolean canAccess) {
+		this.name = name;
+		this.canAccess = canAccess;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public abstract String[] draw();
 
-    public abstract String[] draw();
+	// -------------------
+	// GETTERS AND SETTERS
+	// -------------------
+	public Player getPlayer() {
+		return player;
+	}
 
-    public boolean getCanAccess() {
-        return canAccess;
-    }
+	public boolean getCanAccess() {
+		return canAccess;
+	}
 
-    public String toString() {
-        return super.toString() + "[" +
-                "name" + ":" + getName() + "," +
-                "canAccess" + ":" + getCanAccess() + "]";
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Player getPlayer() {
-        return player;
-    }
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
+	public String toString() {
+		return super.toString() + "[" +
+				"name" + ":" + getName() + "," +
+				"canAccess" + ":" + getCanAccess() + "]";
+	}
 }

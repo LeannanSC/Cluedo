@@ -1,10 +1,15 @@
 package Views;
 
+/**
+ * Abstract class for viewing the board
+ */
 public abstract class View {
-    public View() {
-    }
+	// FIXME: Extended classes unused
 
-    public void redraw() {
-    }
+	public View() {
+	}
+
+	public void redraw() {
+	}
 
 }
