@@ -1,5 +1,8 @@
 package Entities;
 
+/**
+ * Attributes to display weapons on the board
+ */
 public class WeaponToken {
 
     //WeaponToken Attributes
