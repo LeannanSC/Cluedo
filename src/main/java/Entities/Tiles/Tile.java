@@ -7,42 +7,38 @@ import Entities.Player;
  */
 public abstract class Tile {
 
-	//Tile Attributes
-	private final String name;
-	private final boolean canAccess;
-	Player player = null;
+    //Tile Attributes
+    private final String name;
+    private final boolean canAccess;
+    Player player = null;
 
-	/**
-	 * Constructor
-	 *
-	 * @param name      name of the room, used mostly for Room Tiles
-	 * @param canAccess can the player access this tile?
-	 */
-	public Tile(String name, boolean canAccess) {
-		this.name = name;
-		this.canAccess = canAccess;
-	}
 
-	public String getName() {
-		return name;
-	}
+    public Tile(String name, boolean canAccess) {
+        this.name = name;
+        this.canAccess = canAccess;
+    }
 
-	/**
-	 * Draw method to be defined in specific tiles
-	 */
-	public abstract String[] draw();
+    public String getName() {
+        return name;
+    }
 
-	public boolean getCanAccess() {
-		return canAccess;
-	}
+    public abstract String[] draw();
 
-	public String toString() {
-		return super.toString() + "[" +
-				"name" + ":" + getName() + "," +
-				"canAccess" + ":" + getCanAccess() + "]";
-	}
+    public boolean getCanAccess() {
+        return canAccess;
+    }
 
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
+    public String toString() {
+        return super.toString() + "[" +
+                "name" + ":" + getName() + "," +
+                "canAccess" + ":" + getCanAccess() + "]";
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }

@@ -12,104 +12,88 @@ import java.util.List;
  */
 public class Player {
 
-	// Player Attributes
-	private Point location;
-	private final String characterName;
-	private final String colour; // First character of colour represents the player on the board
-	private int movesRemaining;
+    //Player Attributes
+    private Point location;
+    private final String characterName;
+    private final String colour;
 
-	// Player Associations
-	private List<Card> cardsInHand;
+    private int movesRemaining;
 
-	/**
-	 * Constructor
-	 *
-	 * @param location      initial starting position of the player
-	 * @param characterName The players characters name
-	 * @param colour        The players characters colour
-	 */
-	public Player(Point location, String characterName, String colour) {
-		this.location = location;
-		this.characterName = characterName;
-		this.colour = colour;
-		this.cardsInHand = new ArrayList<>();
-		this.movesRemaining = 0;
-	}
+    //Player Associations
+    private List<Card> cardsInHand;
 
-	public boolean setLocation(Point aLocation) {
-		boolean wasSet = false;
-		location = aLocation;
-		wasSet = true;
-		return wasSet;
-	}
+    public Player(Point location, String characterName, String colour) {
+        this.location = location;
+        this.characterName = characterName;
+        this.colour = colour;
+        this.cardsInHand = new ArrayList<>();
+        this.movesRemaining = 0;
+    }
 
-	public Point getLocation() {
-		return location;
-	}
+    public boolean setLocation(Point aLocation) {
+        boolean wasSet = false;
+        location = aLocation;
+        wasSet = true;
+        return wasSet;
+    }
 
-	public String getCharacterName() {
-		return characterName;
-	}
+    public Point getLocation() {
+        return location;
+    }
 
-	public String getColour() {
-		return colour;
-	}
+    public String getCharacterName() {
+        return characterName;
+    }
 
-	public Card getCardInHandAtIndex(int index) {
-		return cardsInHand.get(index);
-	}
+    public String getColour() {
+        return colour;
+    }
 
-	public List<Card> getCardsInHand() {
-		return Collections.unmodifiableList(cardsInHand);
-	}
+    public Card getCardInHandAtIndex(int index) {
+        return cardsInHand.get(index);
+    }
 
-	public void addCardToHand(Card card) {
-		this.cardsInHand.add(card);
-	}
+    public List<Card> getCardsInHand() {
+        return Collections.unmodifiableList(cardsInHand);
+    }
 
-	/**
-	 * Move player one tile in a direction, throws error if invalid
-	 *
-	 * @param direction which cardinal direction the player wants to move in
-	 */
-	public void move(String direction) {
-		movesRemaining--;
-		switch (direction) {
+    public void addCardToHand(Card card) {
+        this.cardsInHand.add(card);
+    }
 
-			case "North":
-				location = new Point(location.x, location.y - 1);
+    public void move(String direction) {
+        movesRemaining--;
+        switch (direction) {
 
-				System.out.println("moved" + direction);
-				break;
+            case "North":
+                location = new Point(location.x,location.y - 1);
 
-			case "South":
-				location = new Point(location.x, location.y + 1);
-				System.out.println("moved" + direction);
-				break;
+                break;
 
-			case "East":
-				location = new Point(location.x - 1, location.y);
-				System.out.println("moved" + direction);
-				break;
+            case "South":
+                location = new Point(location.x, location.y + 1);
+                break;
 
-			case "West":
-				location = new Point(location.x + 1, location.y);
-				System.out.println("moved" + direction);
-				break;
+            case "East":
+                location = new Point(location.x + 1 , location.y);
+                break;
 
-			default:
-				throw new Error();
-		}
-	}
+            case "West":
+                location = new Point(location.x - 1, location.y);
+                break;
 
-	public void draw() {
-	}
+                default: throw new Error();
+        }
+    }
 
-	public int getMovesRemaining() {
-		return movesRemaining;
-	}
+    public void draw() {
+    }
 
-	public void setMovesRemaining(int moves) {
-		movesRemaining = moves;
-	}
+    public int getMovesRemaining() {
+        return movesRemaining;
+    }
+
+    public void setMovesRemaining(int moves) {
+        movesRemaining = moves;
+    }
 }
