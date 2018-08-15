@@ -16,47 +16,43 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Loads the game to the specification
+ * Initialise the game variables and loads in the assets according to the specification
  */
 public class GameLoader {
+
+	// Constants
     public static final int WIDTH = 24;
     public static final int HEIGHT = 25;
 
+    // Variables
     private List<RoomCard> roomCards;
     private List<CharacterCard> chrCards;
     private List<WeaponCard> weapCards;
 
-    // todo ask sophie about
     private List<WeaponToken> weaponTokens;
 
     private List<Player> allCharacterPool;
     private List<Card> allCardPool;
     private Tile[][] board;
 
-    private List<Player> availableCharacterPool; // fixme may not need?
+    private List<Player> availableCharacterPool; // FIXME: may not need?
     private List<Card> remainingCards;
 
-    public GameLoader() {
-
+	/**
+	 * Constructor, calls load and initialise methods
+	 */
+	public GameLoader() {
         loadTiles();
-
         loadCards();
-
         loadAvailableCharacters();
-
         loadWeaponTokens();
-
         initWeaponTokens();
-
         System.out.println("Assets loaded ...");
     }
 
     /**
-     * Puts the weapon tokens randomly on the board
-     *
-     * @author Sophie
+     * Puts the weapon tokens randomly on the board in the beginning
      */
-    // TODO: This needs to be implemented
     public void initWeaponTokens() {
         Random rng = new Random();
         List<String> availableRooms = new ArrayList<>();
@@ -95,7 +91,6 @@ public class GameLoader {
     /**
      * Distributes all remaining cards to the players
      *
-     * @param handSize
      * @param currentPlayers the Players
      */
     public void initPlayerHands(int handSize, List<Player> currentPlayers) {
@@ -123,8 +118,8 @@ public class GameLoader {
     /**
      * Initialise players, including their hands
      *
-     * @param numPlayers number of players, must be between 3 and 6
-     * @return
+     * @param numPlayers Number of human players, must be between 3 and 6
+     * @return List of all the players
      */
     public List<Player> initPlayers(int numPlayers) {
         Random rng = new Random();
@@ -154,7 +149,7 @@ public class GameLoader {
      * Randomly choose the murder solution from all available cards
      * Must comprise of one weapon, one room, and one character
      *
-     * @return the three cards
+     * @return List of the three solution cards
      */
     public List<Card> initSolution() {
         Random rng = new Random();
@@ -244,26 +239,25 @@ public class GameLoader {
     }
 
     /**
-     * Loads the tiles of the board, each are a room, hallway, or inaccessible
-     *
-     * @author Sophie
+     * Loads the tiles of the board, each are a room, hallway, or inaccessible.
      */
     private void loadTiles() {
-        // Old draw method, keep for reference
-//        String[] inaccessibleDraw = new String[3];
-//        inaccessibleDraw[0] = "XXX";
-//        inaccessibleDraw[1] = "XXX";
-//        inaccessibleDraw[2] = "XXX";
+        /* Old draw method, keep for reference
+        String[] inaccessibleDraw = new String[3];
+        inaccessibleDraw[0] = "XXX";
+        inaccessibleDraw[1] = "XXX";
+        inaccessibleDraw[2] = "XXX";
 
-//        String[] hallwayDraw = new String[3];
-//        hallwayDraw[0] = "+-+";
-//        hallwayDraw[1] = "| |";
-//        hallwayDraw[2] = "+-+";
+        String[] hallwayDraw = new String[3];
+        hallwayDraw[0] = "+-+";
+        hallwayDraw[1] = "| |";
+        hallwayDraw[2] = "+-+";
 
 
-//        roomDraw[0] = "***";
-//        roomDraw[1] = "* *";
-//        roomDraw[2] = "***";
+        roomDraw[0] = "***";
+        roomDraw[1] = "* *";
+        roomDraw[2] = "***";
+        */
 
         board = new Tile[WIDTH][HEIGHT];
 
@@ -415,11 +409,8 @@ public class GameLoader {
 
     }
 
-    /**
-     * Getters for most of our variables
-     *
-     * @return
-     */
+    // GETTERS FOR MOST OF THE VARIABLES
+
     public List<WeaponToken> getWeaponTokens() {
         return weaponTokens;
     }

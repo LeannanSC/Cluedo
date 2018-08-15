@@ -3,7 +3,7 @@ package Entities.Tiles;
 import Entities.Player;
 
 /**
- * General class for
+ * General class for tiles
  */
 public abstract class Tile {
 
@@ -41,5 +41,4 @@ public abstract class Tile {
     public void setPlayer(Player player) {
         this.player = player;
     }
-
 }

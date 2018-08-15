@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Initialises loaded assets and making a coherent game
+ * Also allows manipulation of the board
+ */
 public class Game {
 
     //Game Associations
@@ -208,5 +212,4 @@ public class Game {
     public List<Player> getCurrentPlayers() {
         return currentPlayers;
     }
-
 }

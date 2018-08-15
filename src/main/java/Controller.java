@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Controller class handles the user inputs and runs the game overall
+ */
 public class Controller {
 
     Game game;
