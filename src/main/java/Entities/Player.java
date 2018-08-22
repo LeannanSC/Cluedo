@@ -1,10 +1,9 @@
 package Entities;
 
-import Entities.Cards.Card;
+import Entities.Cards.*;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,24 +49,24 @@ public class Player {
 	 *
 	 * @param direction The cardinal direction the player wants to move in
 	 */
-	public void move(String direction) {
+
+	public void move(Action direction) {
 		movesRemaining--;
 		switch (direction) {
 
-			case "North":
+			case NORTH:
 				location = new Point(location.x, location.y - 1);
-
 				break;
 
-			case "South":
+			case SOUTH:
 				location = new Point(location.x, location.y + 1);
 				break;
 
-			case "East":
+			case EAST:
 				location = new Point(location.x + 1, location.y);
 				break;
 
-			case "West":
+			case WEST:
 				location = new Point(location.x - 1, location.y);
 				break;
 
@@ -76,20 +75,9 @@ public class Player {
 		}
 	}
 
-	public void draw() {
-		// FIXME: Unused empty method
-	}
-
 	// -------------------
 	// GETTERS AND SETTERS
 	// -------------------
-	public boolean setLocation(Point aLocation) {
-		// FIXME: Unused method
-		boolean wasSet = false;
-		location = aLocation;
-		wasSet = true;
-		return wasSet;
-	}
 
 	public Point getLocation() {
 		return location;
@@ -103,13 +91,8 @@ public class Player {
 		return colour;
 	}
 
-	public Card getCardInHandAtIndex(int index) {
-		// FIXME: Unused method
-		return cardsInHand.get(index);
-	}
-
 	public List<Card> getCardsInHand() {
-		return Collections.unmodifiableList(cardsInHand);
+		return cardsInHand;
 	}
 
 	public int getMovesRemaining() {

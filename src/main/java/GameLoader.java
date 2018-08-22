@@ -93,7 +93,7 @@ public class GameLoader {
 	 *
 	 * @param currentPlayers The players
 	 */
-	public void initPlayerHands(int handSize, List<Player> currentPlayers) {
+	public void initPlayerHands(List<Player> currentPlayers) {
 		Random rng = new Random();
 
 		// can now deal with uneven hand size
@@ -103,7 +103,7 @@ public class GameLoader {
 				if (size == 0) {
 					break;
 				}
-				Card randomCard = remainingCards.remove(rng.nextInt(size));
+				Card randomCard = remainingCards.get(rng.nextInt(size));
 				p.addCardToHand(randomCard);
 				remainingCards.remove(randomCard);
 			}
@@ -130,14 +130,13 @@ public class GameLoader {
 
 		List<Player> allPlayerCopy = new ArrayList<>(allCharacterPool);
 		List<Player> currentPlayers = new ArrayList<>();
-
 		for (int i = 0; i < numPlayers; i++) {
 			Player newPlayer = allPlayerCopy.remove(rng.nextInt(allPlayerCopy.size()));
 			board[newPlayer.getLocation().x][newPlayer.getLocation().y].setPlayer(newPlayer);
 			currentPlayers.add(newPlayer);
 		}
 
-		initPlayerHands(remainingCards.size() / currentPlayers.size(), currentPlayers);
+		initPlayerHands(currentPlayers);
 
 		if (remainingCards.size() != 0) {
 			throw new Error("should have 0 remaining cards after all hands initialised size is: " + remainingCards.size());
