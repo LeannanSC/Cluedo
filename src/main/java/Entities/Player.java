@@ -17,6 +17,8 @@ public class Player {
 	private final String colour; // The first letter is used for board representation
 	private int movesRemaining;
 
+	private boolean isOut = false;
+
 	//Player Associations
 	private List<Card> cardsInHand;
 
@@ -101,5 +103,13 @@ public class Player {
 
 	public void setMovesRemaining(int moves) {
 		movesRemaining = moves;
+	}
+
+	public boolean isOut() {
+		return isOut;
+	}
+
+	public void setOut(boolean out) {
+		isOut = out;
 	}
 }

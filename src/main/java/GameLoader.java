@@ -11,7 +11,6 @@ import Entities.WeaponToken;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -34,8 +33,6 @@ public class GameLoader {
 	private List<Player> allCharacterPool;
 	private List<Card> allCardPool;
 	private Tile[][] board;
-
-	private List<Player> availableCharacterPool; // FIXME: may not need?
 	private List<Card> remainingCards;
 
 	/**
@@ -55,21 +52,12 @@ public class GameLoader {
 	 */
 	public void initWeaponTokens() {
 		Random rng = new Random();
-		List<String> availableRooms = new ArrayList<>();
-		availableRooms.add("Ballroom");
-		availableRooms.add("Kitchen");
-		availableRooms.add("Dining Room");
-		availableRooms.add("Lounge");
-		availableRooms.add("Hall");
-		availableRooms.add("Study");
-		availableRooms.add("Library");
-		availableRooms.add("Billiard Room");
-		availableRooms.add("Conservatory");
 
+		List<RoomCard> tempRooms = new ArrayList<>(roomCards);
 		List<WeaponToken> clone = new ArrayList<>(weaponTokens);
 		// Go through all weapon tokens
 		while (!clone.isEmpty()) {
-			int room = rng.nextInt(availableRooms.size() - 1);
+			int room = rng.nextInt(tempRooms.size() - 1);
 
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
@@ -77,10 +65,10 @@ public class GameLoader {
 						break;
 					}
 
-					if (board[x][y].getName().equals(availableRooms.get(room))) {
+					if (board[x][y].getName().equals(tempRooms.get(room).getCardName())) {
 						if (!((RoomTile) board[x][y]).isDoorway()) {
 							((RoomTile) board[x][y]).setWeaponToken(clone.remove(rng.nextInt(clone.size())));
-							availableRooms.remove(room);
+							tempRooms.remove(room);
 						}
 					}
 				}

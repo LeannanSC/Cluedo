@@ -7,12 +7,12 @@ import Entities.Tiles.Tile;
  * Abstract class for viewing the board
  */
 public abstract class View {
-	// FIXME: Extended classes unused
 
 	public View() {
 	}
 
-	public void redraw() {
+	public void redraw(){
+//fixme implement
 	}
 
 	public abstract void drawBoard(Tile[][] board, int width, int height);

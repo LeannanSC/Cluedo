@@ -3,7 +3,9 @@ import Entities.Cards.RoomCard;
 import Entities.Cards.WeaponCard;
 import Entities.Player;
 import Entities.Action;
+import Entities.Suggestion;
 import Entities.Tiles.HallwayTile;
+import Entities.Tiles.RoomTile;
 import Views.TextView;
 import Views.View;
 
@@ -19,22 +21,20 @@ public class Controller {
 
     private Game game;
     private Player currentPlayer;
-
     private View view;
-
+    boolean gameFinished;
 
     /**
      * The game is run in this here
      */
     private Controller() {
-        view = new TextView(); // fixme
-
+        view = new TextView(); // fixme move to view
         game = new Game(getInput());
         currentPlayer = game.getCurrentPlayers().get(0);
 
 
-        boolean gameFinished = false;
-        update(view);
+        gameFinished = false;
+        redraw(view);
 
         while (!gameFinished) {
             System.out.println("Character name - " + currentPlayer.getCharacterName() + ", Board Representation - " + currentPlayer.getColour().charAt(0));
@@ -81,31 +81,36 @@ public class Controller {
     /**
      * Checks if the move the player wants to do is a valid move. If so, then proceed.
      *
-     * @param p The current player
+     * @param player The current player
      */
-    private void doCommand(Player p) {
+    private void doCommand(Player player) {
 
-        System.out.println("Select Command:");
-        String avail = "[" + Arrays.stream(Action.values()).map(action -> this.createLabel(action, p)).collect(Collectors.joining(", ")) + "]";
-        System.out.println("Current Valid Moves -\n" + avail);
+        String avail = Arrays.stream(Action.values()).map( //fixme
+                action -> this.createLabel(action, player))
+                .collect(Collectors.joining(", "));
+        System.out.println("Current Valid Commands -\n" + avail);
         int input = getInput();
+
         Action selected = Action.values()[input - 1];
-        if (selected == null || !this.game.getCanMove(p, selected)) {
+
+        if (selected == null || !this.game.canDoAction(selected, player)) {
             System.out.println("That move is unavailable please select another");
             return;
         }
+
         switch (selected) {
             case NORTH:
             case SOUTH:
             case EAST:
             case WEST:
-                game.movePlayer(p, selected);
+                game.movePlayer(player, selected);
+                game.draw(view);
                 break;
             case SUGGESTION:
-                this.makeSuggestion();
+                makeSuggestion(player);
                 break;
             case ACCUSATION:
-                this.makeAccusation(p); //TODO
+                makeAccusation(player);
                 break;
             case TURN:
                 currentPlayer = game.changeTurn(currentPlayer);
@@ -117,28 +122,94 @@ public class Controller {
         }
     }
 
-    private String createLabel(Action action, Player p) {
-        String text = (action.ordinal() + 1) + ": ";
-        if (game.canDoAction(action, p)) {
-            text += action.getLabel();
+    private void doSuggest(){
+
+        String avail = Arrays.stream(Suggestion.values()).map( // fixme move to view
+                suggestion -> this.createLabel(suggestion))
+                .collect(Collectors.joining(", "));
+        System.out.println("Current Valid Commands -\n" + avail);
+
+        int input = getInput();
+
+        Suggestion selected = Suggestion.values()[input - 1];
+
+        if (selected == null || !this.game.canDoSuggestion(selected)) {
+            System.out.println("That move is unavailable please select another");
+            return;
         }
-        return text;
+
+        StringBuilder output;
+
+        switch (selected){
+            case CHARACTER:
+                List<CharacterCard> chrClone = game.gameLoader.getChrCards(); // fixme
+                output = new StringBuilder();
+                for (int i = 0; i < chrClone.size(); i++) {
+                    CharacterCard c = chrClone.get(i);
+                    output.append(i).append(": ").append(c.getCardName()).append(" ");
+                }
+                System.out.println(output.toString());
+                game.selectedCharacter = chrClone.get(getInput());
+                break;
+
+            case WEAPON:
+                List<WeaponCard> wepClone = game.gameLoader.getWeapCards();
+                output = new StringBuilder();
+                for (int i = 0; i < wepClone.size(); i++) {
+                    WeaponCard c = wepClone.get(i);
+                    output.append(i).append(": ").append(c.getCardName()).append(" ");
+                }
+                System.out.println(output.toString());
+                game.selectedWeapon = wepClone.get(getInput());
+                break;
+
+            case ROOM:
+                List<RoomCard> roomClone = game.gameLoader.getRoomCards();
+                output = new StringBuilder();
+                for (int i = 0; i < roomClone.size(); i++) {
+                    RoomCard c = roomClone.get(i);
+                    output.append(i).append(": ").append(c.getCardName()).append(" ");
+                }
+                System.out.println(output.toString());
+                game.selectedRoom = roomClone.get(getInput());
+                break;
+
+            case CONFIRM:
+                game.suggestedThisTurn = true;
+                break;
+        }
     }
 
-    /**
-     * Update the visuals
-     */
-    public void update(View v) {
-        game.draw(v);
+    private void doRefute(Player p) { // fixme refactor to follow doCommand and doSuggest style
+        System.out.println(p.getCharacterName());
+        System.out.println("Select Command: ");
+        System.out.println(game.getAvailRefutations(p));
+        int input = getInput();
+        switch (input) {
+            case 1:
+                if (game.getAvailRefutations(p).get(0).equals("1: Pass")) {
+                    break;
+                } else {// fixme make more secure
+                    view.printHand(p);
+                    game.thisRefutedCard = p.getCardsInHand().get(getInput());
+
+                    if (!(game.thisRefutedCard.equals(game.selectedCharacter) && game.thisRefutedCard.equals(game.selectedWeapon) && game.thisRefutedCard.equals(game.selectedRoom))) {
+                        System.out.println("invalid suggestion try again");
+                        doRefute(p);
+                        return;
+                    }
+                    game.refutedCards.add(game.thisRefutedCard);
+                }
+
+        }
     }
 
-
-    public void makeSuggestion() {
+    public void makeSuggestion(Player player) {
         while (!game.suggestedThisTurn) {
-            doSuggestCommand();
+            doSuggest();
         }
         List<Player> clone = game.getCurrentPlayers();
-        clone.remove(currentPlayer);
+        clone.remove(player);
         for (Player p : clone) {
             System.out.println("Suggested cards: " + game.selectedCharacter
                     + ", " + game.selectedWeapon + ", " + game.selectedRoom);
@@ -153,113 +224,49 @@ public class Controller {
         }
     }
 
-    private void doSuggestCommand() {
-        List<String> availSuggestions = game.getAvailSuggestions();
-        System.out.println(game.getAvailSuggestions()); // fixme
-        int input = getInput();
-
-        switch (input) {
-            case 1:
-                if (availSuggestions.get(0).equals("1: Select Character")) {
-                    cardSelection(currentPlayer, "Suggest Character");
-                } else if (availSuggestions.get(0).equals("1: Change Character")) {
-                    cardSelection(currentPlayer, "Suggest Character");
-                } else throw new Error("Error unexpected move found during suggest selectCharacter");
-                break;
-
-            case 2:
-                if (availSuggestions.get(1).equals("2: Select Weapon")) {
-                    cardSelection(currentPlayer, "Suggest Weapon");
-                } else if (availSuggestions.get(1).equals("2: Change Weapon")) {
-                    cardSelection(currentPlayer, "Suggest Weapon");
-                } else throw new Error("Error unexpected move found during suggest selectWeapon");
-                break;
-
-            case 3:
-                if (availSuggestions.get(2).equals("3: Select Room")) {
-                    cardSelection(currentPlayer, "Suggest Room");
-                } else if (availSuggestions.get(2).equals("3: Change Room")) {
-                    cardSelection(currentPlayer, "Suggest Room");
-                } else throw new Error("Error unexpected move found during suggest selectRoom");
-                break;
-
-            case 4:
-                if (availSuggestions.get(3).equals("4: Confirm Selection")) {
-                    game.suggestedThisTurn = true;
-                } else throw new Error("Error unexpected move found during suggest confirm");
-                break;
+    public void makeAccusation(Player player) {
+        for (RoomCard roomCard : game.gameLoader.getRoomCards()) {
+            if ( game.getBoard()[player.getLocation().x][player.getLocation().y].getName().equals(roomCard.getCardName())){
+                game.selectedRoom = roomCard;
+            }
         }
 
-
-    }
-
-    private void cardSelection(Player p, String mode) {
-
-        if (mode.equals("Refute")) {
-            view.printHand(p);
-            game.thisRefutedCard = p.getCardsInHand().get(getInput());
-
-            if (!(game.thisRefutedCard.equals(game.selectedCharacter) && game.thisRefutedCard.equals(game.selectedWeapon) && game.thisRefutedCard.equals(game.selectedRoom))) {
-                System.out.println("invalid suggestion try again");
-                cardSelection(p, mode);
-                return;
-            }
-            game.refutedCards.add(game.thisRefutedCard);
-
-        } else if (mode.equals("Suggest Character")) {
-            List<CharacterCard> chrClone = game.gameLoader.getChrCards();
-            StringBuilder output = new StringBuilder();
-            for (int i = 0; i < chrClone.size(); i++) {
-                CharacterCard c = chrClone.get(i);
-                output.append(i).append(": ").append(c.getCardName()).append(" ");
-            }
-            System.out.println(output.toString());
-            game.selectedCharacter = chrClone.get(getInput());
-
-        } else if (mode.equals("Suggest Weapon")) {
-            List<WeaponCard> wepClone = game.gameLoader.getWeapCards();
-            StringBuilder output = new StringBuilder();
-            for (int i = 0; i < wepClone.size(); i++) {
-                WeaponCard c = wepClone.get(i);
-                output.append(i).append(": ").append(c.getCardName()).append(" ");
-            }
-            System.out.println(output.toString());
-            game.selectedWeapon = wepClone.get(getInput());
-
-        } else if (mode.equals("Suggest Room")) {
-            List<RoomCard> roomClone = game.gameLoader.getRoomCards();
-            StringBuilder output = new StringBuilder();
-            for (int i = 0; i < roomClone.size(); i++) {
-                RoomCard c = roomClone.get(i);
-                output.append(i).append(": ").append(c.getCardName()).append(" ");
-            }
-            System.out.println(output.toString());
-            game.selectedRoom = roomClone.get(getInput());
-
-        } else throw new Error("Error unexpected move found during select card select");
-    }
-
-
-    private void doRefute(Player p) {
-        System.out.println(p.getCharacterName());
-        System.out.println("Select Command: ");
-        System.out.println(game.getAvailRefutations(p));
-        int input = getInput();
-        switch (input) {
-            case 1:
-                if (game.getAvailRefutations(p).get(0).equals("1: Pass")) {
-                    break;
-                } else {// fixme make more secure
-                    cardSelection(p, "Refute");
-                }
-
+        while (!game.suggestedThisTurn){
+            doSuggest();
         }
+
+        if (game.checkSolution()){
+            gameFinished = true;
+            return;
+        } else {
+            player.setOut(true);
+        }
+        //todo test
     }
 
 
-    public void makeAccusation(Player p) {
-        System.out.println("not implemented");
-        // TODO: Implement
+    /**
+     * Update the visuals
+     */
+    public void redraw(View v) {
+        game.draw(v);
+    }
+
+
+    private String createLabel(Suggestion suggestion) {
+        String text = (suggestion.ordinal() + 1) + ": ";
+        if (game.canDoSuggestion(suggestion)) {
+            text += suggestion.getLabel();
+        }
+        return text;
+    }
+
+    private String createLabel(Action action, Player player) {
+        String text = (action.ordinal() + 1) + ": ";
+        if (game.canDoAction(action, player)) {
+            text += action.getLabel();
+        }
+        return text;
     }
 
     public static void main(String[] args) {

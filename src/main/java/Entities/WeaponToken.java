@@ -23,32 +23,12 @@ public class WeaponToken {
 	// -------------------
 	// GETTERS AND SETTERS
 	// -------------------
-	public boolean setName(String name) {
-		// FIXME: Unused method
-		boolean wasSet = false;
-		this.name = name;
-		wasSet = true;
-		return wasSet;
-	}
-
-	public boolean setIcon(String icon) {
-		// FIXME: Unused method
-		boolean wasSet = false;
-		this.icon = icon;
-		wasSet = true;
-		return wasSet;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public String getIcon() {
 		return icon;
-	}
-
-	public void delete() {
-		// FIXME: Unused empty method
 	}
 
 	public String toString() {

@@ -4,13 +4,17 @@ import Entities.Cards.CharacterCard;
 import Entities.Cards.RoomCard;
 import Entities.Cards.WeaponCard;
 import Entities.Player;
-import Entities.Tiles.*;
-import Views.TextView;
+import Entities.Suggestion;
+import Entities.Tiles.HallwayTile;
+import Entities.Tiles.InaccessibleTile;
+import Entities.Tiles.RoomTile;
+import Entities.Tiles.Tile;
 import Views.View;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Initialises loaded assets and making a coherent game
@@ -24,7 +28,6 @@ public class Game {
     private final List<Player> currentPlayers = new ArrayList<>();
     private List<Point> placesMoved = new ArrayList<>();
     private Tile[][] board;
-
 
     public boolean rolledThisTurn = false;
     public boolean movedThisTurn = false;
@@ -46,7 +49,6 @@ public class Game {
         solutionCards.addAll(gameLoader.initSolution()); // always init solution before players
         currentPlayers.addAll(gameLoader.initPlayers(numPlayers));
         board = gameLoader.getBoard();
-        System.out.println("Starting game!");
     }
 
     /**
@@ -67,11 +69,8 @@ public class Game {
         return moves;
     }
 
-    /**
-     * Draws the whole board
-     */
     public void draw(View v) {
-        v.drawBoard(board, GameLoader.WIDTH, GameLoader.HEIGHT); // fixme
+        v.drawBoard(board, GameLoader.WIDTH, GameLoader.HEIGHT);
     }
 
     /**
@@ -122,61 +121,48 @@ public class Game {
             case EAST:
             case WEST:
                 return getCanMove(player, action);
+
             case SUGGESTION:
             case ACCUSATION:
-                return gameLoader.getBoard()[player.getLocation().x][player.getLocation().y] instanceof RoomTile;
+                return board[player.getLocation().x][player.getLocation().y] instanceof RoomTile;
+
             case TURN:
                 return !movedThisTurn;
+
             case INFO:
                 return true;
         }
         return false;
     }
 
-    public List<String> getAvailSuggestions() {
-        List<String> currentOptions = new ArrayList<>();
-        if (selectedCharacter == null) {
-            currentOptions.add("1: Select Character");
-        } else {
-            currentOptions.add("1: Change Character");
+    public boolean canDoSuggestion(Suggestion suggestion){
+        switch (suggestion){
+            case CHARACTER:
+                return selectedCharacter == null;
+            case WEAPON:
+                return selectedWeapon == null;
+            case ROOM:
+                return selectedWeapon == null;
+            case CONFIRM:
+                return (selectedCharacter != null && selectedWeapon != null && selectedRoom != null);
         }
-
-        if (selectedWeapon == null) {
-            currentOptions.add("2: Select Weapon");
-        } else {
-            currentOptions.add("2: Change Weapon");
-        }
-
-        if (selectedRoom == null) {
-            currentOptions.add("3: Select Room");
-        } else {
-            currentOptions.add("3: Change Room");
-        }
-
-        if (selectedCharacter != null && selectedWeapon != null && selectedRoom != null) {
-            currentOptions.add("4: Confirm Selection");
-        } else {
-            currentOptions.add("4:");
-        }
-
-        if (currentOptions.isEmpty()) {
-            throw new Error("unexpected current option size in suggest");
-        }
-
-        return currentOptions;
-
+        return false;
     }
 
-    public List<String> getAvailRefutations(Player player) {
+    public List<String> getAvailRefutations(Player player) { // fixme make follow suit
         List<String> currentOptions = new ArrayList<>();
-        if (getCanRefute(player, selectedCharacter, selectedWeapon, selectedRoom)) {
+        if (getCanRefute(player)) {
             currentOptions.add("1: Refute");
         } else {
-            currentOptions.add("1: Pass");
+            System.out.println("unable to refute");
+            changeTurn(player);
         }
         return currentOptions;
     }
 
+    public boolean checkSolution(){
+        return (solutionCards.contains(selectedCharacter) && solutionCards.contains(selectedWeapon) && solutionCards.contains(selectedRoom));
+    }
 
     /**
      * Checks if the player can move in the selected direction
@@ -248,19 +234,17 @@ public class Game {
     }
 
     public void getNextTile(){
-
+//todo implement
     }
 
     public List<Player> getCurrentPlayers() {
         return currentPlayers;
     }
 
-    public boolean getCanRefute(Player player, CharacterCard characterCard, WeaponCard weaponCard, RoomCard roomCard) {
-        if (player.getCardsInHand().contains(characterCard) || player.getCardsInHand().contains(weaponCard) || player.getCardsInHand().contains(roomCard)) {
-            return true;
-        }
-        return false;
+    public boolean getCanRefute(Player player) {
+        return (player.getCardsInHand().contains(selectedCharacter) || solutionCards.contains(selectedWeapon) || solutionCards.contains(selectedRoom));
     }
+
 
     public Tile[][] getBoard() {
         return board;
