@@ -192,9 +192,9 @@ public class Game {
     public boolean canDoRefutation(Refutation refutation, Player player) {
         switch (refutation) {
             case REFUTE:
-                return (player.getCardsInHand().contains(selectedCharacter) || solutionCards.contains(selectedWeapon) || solutionCards.contains(selectedRoom));
+                return (player.getCardsInHand().contains(selectedCharacter) || player.getCardsInHand().contains(selectedWeapon) || player.getCardsInHand().contains(selectedRoom));
             case PASS:
-                return !(player.getCardsInHand().contains(selectedCharacter) || solutionCards.contains(selectedWeapon) || solutionCards.contains(selectedRoom));
+                return !(player.getCardsInHand().contains(selectedCharacter) || player.getCardsInHand().contains(selectedWeapon) || player.getCardsInHand().contains(selectedRoom));
         }
         return false; // fixme?
     }
