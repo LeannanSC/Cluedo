@@ -1,8 +1,8 @@
-package Entities;
+package Entities.Commands;
 
 public enum Suggestion {
 
-    CHARACTER("Select Character"), WEAPON("Move South"), ROOM("Move East"), CONFIRM("Move East");
+    CHARACTER("Select Character"), WEAPON("Select Weapon"), ROOM("Select Room"), CONFIRM("Confirm Selection");
     private final String label;
 
     Suggestion(String label) {

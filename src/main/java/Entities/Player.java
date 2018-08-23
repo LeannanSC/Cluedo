@@ -1,6 +1,7 @@
 package Entities;
 
 import Entities.Cards.*;
+import Entities.Commands.Action;
 
 import java.awt.*;
 import java.util.ArrayList;
