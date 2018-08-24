@@ -11,7 +11,6 @@ import Entities.WeaponToken;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -34,8 +33,6 @@ public class GameLoader {
 	private List<Player> allCharacterPool;
 	private List<Card> allCardPool;
 	private Tile[][] board;
-
-	private List<Player> availableCharacterPool; // FIXME: may not need?
 	private List<Card> remainingCards;
 
 	/**
@@ -55,21 +52,12 @@ public class GameLoader {
 	 */
 	public void initWeaponTokens() {
 		Random rng = new Random();
-		List<String> availableRooms = new ArrayList<>();
-		availableRooms.add("Ballroom");
-		availableRooms.add("Kitchen");
-		availableRooms.add("Dining Room");
-		availableRooms.add("Lounge");
-		availableRooms.add("Hall");
-		availableRooms.add("Study");
-		availableRooms.add("Library");
-		availableRooms.add("Billiard Room");
-		availableRooms.add("Conservatory");
 
+		List<RoomCard> tempRooms = new ArrayList<>(roomCards);
 		List<WeaponToken> clone = new ArrayList<>(weaponTokens);
 		// Go through all weapon tokens
 		while (!clone.isEmpty()) {
-			int room = rng.nextInt(availableRooms.size() - 1);
+			int room = rng.nextInt(tempRooms.size() - 1);
 
 			for (int y = 0; y < HEIGHT; y++) {
 				for (int x = 0; x < WIDTH; x++) {
@@ -77,10 +65,10 @@ public class GameLoader {
 						break;
 					}
 
-					if (board[x][y].getName().equals(availableRooms.get(room))) {
+					if (board[x][y].getName().equals(tempRooms.get(room).getCardName())) {
 						if (!((RoomTile) board[x][y]).isDoorway()) {
 							((RoomTile) board[x][y]).setWeaponToken(clone.remove(rng.nextInt(clone.size())));
-							availableRooms.remove(room);
+							tempRooms.remove(room);
 						}
 					}
 				}
@@ -93,7 +81,7 @@ public class GameLoader {
 	 *
 	 * @param currentPlayers The players
 	 */
-	public void initPlayerHands(int handSize, List<Player> currentPlayers) {
+	public void initPlayerHands(List<Player> currentPlayers) {
 		Random rng = new Random();
 
 		// can now deal with uneven hand size
@@ -103,7 +91,7 @@ public class GameLoader {
 				if (size == 0) {
 					break;
 				}
-				Card randomCard = remainingCards.remove(rng.nextInt(size));
+				Card randomCard = remainingCards.get(rng.nextInt(size));
 				p.addCardToHand(randomCard);
 				remainingCards.remove(randomCard);
 			}
@@ -130,14 +118,13 @@ public class GameLoader {
 
 		List<Player> allPlayerCopy = new ArrayList<>(allCharacterPool);
 		List<Player> currentPlayers = new ArrayList<>();
-
 		for (int i = 0; i < numPlayers; i++) {
 			Player newPlayer = allPlayerCopy.remove(rng.nextInt(allPlayerCopy.size()));
 			board[newPlayer.getLocation().x][newPlayer.getLocation().y].setPlayer(newPlayer);
 			currentPlayers.add(newPlayer);
 		}
 
-		initPlayerHands(remainingCards.size() / currentPlayers.size(), currentPlayers);
+		initPlayerHands(currentPlayers);
 
 		if (remainingCards.size() != 0) {
 			throw new Error("should have 0 remaining cards after all hands initialised size is: " + remainingCards.size());
@@ -243,22 +230,6 @@ public class GameLoader {
 	 * Each are a room, hallway, or inaccessible.
 	 */
 	private void loadTiles() {
-        /* Old draw method, keep for reference
-        String[] inaccessibleDraw = new String[3];
-        inaccessibleDraw[0] = "XXX";
-        inaccessibleDraw[1] = "XXX";
-        inaccessibleDraw[2] = "XXX";
-
-        String[] hallwayDraw = new String[3];
-        hallwayDraw[0] = "+-+";
-        hallwayDraw[1] = "| |";
-        hallwayDraw[2] = "+-+";
-
-
-        roomDraw[0] = "***";
-        roomDraw[1] = "* *";
-        roomDraw[2] = "***";
-        */
 
 		board = new Tile[WIDTH][HEIGHT];
 
@@ -425,7 +396,19 @@ public class GameLoader {
 		return roomCards.get(idx);
 	}
 
-	public CharacterCard getChrCardAtIndex(int idx) {
+    public List<RoomCard> getRoomCards() {
+        return roomCards;
+    }
+
+    public List<CharacterCard> getChrCards() {
+        return chrCards;
+    }
+
+    public List<WeaponCard> getWeapCards() {
+        return weapCards;
+    }
+
+    public CharacterCard getChrCardAtIndex(int idx) {
 		return chrCards.get(idx);
 	}
 
