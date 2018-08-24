@@ -24,7 +24,7 @@ public class Game {
 
     //Game Associations
     final GameLoader gameLoader;
-    private final List<Card> solutionCards = new ArrayList<>();
+    public final List<Card> solutionCards = new ArrayList<>();
     private final List<Player> currentPlayers = new ArrayList<>();
     private List<Tile> placesMoved = new ArrayList<>();
     private Tile[][] board;
@@ -69,15 +69,11 @@ public class Game {
         int d2 = rng.nextInt(6) + 1;
 
         int moves = d1 + d2;
-        if (d1 > 6 || d2 > 6 || moves > 12) {
-            throw new Error("Dice rolled too high");
+        if (d1 > 6 || d2 > 6 || moves > 12 || moves == 0) {
+            throw new Error("Dice roll error");
         }
         rolledThisTurn = true;
         currentPlayer.setMovesRemaining(moves);
-    }
-
-    public void draw(View v) {
-        v.drawBoard(board, GameLoader.WIDTH, GameLoader.HEIGHT);
     }
 
     /**
@@ -169,14 +165,14 @@ public class Game {
             case SOUTH:
             case EAST:
             case WEST:
-                return getCanMove(player, action) && !player.isOut();
+                return canMove(player, action) && !player.isOut();
 
             case SUGGESTION:
             case ACCUSATION:
-                return board[player.getLocation().x][player.getLocation().y] instanceof RoomTile && !player.isOut();
+                return !suggestedThisTurn && board[player.getLocation().x][player.getLocation().y] instanceof RoomTile && !player.isOut();
 
             case TURN:
-                return movedThisTurn;
+                return movedThisTurn || player.isOut();
 
             case INFO:
                 return true;
@@ -219,11 +215,12 @@ public class Game {
      * @param direction The direction the player wants to move in
      * @return The validity of movement (boolean)
      */
-    public boolean getCanMove(Player player, Action direction) {
+    public boolean canMove(Player player, Action direction) {
         Point currentTileLocation = player.getLocation();
         Tile currentTile = board[player.getLocation().x][player.getLocation().y];
         Tile nextTile = getNextTile(currentTileLocation, direction);
 
+        if (player.getMovesRemaining() <= 0) {return false;}
         if (nextTile == null){
             return false;
         }
