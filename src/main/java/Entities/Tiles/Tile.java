@@ -1,6 +1,7 @@
 package Entities.Tiles;
 
 import Entities.Player;
+import Views.View;
 
 /**
  * General class for tiles
@@ -12,13 +13,10 @@ public abstract class Tile {
 	private final boolean canAccess;
 	Player player = null;
 
-
 	public Tile(String name, boolean canAccess) {
 		this.name = name;
 		this.canAccess = canAccess;
 	}
-
-	public abstract String[] draw();
 
 	// -------------------
 	// GETTERS AND SETTERS

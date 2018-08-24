@@ -17,20 +17,6 @@ public abstract class Card {
 		this.cardName = cardName;
 	}
 
-	/**
-	 * Set the card name
-	 *
-	 * @param cardName the new name of the card
-	 * @return if the card was properly set
-	 */
-	public boolean setCardName(String cardName) {
-		// FIXME: Unused method
-		boolean wasSet = false;
-		this.cardName = cardName;
-		wasSet = true;
-		return wasSet;
-	}
-
 	public String getCardName() {
 		return cardName;
 	}
