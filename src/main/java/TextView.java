@@ -1,4 +1,7 @@
 import Entities.Cards.Card;
+import Entities.Cards.CharacterCard;
+import Entities.Cards.RoomCard;
+import Entities.Cards.WeaponCard;
 import Entities.Commands.Action;
 import Entities.Commands.Refutation;
 import Entities.Commands.Suggestion;
@@ -8,7 +11,9 @@ import Entities.Tiles.InaccessibleTile;
 import Entities.Tiles.RoomTile;
 import Entities.Tiles.Tile;
 
+import java.lang.ref.SoftReference;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -22,17 +27,32 @@ public class TextView extends View {
         startUpText();
     }
 
-    /*
-     * methods for drawing
-     */
-    private void startUpText() {
-        System.out.println("Welcome to Cluedo");
-        System.out.println("Starting Game...");
+    @Override
+    public void redraw(Game game){
+        drawBoard(game.getBoard(), GameLoader.WIDTH, GameLoader.HEIGHT);
+    }
 
-        System.out.println("Loading Assets...");
-        System.out.println("Please Enter number of players(3-6): ");
+    @Override
+    public int getInput(int arrayOptionSize) {
+        try {
+            Scanner sc = new Scanner(System.in);
+            String line = sc.nextLine();
+            int input = Integer.parseInt(line);
+            if (input > arrayOptionSize) {
+                System.out.println("Invalid input, please try again");
+                return getInput(arrayOptionSize);
+            }
+            return input;
+        } catch (Exception e) {
+            System.out.println("Invalid character, please try again");
+            return getInput(arrayOptionSize);
+        }
 
     }
+
+    /*
+     * Draw entities and board
+     */
 
     @Override
     public void drawBoard(Tile[][] board, int width, int height) {
@@ -111,6 +131,96 @@ public class TextView extends View {
         line3.append("xxx");
     }
 
+
+
+    /*
+     * Draw Menus
+     */
+
+    @Override
+    public void printCommandMenu(Player player, Game game) {
+        String avail = Arrays.stream(Action.values()).map(
+                action -> this.createLabel(action, player, game))
+                .collect(Collectors.joining(", "));
+        System.out.println("Current Valid Commands -\n" + avail);
+    }
+
+    @Override
+    public void printSuggestionMenu(Game game) {
+        String avail = Arrays.stream(Suggestion.values()).map(
+                suggestion -> createLabel(suggestion, game))
+                .collect(Collectors.joining(", "));
+        System.out.println("Current Valid Commands -\n" + avail);
+
+    }
+
+    @Override
+    public void printRefutationMenu(Player player, Game game) {
+        System.out.println("Suggested cards: " + game.selectedCharacter
+                + ", " + game.selectedWeapon + ", " + game.selectedRoom);
+
+        System.out.println(player.getCharacterName());
+        String avail = Arrays.stream(Refutation.values()).map(
+                refutation -> createLabel(refutation, player, game))
+                .collect(Collectors.joining(", "));
+        System.out.println("Current Valid Commands -\n" + avail);
+
+    }
+
+    @Override
+    public void printRefuteCardSelectionMenu(Player player) {
+        System.out.println("Select card to refute");
+        printHand(player);
+    }
+
+
+
+
+    /*
+     * Draw cards for selection
+     */
+
+    @Override
+    public void printAllCharacterCards(Game game) {
+        StringBuilder output;
+        List<CharacterCard> chrs = game.gameLoader.getChrCards();
+        output = new StringBuilder();
+        for (int i = 0; i < chrs.size(); i++) {
+            CharacterCard c = chrs.get(i);
+            output.append(i + 1).append(": ").append(c.getCardName()).append(" ");
+        }
+        System.out.println(output.toString());
+    }
+
+    @Override
+    public void printAllWeaponCards(Game game) {
+        StringBuilder output;
+        List<WeaponCard> weps = game.gameLoader.getWeapCards();
+        output = new StringBuilder();
+        for (int i = 0; i < weps.size(); i++) {
+            WeaponCard c = weps.get(i);
+            output.append(i + 1).append(": ").append(c.getCardName()).append(" ");
+        }
+        System.out.println(output.toString());
+    }
+
+    @Override
+    public void printAllRoomCards(Game game) {
+        StringBuilder output;
+        List<RoomCard> roomClone = game.gameLoader.getRoomCards();
+        output = new StringBuilder();
+        for (int i = 0; i < roomClone.size(); i++) {
+            RoomCard c = roomClone.get(i);
+            output.append(i + 1).append(": ").append(c.getCardName()).append(" ");
+        }
+        System.out.println(output.toString());
+    }
+
+
+    /*
+     * Utility
+     */
+
     @Override
     public void printBoardInfo() {
         StringBuilder output = new StringBuilder();
@@ -129,6 +239,12 @@ public class TextView extends View {
     }
 
     @Override
+    public void printError(String error) {
+        System.out.println(error);
+    }
+
+
+    @Override
     public void printHand(Player p) {
 
         System.out.println("Your hand -");
@@ -143,14 +259,25 @@ public class TextView extends View {
     }
 
     @Override
-    public void passToNextPlayerDialogue(Player nextPlayer){
-        System.out.println("please pass the computer to the next player: " + nextPlayer);
-        System.out.println("Press 1 once received");
+    public void printRefutations(Game game) {
+        printSpacer();
+        System.out.println("Refutations: ");
+        System.out.println(game.refutedCards);
     }
 
     @Override
-    public void printNewTurnMenu(Player currentPlayer) {
-        System.out.println("\n\n==============================");
+    public void printWinText(Player player) {
+        System.out.println("Congratulations "  + player.getCharacterName() + " YoU WIN");
+    }
+
+    @Override
+    public void printLoseText(List<Card> solution) {
+        System.out.println("Well... it seems as though no one guessed correctly, The Murderer Has Won");
+        System.out.println("The solution was: " + solution);
+    }
+
+    @Override
+    public void printNewTurnText(Player currentPlayer) {
         System.out.println("Character name - " + currentPlayer.getCharacterName() + ", Board Representation - " + currentPlayer.getColour().charAt(0));
         System.out.println("You have " + currentPlayer.getMovesRemaining() +
                 " steps remaining");
@@ -158,43 +285,28 @@ public class TextView extends View {
     }
 
     @Override
-    public void printRefuteMenu(Player player) {
-        System.out.println("Select card to refute");
-        printHand(player);
+    public void printEndTurnText(){
+        printSpacer();
+    }
+
+    public void printSpacer(){
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
 
     @Override
-    public void printCommands(Player player, Game game) {
-        String avail = Arrays.stream(Action.values()).map( //fixme move
-                action -> this.createLabel(action, player, game))
-                .collect(Collectors.joining(", "));
-        System.out.println("Current Valid Commands -\n" + avail);
+    public void printPassInstruction(Player nextPlayer) {
+        System.out.println("please pass the computer to the next player: " + nextPlayer.getCharacterName());
+        System.out.println("Press 1 once received");
     }
 
-    @Override
-    public void printSuggestions(Game game){
-        String avail = Arrays.stream(Suggestion.values()).map( // fixme move to view
-                suggestion -> createLabel(suggestion, game))
-                .collect(Collectors.joining(", "));
-        System.out.println("Current Valid Commands -\n" + avail);
+    private void startUpText() {
+        System.out.println("Welcome to Cluedo");
+        System.out.println("Starting Game...");
+
+        System.out.println("Loading Assets...");
+        System.out.println("Please Enter number of players(3-6): ");
 
     }
-
-    @Override
-    public void printSuggestions(Player player, Game game){
-        System.out.println("Suggested cards: " + game.selectedCharacter
-                + ", " + game.selectedWeapon + ", " + game.selectedRoom);
-
-        System.out.println(player.getCharacterName());
-        String avail = Arrays.stream(Refutation.values()).map( // fixme move to view
-                refutation -> createLabel(refutation, player, game))
-                .collect(Collectors.joining(", "));
-        System.out.println("Current Valid Commands -\n" + avail);
-
-    }
-
-
-
 
     private String createLabel(Action action, Player player, Game game) {
         String text = (action.ordinal() + 1) + ": ";
@@ -212,42 +324,12 @@ public class TextView extends View {
         return text;
     }
 
-    private String createLabel(Suggestion suggestion,Game game) {
+    private String createLabel(Suggestion suggestion, Game game) {
         String text = (suggestion.ordinal() + 1) + ": ";
         if (game.canDoSuggestion(suggestion)) {
             text += suggestion.getLabel();
         }
         return text;
     }
-
-
-    //fixme fault print make one
-    @Override
-    public void printFalseAccusation() {
-        System.out.println("you have made a false accusation, you may only make refutations");
-    }
-
-    @Override
-    public void printOutOfMoves(Player currentPlayer) {
-        System.out.println(currentPlayer.getCharacterName() + ", you have run out of steps and are unable to continue this turn");
-    }
-
-    @Override
-    public void printCommandUnavailable() {
-        System.out.println("That move is unavailable please select another");
-    }
-
-
-    @Override
-    public void printRefutationUnavailable() {
-        System.out.println("Card is not suggested, select another card");
-    }
-
-    @Override
-    public void printRutations(Game game) {
-        System.out.println("Refutations: ");
-        System.out.println(game.refutedCards);
-    }
-
 
 }
