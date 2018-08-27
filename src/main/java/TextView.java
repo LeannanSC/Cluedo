@@ -11,6 +11,7 @@ import Entities.Tiles.InaccessibleTile;
 import Entities.Tiles.RoomTile;
 import Entities.Tiles.Tile;
 
+import java.awt.event.WindowEvent;
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +47,6 @@ public class TextView extends View {
             System.out.println("Invalid character, please try again");
             return getInput(arrayOptionSize);
         }
-
     }
 
     /*

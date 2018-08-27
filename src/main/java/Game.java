@@ -22,255 +22,255 @@ import java.util.Random;
  */
 public class Game {
 
-    //Game Associations
-    final GameLoader gameLoader;
-    public final List<Card> solutionCards = new ArrayList<>();
-    private final List<Player> currentPlayers = new ArrayList<>();
-    private List<Tile> placesMoved = new ArrayList<>();
-    private Tile[][] board;
+	//Game Associations
+	final GameLoader gameLoader;
+	public final List<Card> solutionCards = new ArrayList<>();
+	private final List<Player> currentPlayers = new ArrayList<>();
+	private List<Tile> placesMoved = new ArrayList<>();
+	private Tile[][] board;
 
-    public boolean rolledThisTurn = false; // fixme getters + setters
-    public boolean movedThisTurn = false;
-    public boolean suggestedThisTurn = false;
-    public Player currentPlayer;
+	public boolean rolledThisTurn = false; // fixme getters + setters
+	public boolean movedThisTurn = false;
+	public boolean suggestedThisTurn = false;
+	public Player currentPlayer;
 
-    CharacterCard selectedCharacter = null;
-    RoomCard selectedRoom = null;
-    WeaponCard selectedWeapon = null;
-    Card thisRefutedCard = null;
-    List<Card> refutedCards = new ArrayList<>();
+	CharacterCard selectedCharacter = null;
+	RoomCard selectedRoom = null;
+	WeaponCard selectedWeapon = null;
+	Card thisRefutedCard = null;
+	List<Card> refutedCards = new ArrayList<>();
 
-    /**
-     * Constructor
-     *
-     *
-     */
-    public Game() {
-        this.gameLoader = new GameLoader();
-    }
-    public void initGame(int numPlayers){
-        solutionCards.addAll(gameLoader.initSolution()); // always init solution before players
-        currentPlayers.addAll(gameLoader.initPlayers(numPlayers));
-        board = gameLoader.getBoard();
+	/**
+	 * Constructor
+	 */
+	public Game() {
+		this.gameLoader = new GameLoader();
+	}
 
-        currentPlayer = getCurrentPlayers().get(0);
-        placesMoved.add(board[currentPlayer.getLocation().x][currentPlayer.getLocation().y]);
+	public void initGame(int numPlayers) {
+		solutionCards.addAll(gameLoader.initSolution()); // always init solution before players
+		currentPlayers.addAll(gameLoader.initPlayers(numPlayers));
+		board = gameLoader.getBoard();
 
-    }
+		currentPlayer = getCurrentPlayers().get(0);
+		placesMoved.add(board[currentPlayer.getLocation().x][currentPlayer.getLocation().y]);
 
-    /**
-     * Simulates the rolling of two dice.
-     *
-     * @return Integer sum of 2 random numbers
-     */
-    public void rollDice() {
-        Random rng = new Random();
-        int d1 = rng.nextInt(6) + 1; // 0 -> 5 so + 1
-        int d2 = rng.nextInt(6) + 1;
+	}
 
-        int moves = d1 + d2;
-        if (d1 > 6 || d2 > 6 || moves > 12 || moves == 0) {
-            throw new Error("Dice roll error");
-        }
-        rolledThisTurn = true;
-        currentPlayer.setMovesRemaining(moves);
-        return moves;
-    }
+	/**
+	 * Simulates the rolling of two dice.
+	 *
+	 * @return Integer sum of 2 random numbers
+	 */
+	public void rollDice() {
+		Random rng = new Random();
+		int d1 = rng.nextInt(6) + 1; // 0 -> 5 so + 1
+		int d2 = rng.nextInt(6) + 1;
 
-    public void draw(View v) {
-        v.drawBoard(board,GameLoader.WIDTH,GameLoader.HEIGHT);
-    }
+		int moves = d1 + d2;
+		if (d1 > 6 || d2 > 6 || moves > 12 || moves == 0) {
+			throw new Error("Dice roll error");
+		}
+		rolledThisTurn = true;
+		currentPlayer.setMovesRemaining(moves);
+	}
 
-    /**
-     * Moves the player to the neighbouring tile in the desired direction.
-     *
-     * @param player    The player to be moved
-     * @param direction The cardinal direction the player wants to move in
-     */
-    public void movePlayer(Player player, Action direction) {
-        board[player.getLocation().x][player.getLocation().y].setPlayer(null);
-        Tile nextTile = getNextTile(player.getLocation(), direction);
-        if (nextTile == null){
-            throw new Error("invalid next tile in movePlayer");
-        }
-        player.move(direction);
-        nextTile.setPlayer(player);
-        placesMoved.add(nextTile);
-        movedThisTurn = true;
-    }
+	public void draw(View v) {
+		v.drawBoard(board, GameLoader.WIDTH, GameLoader.HEIGHT);
+	}
 
-    public Tile getNextTile(Point currentTileLocation, Action direction) {
+	/**
+	 * Moves the player to the neighbouring tile in the desired direction.
+	 *
+	 * @param player    The player to be moved
+	 * @param direction The cardinal direction the player wants to move in
+	 */
+	public void movePlayer(Player player, Action direction) {
+		board[player.getLocation().x][player.getLocation().y].setPlayer(null);
+		Tile nextTile = getNextTile(player.getLocation(), direction);
+		if (nextTile == null) {
+			throw new Error("invalid next tile in movePlayer");
+		}
+		player.move(direction);
+		nextTile.setPlayer(player);
+		placesMoved.add(nextTile);
+		movedThisTurn = true;
+	}
 
-        Point nextLocation = null;
+	public Tile getNextTile(Point currentTileLocation, Action direction) {
 
-        switch (direction) {
-            case NORTH:
-                nextLocation = new Point(currentTileLocation.x, currentTileLocation.y - 1);
-                break;
+		Point nextLocation = null;
 
-            case SOUTH:
-                nextLocation = new Point(currentTileLocation.x,currentTileLocation.y + 1);
-                break;
+		switch (direction) {
+			case NORTH:
+				nextLocation = new Point(currentTileLocation.x, currentTileLocation.y - 1);
+				break;
 
-            case EAST:
-                nextLocation = new Point(currentTileLocation.x + 1, currentTileLocation.y);
-                break;
+			case SOUTH:
+				nextLocation = new Point(currentTileLocation.x, currentTileLocation.y + 1);
+				break;
 
-            case WEST:
-                nextLocation = new Point(currentTileLocation.x - 1, currentTileLocation.y);
-                break;
+			case EAST:
+				nextLocation = new Point(currentTileLocation.x + 1, currentTileLocation.y);
+				break;
 
-        }
+			case WEST:
+				nextLocation = new Point(currentTileLocation.x - 1, currentTileLocation.y);
+				break;
 
-        if (nextLocation == null || nextLocation.x > GameLoader.WIDTH-1 || nextLocation.x < 0 || nextLocation.y > GameLoader.HEIGHT-1 || nextLocation. y < 0){ ;
-            return null;
+		}
 
-        } else {
-            return board[nextLocation.x][nextLocation.y];
-        }
-    }
+		if (nextLocation == null || nextLocation.x > GameLoader.WIDTH - 1 || nextLocation.x < 0 || nextLocation.y > GameLoader.HEIGHT - 1 || nextLocation.y < 0) {
+			;
+			return null;
 
-    public void changeTurn(Player player) {
+		} else {
+			return board[nextLocation.x][nextLocation.y];
+		}
+	}
 
-
-        player.setMovesRemaining(0);
-        placesMoved = new ArrayList<>();
-        rolledThisTurn = false;
-        movedThisTurn = false;
-        suggestedThisTurn = false;
-        selectedCharacter = null;
-        selectedWeapon = null;
-        selectedRoom = null;
-
-        currentPlayer = getNextPlayer(player);
-        placesMoved.add(board[currentPlayer.getLocation().x][currentPlayer.getLocation().y]);
-
-    }
-
-    public Player getNextPlayer(Player player) {
-        int nextPlayer = currentPlayers.indexOf(player) + 1;
-
-        if (nextPlayer > currentPlayers.size() - 1) {
-            return currentPlayers.get(0);
-        }
-        return currentPlayers.get(nextPlayer);
-    }
-
-    /**
-     * Checks if the player can do an action
-     *
-     * @param player The player to be moved
-     * @param action The action the player wants to do
-     * @return The validity of action (boolean)
-     */
-
-    public boolean canDoAction(Action action, Player player) {
-        switch (action) {
-            case NORTH:
-            case SOUTH:
-            case EAST:
-            case WEST:
-                return canMove(player, action) && !player.isOut();
-
-            case SUGGESTION:
-            case ACCUSATION:
-                return !suggestedThisTurn && board[player.getLocation().x][player.getLocation().y] instanceof RoomTile && !player.isOut();
-
-            case TURN:
-                return movedThisTurn || player.isOut();
-
-            case INFO:
-                return true;
-        }
-        return false; // fixme?
-    }
-
-    public boolean canDoSuggestion(Suggestion suggestion) {
-        switch (suggestion) {
-            case CHARACTER:
-                return selectedCharacter == null;
-            case WEAPON:
-                return selectedWeapon == null;
-            case ROOM:
-                return selectedRoom == null;
-            case CONFIRM:
-                return (selectedCharacter != null && selectedWeapon != null && selectedRoom != null);
-        }
-        return false; // fixme?
-    }
-
-    public boolean canDoRefutation(Refutation refutation, Player player) {
-        switch (refutation) {
-            case REFUTE:
-                return (player.getCardsInHand().contains(selectedCharacter) || player.getCardsInHand().contains(selectedWeapon) || player.getCardsInHand().contains(selectedRoom));
-            case PASS:
-                return !(player.getCardsInHand().contains(selectedCharacter) || player.getCardsInHand().contains(selectedWeapon) || player.getCardsInHand().contains(selectedRoom));
-        }
-        return false; // fixme?
-    }
-
-    public boolean checkSolution() {
-        return (solutionCards.contains(selectedCharacter) && solutionCards.contains(selectedWeapon) && solutionCards.contains(selectedRoom));
-    }
-
-    /**
-     * Checks if the player can move in the selected direction
-     *
-     * @param player    The player to be moved
-     * @param direction The direction the player wants to move in
-     * @return The validity of movement (boolean)
-     */
-    public boolean canMove(Player player, Action direction) {
-        Point currentTileLocation = player.getLocation();
-        Tile currentTile = board[player.getLocation().x][player.getLocation().y];
-        Tile nextTile = getNextTile(currentTileLocation, direction);
-
-        if (player.getMovesRemaining() <= 0) {return false;}
-        if (nextTile == null){
-            return false;
-        }
-        //check for invalid tile
-        if (nextTile instanceof InaccessibleTile) {
-            return false;
-        }
-
-        // check if player is at next tile
-        if (nextTile.getPlayer() != null) {
-            return false;
-        }
-
-        // check if moved to the next tile before
-        if (placesMoved.contains(nextTile)) {
-            return false;
-        }
-
-        // check for entrance on room enter
-        if (currentTile instanceof HallwayTile && nextTile instanceof RoomTile) {
-            return ((RoomTile) nextTile).isDoorway();
-        }
-        // check for entrance on room exit
-        if (currentTile instanceof RoomTile && nextTile instanceof HallwayTile) {
-            return ((RoomTile) currentTile).isDoorway();
-        }
-        return true;
-    }
+	public void changeTurn(Player player) {
 
 
-    public List<Player> getCurrentPlayers() {
-        return currentPlayers;
-    }
+		player.setMovesRemaining(0);
+		placesMoved = new ArrayList<>();
+		rolledThisTurn = false;
+		movedThisTurn = false;
+		suggestedThisTurn = false;
+		selectedCharacter = null;
+		selectedWeapon = null;
+		selectedRoom = null;
 
-    public Tile[][] getBoard() {
-        return board;
-    }
+		currentPlayer = getNextPlayer(player);
+		placesMoved.add(board[currentPlayer.getLocation().x][currentPlayer.getLocation().y]);
 
-    public boolean checkMovesRemaining() {
-        if (currentPlayer.getMovesRemaining() == 0) {
-            if (getBoard()[currentPlayer.getLocation().x][currentPlayer.getLocation().y]
-                    instanceof HallwayTile) {
-                return false;
-            }
-        }
-        return true;
-    }
+	}
+
+	public Player getNextPlayer(Player player) {
+		int nextPlayer = currentPlayers.indexOf(player) + 1;
+		if (nextPlayer > currentPlayers.size() - 1) {
+			return currentPlayers.get(0);
+		}
+		return currentPlayers.get(nextPlayer);
+	}
+
+	/**
+	 * Checks if the player can do an action
+	 *
+	 * @param player The player to be moved
+	 * @param action The action the player wants to do
+	 * @return The validity of action (boolean)
+	 */
+
+	public boolean canDoAction(Action action, Player player) {
+		switch (action) {
+			case NORTH:
+			case SOUTH:
+			case EAST:
+			case WEST:
+				return canMove(player, action) && !player.isOut();
+
+			case SUGGESTION:
+			case ACCUSATION:
+				return !suggestedThisTurn && board[player.getLocation().x][player.getLocation().y] instanceof RoomTile && !player.isOut();
+
+			case TURN:
+				return movedThisTurn || player.isOut();
+
+			case INFO:
+				return true;
+		}
+		return false; // fixme?
+	}
+
+	public boolean canDoSuggestion(Suggestion suggestion) {
+		switch (suggestion) {
+			case CHARACTER:
+				return selectedCharacter == null;
+			case WEAPON:
+				return selectedWeapon == null;
+			case ROOM:
+				return selectedRoom == null;
+			case CONFIRM:
+				return (selectedCharacter != null && selectedWeapon != null && selectedRoom != null);
+		}
+		return false; // fixme?
+	}
+
+	public boolean canDoRefutation(Refutation refutation, Player player) {
+		switch (refutation) {
+			case REFUTE:
+				return (player.getCardsInHand().contains(selectedCharacter) || player.getCardsInHand().contains(selectedWeapon) || player.getCardsInHand().contains(selectedRoom));
+			case PASS:
+				return !(player.getCardsInHand().contains(selectedCharacter) || player.getCardsInHand().contains(selectedWeapon) || player.getCardsInHand().contains(selectedRoom));
+		}
+		return false; // fixme?
+	}
+
+	public boolean checkSolution() {
+		return (solutionCards.contains(selectedCharacter) && solutionCards.contains(selectedWeapon) && solutionCards.contains(selectedRoom));
+	}
+
+	/**
+	 * Checks if the player can move in the selected direction
+	 *
+	 * @param player    The player to be moved
+	 * @param direction The direction the player wants to move in
+	 * @return The validity of movement (boolean)
+	 */
+	public boolean canMove(Player player, Action direction) {
+		Point currentTileLocation = player.getLocation();
+		Tile currentTile = board[player.getLocation().x][player.getLocation().y];
+		Tile nextTile = getNextTile(currentTileLocation, direction);
+
+		if (player.getMovesRemaining() <= 0) {
+			return false;
+		}
+		if (nextTile == null) {
+			return false;
+		}
+		//check for invalid tile
+		if (nextTile instanceof InaccessibleTile) {
+			return false;
+		}
+
+		// check if player is at next tile
+		if (nextTile.getPlayer() != null) {
+			return false;
+		}
+
+		// check if moved to the next tile before
+		if (placesMoved.contains(nextTile)) {
+			return false;
+		}
+
+		// check for entrance on room enter
+		if (currentTile instanceof HallwayTile && nextTile instanceof RoomTile) {
+			return ((RoomTile) nextTile).isDoorway();
+		}
+		// check for entrance on room exit
+		if (currentTile instanceof RoomTile && nextTile instanceof HallwayTile) {
+			return ((RoomTile) currentTile).isDoorway();
+		}
+		return true;
+	}
+
+
+	public List<Player> getCurrentPlayers() {
+		return currentPlayers;
+	}
+
+	public Tile[][] getBoard() {
+		return board;
+	}
+
+	public boolean checkMovesRemaining() {
+		if (currentPlayer.getMovesRemaining() == 0) {
+			if (getBoard()[currentPlayer.getLocation().x][currentPlayer.getLocation().y]
+					instanceof HallwayTile) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

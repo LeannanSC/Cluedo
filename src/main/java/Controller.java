@@ -4,7 +4,6 @@ import Entities.Commands.Refutation;
 import Entities.Player;
 import Entities.Commands.Action;
 import Entities.Commands.Suggestion;
-import Entities.Tiles.HallwayTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +31,10 @@ public class Controller {
         gameloop();
     }
 
+    /**
+     * Runs the game on loop until the game is won or lost
+     */
     public void gameloop() {
-
         redraw();
         while (!gameFinished) {
 
@@ -60,7 +61,6 @@ public class Controller {
 
     /**
      * Checks if the move the player wants to do is a valid move. If so, then proceed.
-     *
      */
     private void doCommand() {
 
@@ -96,7 +96,10 @@ public class Controller {
         }
     }
 
-    private void doSuggest() {
+	/**
+	 * Runs suggestion
+	 */
+	private void doSuggest() {
         view.printSuggestionMenu(game);
         int input = view.getInput(Suggestion.values().length);
         Suggestion selected = Suggestion.values()[input - 1];
@@ -137,7 +140,11 @@ public class Controller {
         }
     }
 
-    private void doRefute(Player player) {
+	/**
+	 * Players must refute if they can, or they have to pass
+	 * @param player The player that needs to refute the suggestion
+	 */
+	private void doRefute(Player player) {
         view.printRefutationMenu(player, game);
         int input = view.getInput(Refutation.values().length);
 
@@ -171,7 +178,10 @@ public class Controller {
         }
     }
 
-    public void makeSuggestion() {
+	/**
+	 * The player makes a suggestion
+	 */
+	public void makeSuggestion() {
         String tileName = game.getBoard()[game.currentPlayer.getLocation().x][game.currentPlayer.getLocation().y].getName();
         for (RoomCard roomCard : game.gameLoader.getRoomCards()) {
             String roomName = roomCard.getCardName();
@@ -200,16 +210,19 @@ public class Controller {
         }
     }
 
-    public void makeAccusation() {
+	/**
+	 * Player makes an accusation.
+	 * If they are correct, they win. If they are wrong, they lose and can only refute from now on.
+	 */
+	public void makeAccusation() {
         while (!game.suggestedThisTurn) {
             doSuggest();
         }
-
         if (game.checkSolution()) {
             gameFinished = true;
             view.printWinText(game.currentPlayer);
             return;
-        } else {
+		} else {
             game.currentPlayer.setOut(true);
             game.getBoard()[game.currentPlayer.getLocation().x][game.currentPlayer.getLocation().y].setPlayer(null);
             view.printError("you have made a false accusation, you may only make refutations");
@@ -225,7 +238,9 @@ public class Controller {
          view.redraw(game);
     }
 
-
+	/**
+	 * End turn for the current player.
+	 */
     public void endTurnSequence() {
         view.printPassInstruction(game.getNextPlayer(game.currentPlayer));
         if (view.getInput(1) == 1) {
@@ -240,7 +255,11 @@ public class Controller {
         } else endTurnSequence();
     }
 
-    private boolean allOut() {
+	/**
+	 * Checks if all players have lost
+	 * @return
+	 */
+	private boolean allOut() {
         for (Player p: game.getCurrentPlayers()) {
             if (!p.isOut()){
                 return false;
@@ -249,8 +268,8 @@ public class Controller {
         return true;
     }
 
-    public static void main(String[] args) {
-        new Controller(new TextView());
+	public static void main(String[] args) {
+        new Controller(new GraphicalView());
     }
 
 }
