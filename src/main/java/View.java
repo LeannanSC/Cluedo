@@ -6,16 +6,27 @@ import Entities.Tiles.RoomTile;
 import Entities.Tiles.Tile;
 
 import java.util.List;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowListener;
 
 /**
  * Abstract class for viewing the board
  */
-public abstract class View {
+
+public abstract class View extends JFrame implements WindowListener {
 
 
 	public abstract void redraw(Game game);
 
 	public abstract int getInput(int arrayOptionSize);
+
+	public View() {
+	}
+
+	public View(String windowName) {
+		super(windowName);
+	}
 
 	public abstract void drawBoard(Tile[][] board, int width, int height);
 
@@ -56,4 +67,10 @@ public abstract class View {
 	public abstract void printEndTurnText();
 
 	public abstract void printPassInstruction(Player nextPlayer);
+  
+	public void printHand(Player p) {
+	}
+
+	public void printBoardInfo() {
+	}
 }

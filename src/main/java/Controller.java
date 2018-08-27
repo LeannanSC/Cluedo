@@ -4,6 +4,7 @@ import Entities.Commands.Refutation;
 import Entities.Player;
 import Entities.Commands.Action;
 import Entities.Commands.Suggestion;
+import Entities.Tiles.HallwayTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,6 @@ public class Controller {
     public void gameloop() {
 
         redraw();
-
         while (!gameFinished) {
 
             if (game.currentPlayer.isOut()) {

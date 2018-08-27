@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-
 /**
  * Class for displaying objects using text
  */
@@ -331,5 +330,4 @@ public class TextView extends View {
         }
         return text;
     }
-
 }
