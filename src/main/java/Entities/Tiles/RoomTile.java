@@ -1,9 +1,6 @@
 package Entities.Tiles;
 
-import Entities.Player;
 import Entities.WeaponToken;
-import Views.TextView;
-import Views.View;
 
 /**
  * Represents the room tiles.

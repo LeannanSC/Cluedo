@@ -44,7 +44,6 @@ public class GameLoader {
 		loadAvailableCharacters();
 		loadWeaponTokens();
 		initWeaponTokens();
-		System.out.println("Assets loaded ...");
 	}
 
 	/**
