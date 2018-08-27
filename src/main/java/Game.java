@@ -24,7 +24,7 @@ public class Game {
 
     //Game Associations
     final GameLoader gameLoader;
-    private final List<Card> solutionCards = new ArrayList<>();
+    public final List<Card> solutionCards = new ArrayList<>();
     private final List<Player> currentPlayers = new ArrayList<>();
     private List<Tile> placesMoved = new ArrayList<>();
     private Tile[][] board;
@@ -43,15 +43,19 @@ public class Game {
     /**
      * Constructor
      *
-     * @param numPlayers The number of human players
+     *
      */
-    public Game(int numPlayers) {
+    public Game() {
         this.gameLoader = new GameLoader();
+    }
+    public void initGame(int numPlayers){
         solutionCards.addAll(gameLoader.initSolution()); // always init solution before players
         currentPlayers.addAll(gameLoader.initPlayers(numPlayers));
         board = gameLoader.getBoard();
+
         currentPlayer = getCurrentPlayers().get(0);
         placesMoved.add(board[currentPlayer.getLocation().x][currentPlayer.getLocation().y]);
+
     }
 
     /**
@@ -59,16 +63,17 @@ public class Game {
      *
      * @return Integer sum of 2 random numbers
      */
-    public int rollDice() {
+    public void rollDice() {
         Random rng = new Random();
         int d1 = rng.nextInt(6) + 1; // 0 -> 5 so + 1
         int d2 = rng.nextInt(6) + 1;
 
         int moves = d1 + d2;
-        if (d1 > 6 || d2 > 6 || moves > 12) {
-            throw new Error("Dice rolled too high");
+        if (d1 > 6 || d2 > 6 || moves > 12 || moves == 0) {
+            throw new Error("Dice roll error");
         }
         rolledThisTurn = true;
+        currentPlayer.setMovesRemaining(moves);
         return moves;
     }
 
@@ -126,11 +131,7 @@ public class Game {
     }
 
     public void changeTurn(Player player) {
-        int nextPlayer = currentPlayers.indexOf(player) + 1;
 
-        if (nextPlayer > currentPlayers.size() - 1) {
-            nextPlayer = 0;
-        }
 
         player.setMovesRemaining(0);
         placesMoved = new ArrayList<>();
@@ -141,8 +142,18 @@ public class Game {
         selectedWeapon = null;
         selectedRoom = null;
 
-        currentPlayer = currentPlayers.get(nextPlayer);
+        currentPlayer = getNextPlayer(player);
         placesMoved.add(board[currentPlayer.getLocation().x][currentPlayer.getLocation().y]);
+
+    }
+
+    public Player getNextPlayer(Player player) {
+        int nextPlayer = currentPlayers.indexOf(player) + 1;
+
+        if (nextPlayer > currentPlayers.size() - 1) {
+            return currentPlayers.get(0);
+        }
+        return currentPlayers.get(nextPlayer);
     }
 
     /**
@@ -159,14 +170,14 @@ public class Game {
             case SOUTH:
             case EAST:
             case WEST:
-                return getCanMove(player, action) && !player.isOut();
+                return canMove(player, action) && !player.isOut();
 
             case SUGGESTION:
             case ACCUSATION:
-                return board[player.getLocation().x][player.getLocation().y] instanceof RoomTile && !player.isOut();
+                return !suggestedThisTurn && board[player.getLocation().x][player.getLocation().y] instanceof RoomTile && !player.isOut();
 
             case TURN:
-                return movedThisTurn;
+                return movedThisTurn || player.isOut();
 
             case INFO:
                 return true;
@@ -209,11 +220,12 @@ public class Game {
      * @param direction The direction the player wants to move in
      * @return The validity of movement (boolean)
      */
-    public boolean getCanMove(Player player, Action direction) {
+    public boolean canMove(Player player, Action direction) {
         Point currentTileLocation = player.getLocation();
         Tile currentTile = board[player.getLocation().x][player.getLocation().y];
         Tile nextTile = getNextTile(currentTileLocation, direction);
 
+        if (player.getMovesRemaining() <= 0) {return false;}
         if (nextTile == null){
             return false;
         }
@@ -250,5 +262,15 @@ public class Game {
 
     public Tile[][] getBoard() {
         return board;
+    }
+
+    public boolean checkMovesRemaining() {
+        if (currentPlayer.getMovesRemaining() == 0) {
+            if (getBoard()[currentPlayer.getLocation().x][currentPlayer.getLocation().y]
+                    instanceof HallwayTile) {
+                return false;
+            }
+        }
+        return true;
     }
 }

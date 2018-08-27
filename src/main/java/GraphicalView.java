@@ -1,8 +1,11 @@
+import Entities.Cards.Card;
+import Entities.Player;
 import Entities.Tiles.HallwayTile;
 import Entities.Tiles.InaccessibleTile;
 import Entities.Tiles.RoomTile;
 import Entities.Tiles.Tile;
 
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -14,6 +17,15 @@ import java.nio.file.Paths;
  * Class for displaying objects using graphics
  */
 public class GraphicalView extends View {
+
+	@Override
+	public void redraw(Game game) {
+
+	}
+
+	@Override
+	public int getInput(int arrayOptionSize) {
+		return 0;
 
 	// Image Icons
 	// MERCIFUL GOD IN HEAVEN THIS IS A NIGHTMARE
@@ -59,7 +71,7 @@ public class GraphicalView extends View {
 
 	@Override
 	public void drawBoard(Tile[][] board, int width, int height) {
-		displayBoard = new JPanel(new GridLayout(height,width));
+    		displayBoard = new JPanel(new GridLayout(height,width));
 		for (int x = 0; x < height; x++) {
 			for (int y = 0; y < width; y++) {
 				displayBoard.add(new JLabel(getTileIcon(board[y][x])));
@@ -68,6 +80,39 @@ public class GraphicalView extends View {
 		displayBoard.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		redraw();
 	}
+
+	@Override
+	public void drawRoomTile(RoomTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
+
+	}
+
+	@Override
+	public void drawHallwayTile(HallwayTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
+
+	}
+
+	@Override
+	public void drawInaccessibleTile(InaccessibleTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
+
+	}
+
+	@Override
+	public void printCommandMenu(Player player, Game game) {
+
+	}
+
+	@Override
+	public void printSuggestionMenu(Game game) {
+
+	}
+
+	@Override
+	public void printRefutationMenu(Player player, Game game) {
+
+	}
+
+	@Override
+	public void printRefuteCardSelectionMenu(Player player) {}
 
 	/**
 	 * This method gives the appropriate icon based on the tile and its content
@@ -182,50 +227,78 @@ public class GraphicalView extends View {
 	 */
 	@Override
 	public void windowOpened(WindowEvent e) {
-
 	}
 
 	@Override
-	public void windowClosing(WindowEvent e) {
-
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-
-	}
+	public void printAllCharacterCards(Game game) {}
+	public void windowClosing(WindowEvent e) {}
 
 	@Override
-	public void windowIconified(WindowEvent e) {
-
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-
-	}
+	public void printAllWeaponCards(Game game) {}
+	public void windowClosed(WindowEvent e) {}
 
 	@Override
+	public void printAllRoomCards(Game game) {}
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+
+	public void printBoardInfo() {}
+	public void windowDeiconified(WindowEvent e) {	}
+
+	@Override
+
+	public void printError(String error) {}
+
 	public void windowActivated(WindowEvent e) {
 
+
 	}
 
 	@Override
+
+	public void printHand(Player p) {}
+
 	public void windowDeactivated(WindowEvent e) {
 
 	}
 
 	@Override
-	public void drawRoomTile(RoomTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
+	public void printRefutations(Game game) {
 
 	}
 
 	@Override
+	public void printWinText(Player player) {
+
+	}
+
+	@Override
+	public void printLoseText(List<Card> solution) {}
+
+	public void drawRoomTile(RoomTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
+
+
+	}
+
+	@Override
+	public void printNewTurnText(Player currentPlayer) {}
+
 	public void drawHallwayTile(HallwayTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
 
 	}
 
 	@Override
+
+	public void printEndTurnText() {
+
+	}
+
+	@Override
+	public void printPassInstruction(Player nextPlayer) {
+
+	}
+
 	public void drawInaccessibleTile(InaccessibleTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
 
 	}
