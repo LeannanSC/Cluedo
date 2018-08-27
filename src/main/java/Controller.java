@@ -7,9 +7,6 @@ import Entities.Player;
 import Entities.Commands.Action;
 import Entities.Commands.Suggestion;
 import Entities.Tiles.HallwayTile;
-import Views.TextView;
-import Views.View;
-import com.sun.org.apache.bcel.internal.generic.Select;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,14 +26,12 @@ public class Controller {
      * The game is run in this here
      */
     private Controller() {
-        view = new TextView(); // fixme move to view
-        game = new Game(getInput());
-
-
+        game = new Game(3); // FIXME: Change when testing done
+        view = new GraphicalView();
 
         gameFinished = false;
-        redraw(view);
 
+        redraw(view);
         while (!gameFinished) {
             System.out.println("Character name - " + game.currentPlayer.getCharacterName() + ", Board Representation - " + game.currentPlayer.getColour().charAt(0));
             view.printHand(game.currentPlayer);

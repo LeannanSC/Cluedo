@@ -74,6 +74,11 @@ public class Game {
         }
         rolledThisTurn = true;
         currentPlayer.setMovesRemaining(moves);
+        return moves;
+    }
+
+    public void draw(View v) {
+        v.drawBoard(board,GameLoader.WIDTH,GameLoader.HEIGHT);
     }
 
     /**
