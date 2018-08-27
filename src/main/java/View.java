@@ -1,5 +1,3 @@
-package Views;
-
 import Entities.Player;
 import Entities.Tiles.HallwayTile;
 import Entities.Tiles.InaccessibleTile;

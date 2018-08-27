@@ -1,5 +1,3 @@
-package Views;
-
 import Entities.Tiles.HallwayTile;
 import Entities.Tiles.InaccessibleTile;
 import Entities.Tiles.RoomTile;
@@ -45,7 +43,6 @@ public class GraphicalView extends View {
 
 	private JPanel fullSetup = new JPanel();
 	private JPanel displayBoard = new JPanel();
-
 
 	public GraphicalView() {
 		super("Cluedo");

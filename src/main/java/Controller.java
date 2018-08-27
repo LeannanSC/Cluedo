@@ -7,10 +7,6 @@ import Entities.Player;
 import Entities.Commands.Action;
 import Entities.Commands.Suggestion;
 import Entities.Tiles.HallwayTile;
-import Views.GraphicalView;
-import Views.TextView;
-import Views.View;
-import com.sun.org.apache.bcel.internal.generic.Select;
 
 import java.util.Arrays;
 import java.util.List;

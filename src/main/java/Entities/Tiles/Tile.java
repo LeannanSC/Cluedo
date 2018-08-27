@@ -1,7 +1,6 @@
 package Entities.Tiles;
 
 import Entities.Player;
-import Views.View;
 
 /**
  * General class for tiles

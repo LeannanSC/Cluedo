@@ -10,7 +10,6 @@ import Entities.Tiles.HallwayTile;
 import Entities.Tiles.InaccessibleTile;
 import Entities.Tiles.RoomTile;
 import Entities.Tiles.Tile;
-import Views.View;
 
 import java.awt.*;
 import java.util.ArrayList;

@@ -1,5 +1,3 @@
-package Views;
-
 import Entities.Cards.Card;
 import Entities.Player;
 import Entities.Tiles.HallwayTile;
