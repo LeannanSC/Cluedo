@@ -47,7 +47,6 @@ public class TextView extends View {
             System.out.println("Invalid character, please try again");
             return getInput(arrayOptionSize);
         }
-
     }
 
     /*
@@ -330,40 +329,5 @@ public class TextView extends View {
             text += suggestion.getLabel();
         }
         return text;
-    }
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
     }
 }
