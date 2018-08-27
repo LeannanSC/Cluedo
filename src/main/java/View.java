@@ -67,10 +67,4 @@ public abstract class View extends JFrame implements WindowListener {
 	public abstract void printEndTurnText();
 
 	public abstract void printPassInstruction(Player nextPlayer);
-  
-	public void printHand(Player p) {
-	}
-
-	public void printBoardInfo() {
-	}
 }
