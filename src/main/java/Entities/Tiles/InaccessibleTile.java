@@ -1,9 +1,5 @@
 package Entities.Tiles;
 
-import Views.TextView;
-import Views.View;
-
-
 /**
  * Represents inaccessible tiles on the board (e.g Cellar)
  */

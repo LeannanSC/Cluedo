@@ -11,7 +11,7 @@ import Entities.Tiles.Tile;
 /**
  * Class for displaying objects using text
  */
-public class TextView extends View {
+public class TextView{
 
 	public TextView() {
 		System.out.println("Loading Assets...");
@@ -19,7 +19,6 @@ public class TextView extends View {
 
 	}
 
-	@Override
 	public void drawBoard(Tile[][] board, int width, int height ) {
 		StringBuilder output = new StringBuilder();
 		for (int y = 0; y < height; y++) {
@@ -46,7 +45,6 @@ public class TextView extends View {
 		System.out.println(output);
 	}
 
-	@Override
 	public void drawRoomTile(RoomTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
 		// Draw player if on tile
 		if (t.getPlayer() != null) {
@@ -73,7 +71,6 @@ public class TextView extends View {
 		}
 	}
 
-	@Override
 	public void drawHallwayTile(HallwayTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
 		if (t.getPlayer() != null) {
 
@@ -89,14 +86,12 @@ public class TextView extends View {
 		}
 	}
 
-	@Override
 	public void drawInaccessibleTile(InaccessibleTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
 		line1.append("xxx");
 		line2.append("xxx");
 		line3.append("xxx");
 	}
 
-	@Override
 	public void printHand(Player p){
 
 		System.out.println("Your hand -");
@@ -110,7 +105,6 @@ public class TextView extends View {
 		System.out.println(output.toString());
 	}
 
-	@Override
 	public void printBoardInfo() {
 		StringBuilder output = new StringBuilder();
 

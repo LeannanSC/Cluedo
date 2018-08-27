@@ -74,7 +74,7 @@ public class Game {
     }
 
     public void draw(View v) {
-        v.drawBoard(board, GameLoader.WIDTH, GameLoader.HEIGHT);
+        v.drawBoard(board,GameLoader.WIDTH,GameLoader.HEIGHT);
     }
 
     /**
