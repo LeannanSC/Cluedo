@@ -11,7 +11,6 @@ import java.awt.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
 /**
  * Class for displaying objects using graphics
@@ -45,7 +44,7 @@ public class GraphicalView extends View {
 
 	private JFrame mainFrame;		// The overall view of the window, add components to this
 	private JMenuBar menuBar;		// The menu bar,
-	private JPanel displayBoard;	// The board to display to the user of the GUI
+	private JPanel boardArea;	// The board to display to the user of the GUI
 	private JPanel dicePanel; 		// The dice to display to the user
 	private JPanel playerCards;		// The players cards in the players hand.
 
@@ -64,12 +63,9 @@ public class GraphicalView extends View {
 		mainFrame.setSize(400,400);
 		mainFrame.setLayout(new BorderLayout());
 		menuBar = new JMenuBar();
-		menuBar.add(new JMenu("MENU BAR 1"));
-		menuBar.add(new JMenu("MENU BAR 2"));
-		displayBoard = new JPanel(false);
-		displayBoard.setBorder(BorderFactory.createEmptyBorder());
+		menuBar.add(new JMenu("MENU BUTTON 1"));
+		menuBar.add(new JMenu("MENU  BUTTON 2"));
 		mainFrame.add(menuBar,BorderLayout.PAGE_START);
-		mainFrame.add(displayBoard,BorderLayout.WEST);
 		mainFrame.setVisible(true);
 	}
 
@@ -80,25 +76,23 @@ public class GraphicalView extends View {
 	@Override
 	public void redraw(Game game) {
 		drawBoard(game.getBoard(),GameLoader.WIDTH, GameLoader.HEIGHT);
-		mainFrame.getContentPane().removeAll();
-		setupGUI();
+//		mainFrame.getContentPane().removeAll();
+//		setupGUI();
+
+//		boardArea = new JPanel(false);
+//		boardArea.setBorder(BorderFactory.createEmptyBorder());
+
+//		mainFrame.add(boardArea,BorderLayout.WEST);
 	}
 
 	/**
 	 * Receives input from the player
-	 * TODO wtf to do with this
 	 * @param arrayOptionSize
 	 * @return
 	 */
 	@Override
 	public int getInput(int arrayOptionSize) {
-		return 0;
-	}
-
-	/**
-	 *
-	 */
-	public void redraw(){
+		return 0; // todo
 	}
 
 	/**
@@ -109,14 +103,17 @@ public class GraphicalView extends View {
 	 */
 	@Override
 	public void drawBoard(Tile[][] board, int width, int height) {
-		displayBoard = new JPanel(new GridLayout(height, width));
+		new TextView().drawBoard(board,width,height); // test fixme
+
+		boardArea = new JPanel(new GridLayout(height, width));
 		for (int x = 0; x < height; x++) {
 			for (int y = 0; y < width; y++) {
-				displayBoard.add(new JLabel(getTileIcon(board[y][x])));
+				boardArea.add(new JLabel(getTileIcon(board[y][x])));
 			}
 		}
-		displayBoard.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		mainFrame.add(displayBoard);
+
+		boardArea.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		mainFrame.add(boardArea, BorderLayout.CENTER);
 	}
 
 	/**
@@ -215,6 +212,23 @@ public class GraphicalView extends View {
 			return null;
 		}
 	}
+
+	@Override
+	public int getPlayers() {
+		String input = JOptionPane.showInputDialog("Please Enter number of players(3-6): ");
+		System.out.println(input);
+		int numplayers = Integer.parseInt(input);
+		if (numplayers > 6 || numplayers < 3){
+			getPlayers();
+		}
+		return numplayers;
+	}
+
+	public static void main(String[] args) {
+		GraphicalView v = new GraphicalView();
+		new Controller(v).initController();
+	}
+
 
 	@Override
 	public void drawRoomTile(RoomTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
