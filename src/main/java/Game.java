@@ -62,7 +62,7 @@ public class Game {
 	 *
 	 * @return Integer sum of 2 random numbers
 	 */
-	public void rollDice() {
+	public int[] rollDice() {
 		Random rng = new Random();
 		int d1 = rng.nextInt(6) + 1; // 0 -> 5 so + 1
 		int d2 = rng.nextInt(6) + 1;
@@ -73,6 +73,7 @@ public class Game {
 		}
 		rolledThisTurn = true;
 		currentPlayer.setMovesRemaining(moves);
+		return new int[] {d1,d2};
 	}
 
 	public void draw(View v) {

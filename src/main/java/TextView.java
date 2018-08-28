@@ -302,6 +302,11 @@ public class TextView extends View {
         return getInput(6);
     }
 
+    @Override
+    public void setDicePanel(int dice1, int dice2) {
+
+    }
+
     private void initView() {
         System.out.println("Welcome to Cluedo");
         System.out.println("Starting Game...");
