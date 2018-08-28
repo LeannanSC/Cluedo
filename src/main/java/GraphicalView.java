@@ -7,14 +7,9 @@ import Entities.Tiles.InaccessibleTile;
 import Entities.Tiles.RoomTile;
 import Entities.Tiles.Tile;
 
-import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
 import java.awt.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 /**
  * Class for displaying objects using graphics
@@ -53,12 +48,13 @@ public class GraphicalView extends View {
 	private ImageIcon dice5 = makeImageIcon("dice-5.png");
 	private ImageIcon dice6 = makeImageIcon("dice-6.png");
 
-	private JFrame mainFrame;        // The overall view of the window, add components to this
-	private JMenuBar menuBar;        // The menu bar,
-	private JPanel boardArea;    // The board to display to the user of the GUI
-	private JPanel bottomPanel;
-	private JPanel dicePanel;        // The dice to display to the user
-	private JPanel playerCards;        // The players cards in the players hand.
+	private JFrame mainFrame;      // The overall view of the window, add components to this
+	private JMenuBar menuBar;      // The menu bar,
+	private JPanel boardArea;    	// The board to display to the user of the GUI
+	private JPanel bottomPanel;		// The bottom panel where the dice and cards are displayed
+	private JPanel dicePanel;      // The dice to display to the user
+	private JPanel playerCards;    // The players cards in the players hand.
+	private JPanel text;
 
 	/**
 	 * Constructor, starts the GUI
@@ -73,17 +69,18 @@ public class GraphicalView extends View {
 	 * Sets up the GUI first time round
 	 */
 	private void setupGUI() {
-		mainFrame.setSize(600,600);
 		mainFrame.setLayout(new BorderLayout());
 		menuBar = new JMenuBar();
 		menuBar.add(new JMenu("MENU BUTTON 1"));
 		menuBar.add(new JMenu("MENU BUTTON 2"));
 		bottomPanel = new JPanel();
 		dicePanel = new JPanel();
+		text = new JPanel();
 		setDicePanel(0,0);
 		playerCards = new JPanel();
 		bottomPanel.add(dicePanel,FlowLayout.LEFT);
 		bottomPanel.add(playerCards,FlowLayout.CENTER);
+		bottomPanel.add(text,FlowLayout.RIGHT);
 		mainFrame.add(menuBar, BorderLayout.PAGE_START);
 		mainFrame.add(bottomPanel,BorderLayout.PAGE_END);
 		mainFrame.setVisible(true);
@@ -96,27 +93,23 @@ public class GraphicalView extends View {
 	 */
 	@Override
 	public void redraw(Game game) {
+		mainFrame.getContentPane().removeAll();
 		drawBoard(game.getBoard(), GameLoader.WIDTH, GameLoader.HEIGHT);
-		setPlayerCards(game.currentPlayer);
+		printHand(game.currentPlayer);
+		printNewTurnText(game.currentPlayer);
+		bottomPanel.removeAll();
 		bottomPanel.add(dicePanel);
 		bottomPanel.add(playerCards);
+		bottomPanel.add(text);
 		bottomPanel.setBorder(BorderFactory.createBevelBorder(0,Color.GRAY,Color.GRAY));
+		mainFrame.add(menuBar, BorderLayout.PAGE_START);
 		mainFrame.add(bottomPanel,BorderLayout.SOUTH);
+		mainFrame.pack();
 //		mainFrame.getContentPane().removeAll();
 //		setupGUI();
 //		boardArea = new JPanel(false);
 //		boardArea.setBorder(BorderFactory.createEmptyBorder());
 //		mainFrame.add(boardArea,BorderLayout.WEST);
-	}
-
-	public void setPlayerCards(Player player) {
-		playerCards = new JPanel();
-		playerCards.setLayout(new BoxLayout(playerCards, BoxLayout.Y_AXIS));
-		playerCards.add(new JLabel("YOUR CARDS:"));
-		for (Card card:player.getCardsInHand()) {
-			playerCards.add(new JLabel(card.getCardName()));
-		}
-		playerCards.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 	}
 
 	/**
@@ -126,6 +119,7 @@ public class GraphicalView extends View {
 		dicePanel = new JPanel();
 		dicePanel.add(new JLabel(getDiceIcon(dice1)));
 		dicePanel.add(new JLabel(getDiceIcon(dice2)));
+		dicePanel.setPreferredSize(new Dimension(120,120));
 		dicePanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 	}
 
@@ -146,7 +140,6 @@ public class GraphicalView extends View {
 
 	/**
 	 * Receives input from the player
-	 *
 	 * @param arrayOptionSize
 	 * @return
 	 */
@@ -185,12 +178,15 @@ public class GraphicalView extends View {
 		boardArea = new JPanel(new GridLayout(height, width));
 		for (int x = 0; x < height; x++) {
 			for (int y = 0; y < width; y++) {
-				boardArea.add(new JLabel(getTileIcon(board[y][x]),JLabel.CENTER));
+				JLabel addThis = new JLabel(getTileIcon(board[y][x]),JLabel.CENTER);
+				addThis.setMinimumSize(new Dimension(15,15));
+				boardArea.add(addThis);
 			}
 		}
 		System.out.println(boardArea.contains(1, 1));
+		boardArea.setMaximumSize(new Dimension(15*width,15*height));
 		boardArea.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		mainFrame.add(boardArea);
+		mainFrame.add(boardArea,BorderLayout.CENTER);
 		mainFrame.setVisible(true);
 	}
 
@@ -364,7 +360,14 @@ public class GraphicalView extends View {
 
 	@Override
 	public void printHand(Player p) {
-
+		playerCards = new JPanel();
+		playerCards.setLayout(new BoxLayout(playerCards, BoxLayout.Y_AXIS));
+		playerCards.add(new JLabel("YOUR CARDS:"));
+		for (Card card:p.getCardsInHand()) {
+			playerCards.add(new JLabel(card.getCardName()));
+		}
+		playerCards.setPreferredSize(new Dimension(120,120));
+		playerCards.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 	}
 
 	@Override
@@ -384,7 +387,13 @@ public class GraphicalView extends View {
 
 	@Override
 	public void printNewTurnText(Player currentPlayer) {
-
+		text = new JPanel();
+		text.setLayout(new BoxLayout(text, BoxLayout.Y_AXIS));
+		text.add(new JLabel("You are playing as " + currentPlayer.getCharacterName()));
+		text.add(new JLabel("Your colour token is " + currentPlayer.getColour().toLowerCase()));
+		text.add(new JLabel("You have " + currentPlayer.getMovesRemaining() + " steps remaining"));
+		text.setPreferredSize(new Dimension(200,120));
+		text.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 	}
 
 	@Override
