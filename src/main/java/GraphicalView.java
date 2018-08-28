@@ -1,16 +1,20 @@
 import Entities.Cards.Card;
+import Entities.Commands.Action;
+import Entities.Commands.Suggestion;
 import Entities.Player;
 import Entities.Tiles.HallwayTile;
 import Entities.Tiles.InaccessibleTile;
 import Entities.Tiles.RoomTile;
 import Entities.Tiles.Tile;
 
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 /**
  * Class for displaying objects using graphics
@@ -148,7 +152,23 @@ public class GraphicalView extends View {
 	 */
 	@Override
 	public int getInput(int arrayOptionSize) {
-		return 0; // todo
+		Object[] options;
+			if (arrayOptionSize == Action.values().length) {
+				options = Action.values();
+			} else if (arrayOptionSize == Suggestion.values().length){
+				options = Suggestion.values();
+			} else throw new Error("error in get input");
+
+		int input = JOptionPane.showOptionDialog(mainFrame,
+				null,
+				"Please Select Command: ",
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				options,
+				options[0]);
+		System.out.println(input+1);
+		return input +1 ;
 	}
 
 	/**
@@ -270,6 +290,7 @@ public class GraphicalView extends View {
 		System.out.println(input);
 		int numplayers = Integer.parseInt(input);
 		if (numplayers > 6 || numplayers < 3) {
+			JOptionPane.showMessageDialog(mainFrame, "invalid Input");
 			return getPlayers();
 		}
 		return numplayers;
@@ -298,6 +319,7 @@ public class GraphicalView extends View {
 
 	@Override
 	public void printCommandMenu(Player player, Game game) {
+
 	}
 
 	@Override
