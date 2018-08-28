@@ -54,6 +54,7 @@ public class GraphicalView extends View {
 	private JPanel bottomPanel;		// The bottom panel where the dice and cards are displayed
 	private JPanel dicePanel;      // The dice to display to the user
 	private JPanel playerCards;    // The players cards in the players hand.
+	private JPanel text;
 
 	/**
 	 * Constructor, starts the GUI
@@ -74,10 +75,12 @@ public class GraphicalView extends View {
 		menuBar.add(new JMenu("MENU BUTTON 2"));
 		bottomPanel = new JPanel();
 		dicePanel = new JPanel();
+		text = new JPanel();
 		setDicePanel(0,0);
 		playerCards = new JPanel();
 		bottomPanel.add(dicePanel,FlowLayout.LEFT);
 		bottomPanel.add(playerCards,FlowLayout.CENTER);
+		bottomPanel.add(text,FlowLayout.RIGHT);
 		mainFrame.add(menuBar, BorderLayout.PAGE_START);
 		mainFrame.add(bottomPanel,BorderLayout.PAGE_END);
 		mainFrame.setVisible(true);
@@ -92,10 +95,12 @@ public class GraphicalView extends View {
 	public void redraw(Game game) {
 		mainFrame.getContentPane().removeAll();
 		drawBoard(game.getBoard(), GameLoader.WIDTH, GameLoader.HEIGHT);
-		setPlayerCards(game.currentPlayer);
+		printHand(game.currentPlayer);
+		printNewTurnText(game.currentPlayer);
 		bottomPanel.removeAll();
 		bottomPanel.add(dicePanel);
 		bottomPanel.add(playerCards);
+		bottomPanel.add(text);
 		bottomPanel.setBorder(BorderFactory.createBevelBorder(0,Color.GRAY,Color.GRAY));
 		mainFrame.add(menuBar, BorderLayout.PAGE_START);
 		mainFrame.add(bottomPanel,BorderLayout.SOUTH);
@@ -105,17 +110,6 @@ public class GraphicalView extends View {
 //		boardArea = new JPanel(false);
 //		boardArea.setBorder(BorderFactory.createEmptyBorder());
 //		mainFrame.add(boardArea,BorderLayout.WEST);
-	}
-
-	public void setPlayerCards(Player player) {
-		playerCards = new JPanel();
-		playerCards.setLayout(new BoxLayout(playerCards, BoxLayout.Y_AXIS));
-		playerCards.add(new JLabel("YOUR CARDS:"));
-		for (Card card:player.getCardsInHand()) {
-			playerCards.add(new JLabel(card.getCardName()));
-		}
-		playerCards.setPreferredSize(new Dimension(120,120));
-		playerCards.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 	}
 
 	/**
@@ -146,7 +140,6 @@ public class GraphicalView extends View {
 
 	/**
 	 * Receives input from the player
-	 *
 	 * @param arrayOptionSize
 	 * @return
 	 */
@@ -367,7 +360,14 @@ public class GraphicalView extends View {
 
 	@Override
 	public void printHand(Player p) {
-
+		playerCards = new JPanel();
+		playerCards.setLayout(new BoxLayout(playerCards, BoxLayout.Y_AXIS));
+		playerCards.add(new JLabel("YOUR CARDS:"));
+		for (Card card:p.getCardsInHand()) {
+			playerCards.add(new JLabel(card.getCardName()));
+		}
+		playerCards.setPreferredSize(new Dimension(120,120));
+		playerCards.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 	}
 
 	@Override
@@ -387,7 +387,13 @@ public class GraphicalView extends View {
 
 	@Override
 	public void printNewTurnText(Player currentPlayer) {
-
+		text = new JPanel();
+		text.setLayout(new BoxLayout(text, BoxLayout.Y_AXIS));
+		text.add(new JLabel("You are playing as " + currentPlayer.getCharacterName()));
+		text.add(new JLabel("Your colour token is " + currentPlayer.getColour().toLowerCase()));
+		text.add(new JLabel("You have " + currentPlayer.getMovesRemaining() + " steps remaining"));
+		text.setPreferredSize(new Dimension(200,120));
+		text.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 	}
 
 	@Override
