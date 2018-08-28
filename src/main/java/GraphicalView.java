@@ -18,35 +18,35 @@ import java.nio.file.Paths;
 public class GraphicalView extends View {
 
 	/*# Image Icons #*/
-	private static ImageIcon inaccessibleTile = makeImageIcon("inaccessible-tile.png");
-	private static ImageIcon hallTileEmpty = makeImageIcon("hall-tile.png");
-	private static ImageIcon hallTileDoor = makeImageIcon("door-hall-tile.png");
-	private static ImageIcon hallTileGreen = makeImageIcon("green-hall-tile.png");
-	private static ImageIcon hallTileRed = makeImageIcon("red-hall-tile.png");
-	private static ImageIcon hallTileBlue = makeImageIcon("blue-hall-tile.png");
-	private static ImageIcon hallTileWhite = makeImageIcon("white-hall-tile.png");
-	private static ImageIcon hallTilePurple = makeImageIcon("purple-hall-tile.png");
-	private static ImageIcon hallTileYellow = makeImageIcon("yellow-hall-tile.png");
-	private static ImageIcon roomTileEmpty = makeImageIcon("room-tile.png");
-	private static ImageIcon roomTileDoor = makeImageIcon("door-room-tile.png");
-	private static ImageIcon roomTileGreen = makeImageIcon("green-room-tile.png");
-	private static ImageIcon roomTileRed = makeImageIcon("red-room-tile.png");
-	private static ImageIcon roomTileBlue = makeImageIcon("blue-room-tile.png");
-	private static ImageIcon roomTileWhite = makeImageIcon("white-room-tile.png");
-	private static ImageIcon roomTilePurple = makeImageIcon("purple-room-tile.png");
-	private static ImageIcon roomTileYellow = makeImageIcon("yellow-room-tile.png");
-	private static ImageIcon roomTileCandle = makeImageIcon("candle-room-tile.png");
-	private static ImageIcon roomTileDagger = makeImageIcon("dagger-room-tile.png");
-	private static ImageIcon roomTilePipe = makeImageIcon("pipe-room-tile.png");
-	private static ImageIcon roomTileRevolver = makeImageIcon("revolver-room-tile.png");
-	private static ImageIcon roomTileRope = makeImageIcon("rope-room-tile.png");
-	private static ImageIcon roomTileSpanner = makeImageIcon("spanner-room-tile.png");
+	private ImageIcon inaccessibleTile = makeImageIcon("inaccessible-tile.png");
+	private ImageIcon hallTileEmpty = makeImageIcon("hall-tile.png");
+	private ImageIcon hallTileDoor = makeImageIcon("door-hall-tile.png");
+	private ImageIcon hallTileGreen = makeImageIcon("green-hall-tile.png");
+	private ImageIcon hallTileRed = makeImageIcon("red-hall-tile.png");
+	private ImageIcon hallTileBlue = makeImageIcon("blue-hall-tile.png");
+	private ImageIcon hallTileWhite = makeImageIcon("white-hall-tile.png");
+	private ImageIcon hallTilePurple = makeImageIcon("purple-hall-tile.png");
+	private ImageIcon hallTileYellow = makeImageIcon("yellow-hall-tile.png");
+	private ImageIcon roomTileEmpty = makeImageIcon("room-tile.png");
+	private ImageIcon roomTileDoor = makeImageIcon("door-room-tile.png");
+	private ImageIcon roomTileGreen = makeImageIcon("green-room-tile.png");
+	private ImageIcon roomTileRed = makeImageIcon("red-room-tile.png");
+	private ImageIcon roomTileBlue = makeImageIcon("blue-room-tile.png");
+	private ImageIcon roomTileWhite = makeImageIcon("white-room-tile.png");
+	private ImageIcon roomTilePurple = makeImageIcon("purple-room-tile.png");
+	private ImageIcon roomTileYellow = makeImageIcon("yellow-room-tile.png");
+	private ImageIcon roomTileCandle = makeImageIcon("candle-room-tile.png");
+	private ImageIcon roomTileDagger = makeImageIcon("dagger-room-tile.png");
+	private ImageIcon roomTilePipe = makeImageIcon("pipe-room-tile.png");
+	private ImageIcon roomTileRevolver = makeImageIcon("revolver-room-tile.png");
+	private ImageIcon roomTileRope = makeImageIcon("rope-room-tile.png");
+	private ImageIcon roomTileSpanner = makeImageIcon("spanner-room-tile.png");
 
-	private JFrame mainFrame;		// The overall view of the window, add components to this
-	private JMenuBar menuBar;		// The menu bar,
-	private JPanel boardArea;	// The board to display to the user of the GUI
-	private JPanel dicePanel; 		// The dice to display to the user
-	private JPanel playerCards;		// The players cards in the players hand.
+	private JFrame mainFrame;        // The overall view of the window, add components to this
+	private JMenuBar menuBar;        // The menu bar,
+	private JPanel boardArea;    // The board to display to the user of the GUI
+	private JPanel dicePanel;        // The dice to display to the user
+	private JPanel playerCards;        // The players cards in the players hand.
 
 	/**
 	 * Constructor, starts the GUI
@@ -60,22 +60,23 @@ public class GraphicalView extends View {
 	 * Sets up the GUI first time round
 	 */
 	private void setupGUI() {
-		mainFrame.setSize(400,400);
+		mainFrame.setSize(450	, 450);
 		mainFrame.setLayout(new BorderLayout());
 		menuBar = new JMenuBar();
 		menuBar.add(new JMenu("MENU BUTTON 1"));
 		menuBar.add(new JMenu("MENU BUTTON 2"));
-		mainFrame.add(menuBar,BorderLayout.PAGE_START);
+		mainFrame.add(menuBar, BorderLayout.PAGE_START);
 		mainFrame.setVisible(true);
 	}
 
 	/**
 	 * IDK what this does
+	 *
 	 * @param game
 	 */
 	@Override
 	public void redraw(Game game) {
-		drawBoard(game.getBoard(),GameLoader.WIDTH, GameLoader.HEIGHT);
+		drawBoard(game.getBoard(), GameLoader.WIDTH, GameLoader.HEIGHT);
 //		mainFrame.getContentPane().removeAll();
 //		setupGUI();
 
@@ -87,6 +88,7 @@ public class GraphicalView extends View {
 
 	/**
 	 * Receives input from the player
+	 *
 	 * @param arrayOptionSize
 	 * @return
 	 */
@@ -97,25 +99,26 @@ public class GraphicalView extends View {
 
 	/**
 	 * Sets up display board
+	 *
 	 * @param board
 	 * @param width
 	 * @param height
 	 */
 	@Override
 	public void drawBoard(Tile[][] board, int width, int height) {
-		new TextView().drawBoard(board,width,height); // test fixme
+		new TextView().drawBoard(board, width, height); // test fixme
 		System.out.println("Print Draw");
 		boardArea = new JPanel(new GridLayout(height, width));
 		for (int x = 0; x < height; x++) {
 			for (int y = 0; y < width; y++) {
 				ImageIcon imageIcon = getTileIcon(board[y][x]);
-				boardArea.add(new JLabel(getTileIcon(board[y][x])));
+				boardArea.add(new JLabel(getTileIcon(board[y][x]),JLabel.CENTER));
 			}
 		}
-		System.out.println(boardArea.contains(1,1));
+		System.out.println(boardArea.contains(1, 1));
 		boardArea.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		boardArea.setVisible(true);
-		mainFrame.add(boardArea, BorderLayout.CENTER);
+		mainFrame.add(boardArea);
+		mainFrame.setVisible(true);
 	}
 
 	/**
@@ -200,14 +203,12 @@ public class GraphicalView extends View {
 	 * @param path name of .png file
 	 * @return ImageIcon of the desired file
 	 */
-	private static ImageIcon makeImageIcon(String path) {
+	private ImageIcon makeImageIcon(String path) {
 		java.net.URL imageURL = GraphicalView.class.getResource(path);
-
-		ImageIcon icon = null;
 		if (imageURL != null) {
-			icon = new ImageIcon(imageURL);
+			return new ImageIcon(imageURL);
 		}
-		return icon;
+		return null;
 	}
 
 	@Override
@@ -215,7 +216,7 @@ public class GraphicalView extends View {
 		String input = JOptionPane.showInputDialog("Please Enter number of players(3-6): ");
 		System.out.println(input);
 		int numplayers = Integer.parseInt(input);
-		if (numplayers > 6 || numplayers < 3){
+		if (numplayers > 6 || numplayers < 3) {
 			return getPlayers();
 		}
 		return numplayers;
@@ -244,7 +245,6 @@ public class GraphicalView extends View {
 
 	@Override
 	public void printCommandMenu(Player player, Game game) {
-
 	}
 
 	@Override
