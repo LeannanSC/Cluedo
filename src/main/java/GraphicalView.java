@@ -64,7 +64,7 @@ public class GraphicalView extends View {
 		mainFrame.setLayout(new BorderLayout());
 		menuBar = new JMenuBar();
 		menuBar.add(new JMenu("MENU BUTTON 1"));
-		menuBar.add(new JMenu("MENU  BUTTON 2"));
+		menuBar.add(new JMenu("MENU BUTTON 2"));
 		mainFrame.add(menuBar,BorderLayout.PAGE_START);
 		mainFrame.setVisible(true);
 	}
@@ -104,15 +104,17 @@ public class GraphicalView extends View {
 	@Override
 	public void drawBoard(Tile[][] board, int width, int height) {
 		new TextView().drawBoard(board,width,height); // test fixme
-
+		System.out.println("Print Draw");
 		boardArea = new JPanel(new GridLayout(height, width));
 		for (int x = 0; x < height; x++) {
 			for (int y = 0; y < width; y++) {
+				ImageIcon imageIcon = getTileIcon(board[y][x]);
 				boardArea.add(new JLabel(getTileIcon(board[y][x])));
 			}
 		}
-
+		System.out.println(boardArea.contains(1,1));
 		boardArea.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		boardArea.setVisible(true);
 		mainFrame.add(boardArea, BorderLayout.CENTER);
 	}
 
@@ -199,18 +201,13 @@ public class GraphicalView extends View {
 	 * @return ImageIcon of the desired file
 	 */
 	private static ImageIcon makeImageIcon(String path) {
-		URL imgURL = null;
-		try {
-			imgURL = Paths.get(path).toUri().toURL();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
+		java.net.URL imageURL = GraphicalView.class.getResource(path);
+
+		ImageIcon icon = null;
+		if (imageURL != null) {
+			icon = new ImageIcon(imageURL);
 		}
-		if (imgURL != null) {
-			return new ImageIcon(imgURL);
-		} else {
-			System.err.println("Couldn't find file: " + path);
-			return null;
-		}
+		return icon;
 	}
 
 	@Override
@@ -219,7 +216,7 @@ public class GraphicalView extends View {
 		System.out.println(input);
 		int numplayers = Integer.parseInt(input);
 		if (numplayers > 6 || numplayers < 3){
-			getPlayers();
+			return getPlayers();
 		}
 		return numplayers;
 	}
