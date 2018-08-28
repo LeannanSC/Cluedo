@@ -64,4 +64,6 @@ public abstract class View{
 	public abstract void printPassInstruction(Player nextPlayer);
 
 	public abstract int getPlayers();
+
+	public abstract void setDicePanel(int dice1,int dice2);
 }
