@@ -66,54 +66,52 @@ public class GraphicalView extends View {
         setupGUI();
     }
 
-    /**
-     * Sets up the GUI first time round
-     */
-    private void setupGUI() {
-        mainFrame.setSize(600, 600);
-        mainFrame.setLayout(new BorderLayout());
-        menuBar = new JMenuBar();
-        menuBar.add(new JMenu("MENU BUTTON 1"));
-        menuBar.add(new JMenu("MENU BUTTON 2"));
-        bottomPanel = new JPanel();
-        dicePanel = new JPanel();
-        text = new JPanel();
-        setDicePanel(0, 0);
-        playerCards = new JPanel();
-        bottomPanel.add(dicePanel, FlowLayout.LEFT);
-        bottomPanel.add(playerCards, FlowLayout.CENTER);
-        bottomPanel.add(text,FlowLayout.RIGHT);
-        mainFrame.add(menuBar, BorderLayout.PAGE_START);
-        mainFrame.add(bottomPanel, BorderLayout.PAGE_END);
-        mainFrame.setVisible(true);
-    }
+	/**
+	 * Sets up the GUI first time round
+	 */
+	private void setupGUI() {
+		mainFrame.setLayout(new BorderLayout());
+		menuBar = new JMenuBar();
+		menuBar.add(new JMenu("MENU BUTTON 1"));
+		menuBar.add(new JMenu("MENU BUTTON 2"));
+		bottomPanel = new JPanel();
+		dicePanel = new JPanel();
+		text = new JPanel();
+		setDicePanel(0,0);
+		playerCards = new JPanel();
+		bottomPanel.add(dicePanel,FlowLayout.LEFT);
+		bottomPanel.add(playerCards,FlowLayout.CENTER);
+		bottomPanel.add(text,FlowLayout.RIGHT);
+		mainFrame.add(menuBar, BorderLayout.PAGE_START);
+		mainFrame.add(bottomPanel,BorderLayout.PAGE_END);
+		mainFrame.setVisible(true);
+	}
 
-    /**
-     * Redraws the updated frame
-     *
-     * @param game
-     */
-    @Override
-    public void redraw(Game game) {
-        drawBoard(game.getBoard(), GameLoader.WIDTH, GameLoader.HEIGHT);
-        setPlayerCards(game.currentPlayer);
-        bottomPanel.removeAll();
-        bottomPanel.add(dicePanel);
-        bottomPanel.add(playerCards);
-        bottomPanel.setBorder(BorderFactory.createBevelBorder(0, Color.GRAY, Color.GRAY));
-        mainFrame.add(bottomPanel, BorderLayout.SOUTH);
-        mainFrame.pack();
-    }
-
-    public void setPlayerCards(Player player) {
-        playerCards = new JPanel();
-        playerCards.setLayout(new BoxLayout(playerCards, BoxLayout.Y_AXIS));
-        playerCards.add(new JLabel("YOUR CARDS:"));
-        for (Card card : player.getCardsInHand()) {
-            playerCards.add(new JLabel(card.getCardName()));
-        }
-        playerCards.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-    }
+	/**
+	 * Redraws the updated frame
+	 *
+	 * @param game
+	 */
+	@Override
+	public void redraw(Game game) {
+		mainFrame.getContentPane().removeAll();
+		drawBoard(game.getBoard(), GameLoader.WIDTH, GameLoader.HEIGHT);
+		printHand(game.currentPlayer);
+		printNewTurnText(game.currentPlayer);
+		bottomPanel.removeAll();
+		bottomPanel.add(dicePanel);
+		bottomPanel.add(playerCards);
+		bottomPanel.add(text);
+		bottomPanel.setBorder(BorderFactory.createBevelBorder(0,Color.GRAY,Color.GRAY));
+		mainFrame.add(menuBar, BorderLayout.PAGE_START);
+		mainFrame.add(bottomPanel,BorderLayout.SOUTH);
+		mainFrame.pack();
+//		mainFrame.getContentPane().removeAll();
+//		setupGUI();
+//		boardArea = new JPanel(false);
+//		boardArea.setBorder(BorderFactory.createEmptyBorder());
+//		mainFrame.add(boardArea,BorderLayout.WEST);
+	}
 
     /**
      *
