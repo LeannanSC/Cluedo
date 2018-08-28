@@ -16,7 +16,6 @@ import java.awt.event.WindowListener;
 
 public abstract class View{
 
-
 	public abstract void redraw(Game game);
 
 	public abstract int getInput(int arrayOptionSize);
@@ -63,4 +62,6 @@ public abstract class View{
 	public abstract void printEndTurnText();
 
 	public abstract void printPassInstruction(Player nextPlayer);
+
+	public abstract int getPlayers();
 }
