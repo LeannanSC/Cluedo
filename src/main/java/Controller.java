@@ -22,11 +22,14 @@ public class Controller {
      * received guidance from Sanjay Govind to learn how to
      * make the code more manageable as it was becoming messy
      */
-    private Controller(View view) {
+    public Controller(View view) {
         game = new Game();
         this.view = view;
-        game.initGame(view.getInput(game.gameLoader.getChrCards().size()));
+        initController();
+    }
 
+    public void initController(){
+        game.initGame(view.getPlayers());
         gameFinished = false;
         gameloop();
     }
@@ -266,10 +269,6 @@ public class Controller {
             }
         }
         return true;
-    }
-
-	public static void main(String[] args) {
-        new Controller(new GraphicalView());
     }
 
 }
