@@ -137,7 +137,7 @@ public class TextView extends View {
     @Override
     public void printCommandMenu(Player player, Game game) {
         String avail = Arrays.stream(Action.values()).map(
-                action -> this.createLabel(action, player, game))
+                action -> super.createLabel(action, player, game))
                 .collect(Collectors.joining(", "));
         System.out.println("Current Valid Commands -\n" + avail);
     }
@@ -145,7 +145,7 @@ public class TextView extends View {
     @Override
     public void printSuggestionMenu(Game game) {
         String avail = Arrays.stream(Suggestion.values()).map(
-                suggestion -> createLabel(suggestion, game))
+                suggestion -> super.createLabel(suggestion, game))
                 .collect(Collectors.joining(", "));
         System.out.println("Current Valid Commands -\n" + avail);
 
@@ -158,7 +158,7 @@ public class TextView extends View {
 
         System.out.println(player.getCharacterName());
         String avail = Arrays.stream(Refutation.values()).map(
-                refutation -> createLabel(refutation, player, game))
+                refutation -> super.createLabel(refutation, player, game))
                 .collect(Collectors.joining(", "));
         System.out.println("Current Valid Commands -\n" + avail);
     }
@@ -304,41 +304,12 @@ public class TextView extends View {
 
     @Override
     public void setDicePanel(int dice1, int dice2) {
-
+        System.out.println("you rolled a " + dice1 + "and a " + dice2);
     }
 
     private void initView() {
         System.out.println("Welcome to Cluedo");
         System.out.println("Starting Game...");
-
-
-
-    }
-
-
-
-    private String createLabel(Action action, Player player, Game game) {
-        String text = (action.ordinal() + 1) + ": ";
-        if (game.canDoAction(action, player)) {
-            text += action.getLabel();
-        }
-        return text;
-    }
-
-    private String createLabel(Refutation refutation, Player player, Game game) {
-        String text = (refutation.ordinal() + 1) + ": ";
-        if (game.canDoRefutation(refutation, player)) {
-            text += refutation.getLabel();
-        }
-        return text;
-    }
-
-    private String createLabel(Suggestion suggestion, Game game) {
-        String text = (suggestion.ordinal() + 1) + ": ";
-        if (game.canDoSuggestion(suggestion)) {
-            text += suggestion.getLabel();
-        }
-        return text;
     }
 
 

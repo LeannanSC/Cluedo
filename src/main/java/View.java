@@ -1,4 +1,7 @@
 import Entities.Cards.Card;
+import Entities.Commands.Action;
+import Entities.Commands.Refutation;
+import Entities.Commands.Suggestion;
 import Entities.Player;
 import Entities.Tiles.HallwayTile;
 import Entities.Tiles.InaccessibleTile;
@@ -66,4 +69,28 @@ public abstract class View{
 	public abstract int getPlayers();
 
 	public abstract void setDicePanel(int dice1,int dice2);
+
+	public String createLabel(Action action, Player player, Game game) {
+		String text = (action.ordinal() + 1) + ": ";
+		if (game.canDoAction(action, player)) {
+			text += action.getLabel();
+		}
+		return text;
+	}
+
+	public String createLabel(Refutation refutation, Player player, Game game) {
+		String text = (refutation.ordinal() + 1) + ": ";
+		if (game.canDoRefutation(refutation, player)) {
+			text += refutation.getLabel();
+		}
+		return text;
+	}
+
+	public String createLabel(Suggestion suggestion, Game game) {
+		String text = (suggestion.ordinal() + 1) + ": ";
+		if (game.canDoSuggestion(suggestion)) {
+			text += suggestion.getLabel();
+		}
+		return text;
+	}
 }
