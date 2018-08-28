@@ -8,27 +8,17 @@ import Entities.Tiles.Tile;
 import java.util.List;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 /**
  * Class for displaying objects using graphics
  */
 public class GraphicalView extends View {
 
-	@Override
-	public void redraw(Game game) {
-
-	}
-
-	@Override
-	public int getInput(int arrayOptionSize) {
-		return 0;
-
-	// Image Icons
-	// MERCIFUL GOD IN HEAVEN THIS IS A NIGHTMARE
+	/*# Image Icons #*/
 	private static ImageIcon inaccessibleTile = makeImageIcon("inaccessible-tile.png");
 	private static ImageIcon hallTileEmpty = makeImageIcon("hall-tile.png");
 	private static ImageIcon hallTileDoor = makeImageIcon("door-hall-tile.png");
@@ -53,72 +43,87 @@ public class GraphicalView extends View {
 	private static ImageIcon roomTileRope = makeImageIcon("rope-room-tile.png");
 	private static ImageIcon roomTileSpanner = makeImageIcon("spanner-room-tile.png");
 
-	private JPanel fullSetup = new JPanel();
-	private JPanel displayBoard = new JPanel();
+	private JFrame mainFrame;		// The overall view of the window, add components to this
+	private JMenuBar menuBar;		// The menu bar,
+	private JPanel displayBoard;	// The board to display to the user of the GUI
+	private JPanel dicePanel; 		// The dice to display to the user
+	private JPanel playerCards;		// The players cards in the players hand.
 
+	/**
+	 * Constructor, starts the GUI
+	 */
 	public GraphicalView() {
-		super("Cluedo");
-		redraw();
+		mainFrame = new JFrame("Cluedo");
+		setupGUI();
 	}
 
-	private void redraw() {
-		makeFullSetup();
-		add(displayBoard);
-		addWindowListener(this);
-		pack();
-		setVisible(true);
+	/**
+	 * Sets up the GUI first time round
+	 */
+	private void setupGUI() {
+		mainFrame.setSize(400,400);
+		mainFrame.setLayout(new BorderLayout());
+		menuBar = new JMenuBar();
+		menuBar.add(new JMenu("MENU BAR 1"));
+		menuBar.add(new JMenu("MENU BAR 2"));
+		displayBoard = new JPanel(false);
+		displayBoard.setBorder(BorderFactory.createEmptyBorder());
+		mainFrame.add(menuBar,BorderLayout.PAGE_START);
+		mainFrame.add(displayBoard,BorderLayout.WEST);
+		mainFrame.setVisible(true);
 	}
 
+	/**
+	 * IDK what this does
+	 * @param game
+	 */
+	@Override
+	public void redraw(Game game) {
+		drawBoard(game.getBoard(),GameLoader.WIDTH, GameLoader.HEIGHT);
+		mainFrame.getContentPane().removeAll();
+		setupGUI();
+	}
+
+	/**
+	 * Receives input from the player
+	 * TODO wtf to do with this
+	 * @param arrayOptionSize
+	 * @return
+	 */
+	@Override
+	public int getInput(int arrayOptionSize) {
+		return 0;
+	}
+
+	/**
+	 *
+	 */
+	public void redraw(){
+	}
+
+	/**
+	 * Sets up display board
+	 * @param board
+	 * @param width
+	 * @param height
+	 */
 	@Override
 	public void drawBoard(Tile[][] board, int width, int height) {
-    		displayBoard = new JPanel(new GridLayout(height,width));
+		displayBoard = new JPanel(new GridLayout(height, width));
 		for (int x = 0; x < height; x++) {
 			for (int y = 0; y < width; y++) {
 				displayBoard.add(new JLabel(getTileIcon(board[y][x])));
 			}
 		}
 		displayBoard.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		redraw();
+		mainFrame.add(displayBoard);
 	}
-
-	@Override
-	public void drawRoomTile(RoomTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
-
-	}
-
-	@Override
-	public void drawHallwayTile(HallwayTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
-
-	}
-
-	@Override
-	public void drawInaccessibleTile(InaccessibleTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
-
-	}
-
-	@Override
-	public void printCommandMenu(Player player, Game game) {
-
-	}
-
-	@Override
-	public void printSuggestionMenu(Game game) {
-
-	}
-
-	@Override
-	public void printRefutationMenu(Player player, Game game) {
-
-	}
-
-	@Override
-	public void printRefuteCardSelectionMenu(Player player) {}
 
 	/**
 	 * This method gives the appropriate icon based on the tile and its content
 	 *
 	 * @param tile The tile to grab the image for
-	 * @return
+	 * @return The image for the tile
 	 */
 	private ImageIcon getTileIcon(Tile tile) {
 		// HALLWAY TILES
@@ -167,7 +172,7 @@ public class GraphicalView extends View {
 							return roomTilePurple;
 					}
 				}
-				if (((RoomTile)tile).isDoorway()){
+				if (((RoomTile) tile).isDoorway()) {
 					return roomTileDoor;
 				}
 				if (((RoomTile) tile).getWeaponToken() != null) {
@@ -188,15 +193,6 @@ public class GraphicalView extends View {
 				}
 				return roomTileEmpty;
 		}
-	}
-
-	private void makeFullSetup() {
-		fullSetup = new JPanel();
-		JPanel dice = new JPanel();
-		JPanel info = new JPanel();
-		JPanel cards = new JPanel();
-		JPanel actions = new JPanel();
-		fullSetup.add(dice);
 	}
 
 	/**
@@ -220,46 +216,68 @@ public class GraphicalView extends View {
 		}
 	}
 
-	/**
-	 * The following are part of WindowListener, but not needed yet
-	 *
-	 * @param e
-	 */
 	@Override
-	public void windowOpened(WindowEvent e) {
-	}
-
-	@Override
-	public void printAllCharacterCards(Game game) {}
-	public void windowClosing(WindowEvent e) {}
-
-	@Override
-	public void printAllWeaponCards(Game game) {}
-	public void windowClosed(WindowEvent e) {}
-
-	@Override
-	public void printAllRoomCards(Game game) {}
-	public void windowIconified(WindowEvent e) {}
-
-	@Override
-
-	public void printBoardInfo() {}
-	public void windowDeiconified(WindowEvent e) {	}
-
-	@Override
-
-	public void printError(String error) {}
-
-	public void windowActivated(WindowEvent e) {
-
+	public void drawRoomTile(RoomTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
 
 	}
 
 	@Override
+	public void drawHallwayTile(HallwayTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
 
-	public void printHand(Player p) {}
+	}
 
-	public void windowDeactivated(WindowEvent e) {
+	@Override
+	public void drawInaccessibleTile(InaccessibleTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
+
+	}
+
+	@Override
+	public void printCommandMenu(Player player, Game game) {
+
+	}
+
+	@Override
+	public void printSuggestionMenu(Game game) {
+
+	}
+
+	@Override
+	public void printRefutationMenu(Player player, Game game) {
+
+	}
+
+	@Override
+	public void printRefuteCardSelectionMenu(Player player) {
+
+	}
+
+	@Override
+	public void printAllCharacterCards(Game game) {
+
+	}
+
+	@Override
+	public void printAllWeaponCards(Game game) {
+
+	}
+
+	@Override
+	public void printAllRoomCards(Game game) {
+
+	}
+
+	@Override
+	public void printBoardInfo() {
+
+	}
+
+	@Override
+	public void printError(String error) {
+
+	}
+
+	@Override
+	public void printHand(Player p) {
 
 	}
 
@@ -274,22 +292,16 @@ public class GraphicalView extends View {
 	}
 
 	@Override
-	public void printLoseText(List<Card> solution) {}
-
-	public void drawRoomTile(RoomTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
-
+	public void printLoseText(List<Card> solution) {
 
 	}
 
 	@Override
-	public void printNewTurnText(Player currentPlayer) {}
-
-	public void drawHallwayTile(HallwayTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
+	public void printNewTurnText(Player currentPlayer) {
 
 	}
 
 	@Override
-
 	public void printEndTurnText() {
 
 	}
@@ -298,9 +310,4 @@ public class GraphicalView extends View {
 	public void printPassInstruction(Player nextPlayer) {
 
 	}
-
-	public void drawInaccessibleTile(InaccessibleTile t, StringBuilder line1, StringBuilder line2, StringBuilder line3) {
-
-	}
-
 }
