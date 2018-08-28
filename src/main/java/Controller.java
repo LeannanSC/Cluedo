@@ -47,7 +47,8 @@ public class Controller {
             }
 
             if (!game.rolledThisTurn) {
-                game.rollDice();
+                int[] dice = game.rollDice();
+                view.setDicePanel(dice[0],dice[1]);
             }
 
             if (!game.checkMovesRemaining()) {

@@ -41,10 +41,18 @@ public class GraphicalView extends View {
 	private ImageIcon roomTileRevolver = makeImageIcon("revolver-room-tile.png");
 	private ImageIcon roomTileRope = makeImageIcon("rope-room-tile.png");
 	private ImageIcon roomTileSpanner = makeImageIcon("spanner-room-tile.png");
+	private ImageIcon dice0 = makeImageIcon("dice-0.png");
+	private ImageIcon dice1 = makeImageIcon("dice-1.png");
+	private ImageIcon dice2 = makeImageIcon("dice-2.png");
+	private ImageIcon dice3 = makeImageIcon("dice-3.png");
+	private ImageIcon dice4 = makeImageIcon("dice-4.png");
+	private ImageIcon dice5 = makeImageIcon("dice-5.png");
+	private ImageIcon dice6 = makeImageIcon("dice-6.png");
 
 	private JFrame mainFrame;        // The overall view of the window, add components to this
 	private JMenuBar menuBar;        // The menu bar,
 	private JPanel boardArea;    // The board to display to the user of the GUI
+	private JPanel bottomPanel;
 	private JPanel dicePanel;        // The dice to display to the user
 	private JPanel playerCards;        // The players cards in the players hand.
 
@@ -53,6 +61,7 @@ public class GraphicalView extends View {
 	 */
 	public GraphicalView() {
 		mainFrame = new JFrame("Cluedo");
+		mainFrame.pack();
 		setupGUI();
 	}
 
@@ -60,30 +69,75 @@ public class GraphicalView extends View {
 	 * Sets up the GUI first time round
 	 */
 	private void setupGUI() {
-		mainFrame.setSize(450	, 450);
+		mainFrame.setSize(600,600);
 		mainFrame.setLayout(new BorderLayout());
 		menuBar = new JMenuBar();
 		menuBar.add(new JMenu("MENU BUTTON 1"));
 		menuBar.add(new JMenu("MENU BUTTON 2"));
+		bottomPanel = new JPanel();
+		dicePanel = new JPanel();
+		setDicePanel(0,0);
+		playerCards = new JPanel();
+		bottomPanel.add(dicePanel,FlowLayout.LEFT);
+		bottomPanel.add(playerCards,FlowLayout.CENTER);
 		mainFrame.add(menuBar, BorderLayout.PAGE_START);
+		mainFrame.add(bottomPanel,BorderLayout.PAGE_END);
 		mainFrame.setVisible(true);
 	}
 
 	/**
-	 * IDK what this does
+	 * Redraws the updated frame
 	 *
 	 * @param game
 	 */
 	@Override
 	public void redraw(Game game) {
 		drawBoard(game.getBoard(), GameLoader.WIDTH, GameLoader.HEIGHT);
+		setPlayerCards(game.currentPlayer);
+		bottomPanel.add(dicePanel);
+		bottomPanel.add(playerCards);
+		bottomPanel.setBorder(BorderFactory.createBevelBorder(0,Color.GRAY,Color.GRAY));
+		mainFrame.add(bottomPanel,BorderLayout.SOUTH);
 //		mainFrame.getContentPane().removeAll();
 //		setupGUI();
-
 //		boardArea = new JPanel(false);
 //		boardArea.setBorder(BorderFactory.createEmptyBorder());
-
 //		mainFrame.add(boardArea,BorderLayout.WEST);
+	}
+
+	public void setPlayerCards(Player player) {
+		playerCards = new JPanel();
+		playerCards.setLayout(new BoxLayout(playerCards, BoxLayout.Y_AXIS));
+		playerCards.add(new JLabel("YOUR CARDS:"));
+		for (Card card:player.getCardsInHand()) {
+			playerCards.add(new JLabel(card.getCardName()));
+		}
+		playerCards.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+	}
+
+	/**
+	 *
+	 */
+	public void setDicePanel(int dice1,int dice2) {
+		dicePanel = new JPanel();
+		dicePanel.add(new JLabel(getDiceIcon(dice1)));
+		dicePanel.add(new JLabel(getDiceIcon(dice2)));
+		dicePanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+	}
+
+	/**
+	 * This method gives the appropriate icon based on the dice
+	 * @param diceInt The number of the dice roll
+	 * @return
+	 */
+	private ImageIcon getDiceIcon(int diceInt) {
+		if (diceInt==1){return dice1;}
+		if (diceInt==2){return dice2;}
+		if (diceInt==3){return dice3;}
+		if (diceInt==4){return dice4;}
+		if (diceInt==5){return dice5;}
+		if (diceInt==6){return dice6;}
+		return dice0;
 	}
 
 	/**
@@ -111,7 +165,6 @@ public class GraphicalView extends View {
 		boardArea = new JPanel(new GridLayout(height, width));
 		for (int x = 0; x < height; x++) {
 			for (int y = 0; y < width; y++) {
-				ImageIcon imageIcon = getTileIcon(board[y][x]);
 				boardArea.add(new JLabel(getTileIcon(board[y][x]),JLabel.CENTER));
 			}
 		}
