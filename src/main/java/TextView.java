@@ -11,8 +11,6 @@ import Entities.Tiles.InaccessibleTile;
 import Entities.Tiles.RoomTile;
 import Entities.Tiles.Tile;
 
-import java.awt.event.WindowEvent;
-import java.lang.ref.SoftReference;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -24,7 +22,7 @@ import java.util.stream.Collectors;
 public class TextView extends View {
 
     public TextView() {
-        startUpText();
+        initView();
     }
 
     @Override
@@ -48,6 +46,7 @@ public class TextView extends View {
             return getInput(arrayOptionSize);
         }
     }
+
 
     /*
      * Draw entities and board
@@ -131,7 +130,6 @@ public class TextView extends View {
     }
 
 
-
     /*
      * Draw Menus
      */
@@ -163,7 +161,6 @@ public class TextView extends View {
                 refutation -> createLabel(refutation, player, game))
                 .collect(Collectors.joining(", "));
         System.out.println("Current Valid Commands -\n" + avail);
-
     }
 
     @Override
@@ -298,14 +295,22 @@ public class TextView extends View {
         System.out.println("Press 1 once received");
     }
 
-    private void startUpText() {
+    @Override
+    public int getPlayers() {
+        System.out.println("Loading Assets...");
+        System.out.println("Please Enter number of players(3-6): ");
+        return getInput(6);
+    }
+
+    private void initView() {
         System.out.println("Welcome to Cluedo");
         System.out.println("Starting Game...");
 
-        System.out.println("Loading Assets...");
-        System.out.println("Please Enter number of players(3-6): ");
+
 
     }
+
+
 
     private String createLabel(Action action, Player player, Game game) {
         String text = (action.ordinal() + 1) + ": ";
@@ -329,5 +334,11 @@ public class TextView extends View {
             text += suggestion.getLabel();
         }
         return text;
+    }
+
+
+    public static void main(String[] args) {
+        new Controller(new TextView());
+
     }
 }
